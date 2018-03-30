@@ -55,5 +55,6 @@ https://w3c.github.io/Web-and-TV-IG/cloud-browser-tf/
 
 Multi Device Timing:  
 http://webtiming.github.io  
+https://www.w3.org/community/webtiming/  
 
 Also see: https://github.com/w3c/publ-a11y/wiki/Publishing-issues-for-Silver#7-media-overlays
