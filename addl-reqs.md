@@ -1,4 +1,4 @@
-# Other Requirements
+# Additional Requirements
 
 ## Technology selection
 In addition to meeting the requirements of the use cases, the technology selection must:
@@ -17,3 +17,4 @@ Additional vocabulary to support synchronized media:
 * `duration` of both the publication and its components (e.g. chapters).
 * `narrator`
 * `(re)distribution rights`
+* TBD
