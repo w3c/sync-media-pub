@@ -17,8 +17,9 @@ The following aspects were considered, ranked roughly from most to least importa
 |:--------------------------------|:----------------|:--------------|:-------|:--------|
 | [SMIL](#smil)                   | No              | Yes           | XML    | Yes     |
 | [TTML2](#ttml2)                 | No              | No            | XML    | Yes     |
-| [WebVTT](#webvtt)               | Yes             | yes*          | Text   | No      |
+| [WebVTT](#webvtt)               | Yes             | No*           | Text   | No      |
 | [WebAnimations](#webanimations) | Yes             | n/a           | n/a    | n/a     |
+| [WebAnnotations](#webannotations)| No             | Yes           | JSON   | No      |
 | [Custom](#custom)               | No              | Yes           | JSON   | Yes     |
 
 
@@ -45,7 +46,7 @@ While web animations provides good timing and playback support, the lack of a de
 ### WebAnnotations
 [https://www.w3.org/annotation/](https://www.w3.org/annotation/)
 
-Web annotations could represent everything that we need it to, but there's no associated processing model for playback as a sequence of audio clips.
+Web annotations could represent everything that we need it to, possibly with some customization for nesting, but there's no associated processing model for playback as a sequence of audio clips.
 
 ### Custom
 None of the candidates above that have browser support can adequately express what we require at minimum, so we can consider creating our own format that is developer-friendly, compact, and easily supports the features we want. We can learn from [Readium2 experiments](drafts/readium2.md) in representing Media Overlays in JSON. We can also tie our work into the Audio TF work, because we really don't want audio-only vs audio + text books to be done in wildly different ways.
