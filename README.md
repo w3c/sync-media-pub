@@ -6,6 +6,6 @@ The Community Group was formed to recommend the best way to synchronize audio or
 
 The purpose of the CG is to collect requirements, analyze existing technologies as potential solutions, and make a recommendation for the best way forward.
 
-Our requirements are to support the features described in these (use cases)[use-cases.md], as well as to comply with these [Additional requirements](addl-reqs.md).
+Our requirements are to support the features described in these [use cases](use-cases.md), as well as to comply with these [Additional requirements](addl-reqs.md).
 
-The recommendation is to develop a custom solution. Read about the (Technology selection)[technology-selection.md] process to see how we arrived at this recommendation.
+The recommendation is to develop a custom solution. Read about the [Technology selection](technology-selection.md) process to see how we arrived at this recommendation.
