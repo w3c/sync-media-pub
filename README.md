@@ -8,4 +8,4 @@ The purpose of the CG is to collect requirements, analyze existing technologies 
 
 Our requirements are to support the features described in these [use cases](use-cases.md), as well as to comply with these [additional requirements](addl-reqs.md).
 
-The recommendation is to develop a custom solution. Read about the [technology selection](technology-selection.md) process to see how we arrived at this recommendation.
+__The recommendation is to develop a custom solution.__ Read about the [technology selection](technology-selection.md) process to see how we arrived at this recommendation.
