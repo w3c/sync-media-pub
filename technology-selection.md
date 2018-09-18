@@ -4,14 +4,11 @@ This document provides an overview of the pros and cons of a range of web techno
 
 ## Features
 
-The following aspects were considered, ranked roughly from most to least important:
+The following aspects were considered:
 * Browser support
-* Ability to point to external text
- * Text format must be HTML5
-* Developer-friendly syntax
- * XML is ok; JSON is better
-* Nested structure support
- * Used for skip/escape features
+* Ability to point to text in an external HTML5 document
+* Developer-friendly syntax (XML is ok; JSON is better)
+* Nested structure support, used for skip/escape features
 
 | Name                            | Browser support | External text | Syntax | Nesting |
 |:--------------------------------|:----------------|:--------------|:-------|:--------|
