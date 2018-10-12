@@ -8,7 +8,7 @@ The following aspects were considered:
 * Browser support
 * Ability to point to text in an external HTML5 document
 * Developer-friendly syntax (XML is ok; JSON is better)
-* Nested structure support, used for skip/escape features
+* Nested structure support, used for skip/escape features and multiple granularities
 
 | Name                            | Browser support | External text | Syntax | Nesting |
 |:--------------------------------|:----------------|:--------------|:-------|:--------|
