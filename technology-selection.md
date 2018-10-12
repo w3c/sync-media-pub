@@ -13,7 +13,7 @@ The following aspects were considered:
 | Name                            | Browser support | External text | Syntax | Nesting |
 |:--------------------------------|:----------------|:--------------|:-------|:--------|
 | [SMIL](#smil)                   | No              | Yes           | XML    | Yes     |
-| [TTML2](#ttml2)                 | No              | No            | XML    | Yes     |
+| [TTML2](#ttml2)                 | No              | No*           | XML    | Yes     |
 | [WebVTT](#webvtt)               | Yes             | No*           | Text   | No      |
 | [WebAnimations](#webanimations) | Yes             | n/a           | n/a    | n/a     |
 | [WebAnnotations](#webannotations)| No             | Yes           | JSON   | No      |
@@ -28,7 +28,7 @@ While SMIL was successfully used in EPUB3 Media Overlays, it has a verbose synta
 ### TTML2
 [https://www.w3.org/TR/ttml2/](https://www.w3.org/TR/ttml2/)
 
-TTML2 is capable of complex media synchronization beyond text + video. However, the text lives in the same file as the timing information -- it does not support pointing to external text documents. This makes it hard to integrate into the Web Publications environment.
+TTML2 is capable of complex media synchronization beyond text + video. However, the text lives in the same file as the timing information -- it does not support pointing to external text documents. It is possible to use custom metadata or hack ID values to insert a reference, but this still means no out of the box support for what we need. This makes it hard to integrate into the Web Publications environment.
 
 ### WebVTT
 [https://www.w3.org/TR/webvtt1/](https://www.w3.org/TR/webvtt1/)
