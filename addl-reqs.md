@@ -17,4 +17,6 @@ Additional vocabulary to support synchronized media:
 * `duration` of both the publication and its components (e.g. chapters).
 * `narrator`
 * `(re)distribution rights`
+* `CSS "active" class` (for highlighting the currently playing HTML element)
+* `enumeration of available multiple synchronization granularities` (so that reading systems / user agents can allow users a list of choices)
 * TBD
