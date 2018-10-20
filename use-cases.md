@@ -22,6 +22,10 @@
 * Most points from above apply here
 * Opportunity to collaborate with the (Audio TF)[https://www.w3.org/TR/wpub/#audiobook]
 
+## Integrating audio and text editions of a book
+
+A publisher has made parallel editions of a publication: one is audio, and the other is text. Adding a synchronized media "glue" layer gives the user a playback experience like what's described in the text+audio example above.  
+
 # Out of scope use cases
 
 ## Video supplemented with text transcript, standalone screenplay
