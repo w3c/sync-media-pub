@@ -33,7 +33,7 @@ TTML2 is capable of complex media synchronization beyond text + video. However, 
 ### WebVTT
 [https://www.w3.org/TR/webvtt1/](https://www.w3.org/TR/webvtt1/)
 
-Theoretically, one could use WebVTT to synchronize audio with custom metadata that points to text. However, we can't leverage existing browser support - our custom metadata would not necessarily be recognized by any implementations except ours.
+The only way to reference external text references would be via custom metadata that sits alongside audio sync points. However, we can't leverage existing browser support - our custom metadata would not be recognized by any implementations except ours. Nesting is also not supported, so we couldn't represent multiple granularities or skippable/escapable structures.
 
 ### WebAnimations
 [https://www.w3.org/TR/web-animations-1/](https://www.w3.org/TR/web-animations-1/)
