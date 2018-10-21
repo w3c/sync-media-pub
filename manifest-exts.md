@@ -173,7 +173,7 @@ Note that the publication-wide `duration` metadata / descriptive property repres
 
 **ISSUE 4**: the `application/vnd.wp-sync-media+json` mime / media type (typically for the HTTP Content-Type header) used in the `encodingFormat` JSON property does not formally exist. Such value would need to be proposed for IANA registration (see https://www.iana.org/assignments/media-types/media-types.xhtml ). To be discussed.
 
-Note that an `AudioBook` Web Publication (i.e. not "sync media", but an audio-only book) would typically also specify `duration` on its `readingOrder` links, for example:
+Note that an `AudioBook` Web Publication (i.e. not necessarily a "sync media", but an audio-only book, or a Web Publication that contains audio files) would typically also specify `duration` on the `readingOrder` or `resources` links that point to audio files, for example:
 
 ```json
 {
@@ -228,12 +228,20 @@ Note that an `AudioBook` Web Publication (i.e. not "sync media", but an audio-on
 
 ## The JSON "sync media" overlay format
 
-This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL syntax (see  http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html ). This JSON format provides a tree representation of the synchronization points between DOM elements (HTML documents) and their associated audio fragments. Just like with the SMIL format of EPUB3 Media Overlays, the root of the tree corresponds to the body of the content document. Each tree node has a `children` property to contain one or more direct descendant(s). The `role` property encodes the type of HTML DOM element that is referenced (equivalent `epub:type` in the EPUB3 model), such as "bodymatter" or "section". The `text` property designates the targeted document and (optionally) a specific element via its unique identifier. The `audio` property is a Media Fragment URL that points to an audio resource, referenced via a begin/end couple of time values (see https://www.w3.org/TR/media-frags/#naming-time ). A `text` + `audio` "pair" in the tree is effectively the equivalent of a SMIL `par` in EPUB3 Media Overlays, whereas other instances of isolated `text` references are equivalent to the SMIL `seq` container. In this lighweight JSON syntax, the time containers are implicit.
+* The proposed JSON format is a compact adaptation of the EPUB3 Media Overlays SMIL syntax (see  http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html ).
+* This provides a tree representation of the synchronization points, i.e. mapping between DOM elements (HTML documents) and their associated audio fragments.
+* Just like with the SMIL format of EPUB3 Media Overlays, the root of the tree corresponds to the body of the content document.
+* Each tree node has an optional `children` property to contain one or more direct descendant(s), providing a "mirror" structural image of the HTML document to synchronize with.
+* The `role` property of a node encodes additional information about the type of HTML DOM element that is referenced (equivalent `epub:type` in the EPUB3 model), such as "bodymatter" or "section".
+* The `text` property is a URL that designates the targeted document and (optionally) a specific element via the URL "fragment" which is typically a unique identifier (e.g. `chapter1.html#section2.3`), but this can also be based on another "fragment" syntax such as EPUB CFI (e.g. for referencing a range of characters within the targeted HTML document).
+* The `audio` property is a Media Fragment URL that points to an audio resource, referenced via a begin/end tuple of time values, such as `chapter1.mp3#t=123.45,678.9` (see https://www.w3.org/TR/media-frags/#naming-time ).
+* A `text` + `audio` "pair" in the tree is effectively the equivalent of a SMIL `par` in EPUB3 Media Overlays, whereas other instances of isolated `text` references are equivalent to the SMIL `seq` container. In this lighweight JSON syntax, the time containers are implicit, and can be inferred by the presence of `text` and `audio` properties.
 
+Full example below.
 
 ## Complete Example
 
-### Web Publications manifest JSON
+### Web Publications JSON manifest
 
 ```json
 {
@@ -246,15 +254,15 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
     "name": "WP sync-media demo",
     "author": "Somebody",
     "readBy": "Somebody Else",
-    "duration": 123.45,
+    "duration": 12345.67,
     "sync-media": {
         "css-class-active": "-epub-media-overlay-active",
         "css-class-playing": "-epub-media-overlay-playing"
     },
     "readingOrder": [
-        "...": "...",
+        "...",
         "preface.html",
-        "...": "...",
+        "...",
         {
             "type": "PublicationLink",
             "url": "chapter1.html",
@@ -262,8 +270,8 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
             "sync-media": {
                 "type": "PublicationLink",
                 "url": "sync-media/chapter1.json",
-                "encodingFormat": "application/vnd.wp-sync-media+json", // See **ISSUE 6**
-                "duration": 123.4 // See **ISSUE 2** and **ISSUE 4**
+                "encodingFormat": "application/vnd.wp-sync-media+json",
+                "duration": 123.45
             }
         },
         {
@@ -273,13 +281,13 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
             "sync-media": {
                 "type": "PublicationLink",
                 "url": "sync-media/chapter2.json",
-                "encodingFormat": "application/vnd.wp-sync-media+json", // See **ISSUE 6**
-                "duration": 567.8 // See **ISSUE 2** and **ISSUE 4**
+                "encodingFormat": "application/vnd.wp-sync-media+json",
+                "duration": 67.89
             }
         },
-        "...": "...",
+        "...",
         "postface.html",
-        "...": "..."
+        "...",
     ],
     "resources": [
         {
@@ -289,41 +297,40 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
             "sync-media": {
                 "type": "PublicationLink",
                 "url": "sync-media/table-of-contents.json",
-                "encodingFormat": "application/vnd.wp-sync-media+json", // See **ISSUE 6**
-                "duration": 432.1 // See **ISSUE 2** and **ISSUE 4**
+                "encodingFormat": "application/vnd.wp-sync-media+json",
+                "duration": 432.1
             }
         },
         {
             "type": "PublicationLink",
             "url": "sync-media/chapter1.mp3",
             "encodingFormat": "audio/mpeg",
-            "duration": 123.4 // See **ISSUE 2**
+            "duration": 123.4
         },
         {
             "type": "PublicationLink",
             "url": "sync-media/chapter2.ogg",
             "encodingFormat": "audio/ogg",
-            "duration": 567.8 // See **ISSUE 2**
+            "duration": 567.8
         },
         {
             "type": "PublicationLink",
             "url": "sync-media/table-of-contents.mp4",
             "encodingFormat": "audio/mp4",
-            "duration": 87.65 // See **ISSUE 2**
+            "duration": 87.65
         },
-        "...": "...",
+        "...",
         "cover.jpg",
         "styles.css",
-        "...": "..."
+        "...",
     ],
     "...": "..."
 }
 ```
 
-### Sync Media definition (also serialized to a JSON format)
+### Sync Media JSON overlays
 
-
-`sync-media/chapter1.json`:
+#### 1) `sync-media/chapter1.json`:
 ```
 {
     "text": "../chapter1.html",
@@ -333,6 +340,7 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
     ],
     "children": [
         {
+            "text": "../chapter1.html#section1",
             "role": [
                 "section"
             ],
@@ -344,14 +352,15 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
                 {
                     "text": "../chapter1.html#id2",
                     "audio": "chapter1.mp3#t=45.6,78.9"
-                }
+                },
+                "..."
             ]
         }
     ]
 }
 ```
 
-`sync-media/chapter2.json`:
+#### 2) `sync-media/chapter2.json`:
 ```
 {
     "text": "../chapter2.html",
@@ -361,6 +370,7 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
     ],
     "children": [
         {
+            "text": "../chapter2.html#section1",
             "role": [
                 "section"
             ],
@@ -372,14 +382,15 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
                 {
                     "text": "../chapter2.html#id2",
                     "audio": "chapter2.mp3#t=45.6,78.9"
-                }
+                },
+                "..."
             ]
         }
     ]
 }
 ```
 
-`sync-media/table-of-contents.json`:
+#### 3) `sync-media/table-of-contents.json`:
 ```
 {
     "text": "../table-of-contents.html",
@@ -388,7 +399,7 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
     ],
     "children": [
         {
-            "text": "../table-of-contents.html#navig",
+            "text": "../table-of-contents.html#navID",
             "role": [
                 "nav"
             ],
@@ -400,7 +411,8 @@ This JSON compact format is an adaptation of the EPUB3 Media Overlays SMIL synta
                 {
                     "text": "../table-of-contents.html#id2",
                     "audio": "table-of-contents.mp3#t=45.6,78.9"
-                }
+                },
+                "..."
             ]
         }
     ]
