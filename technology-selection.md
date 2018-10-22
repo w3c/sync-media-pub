@@ -1,6 +1,6 @@
 # Selection Process
 
-This document provides an overview of the pros and cons of a range of web technologies that were considered for expressing synchronized media in [Web Publications](https://www.w3.org/TR/wpub/). Refer to the functional requirements document to see the use cases under consideration.
+This document provides an overview of the pros and cons of a range of web technologies that were considered for expressing synchronized media in [Web Publications](https://www.w3.org/TR/wpub/). Refer to the [Use Cases](use-cases.md) document to see the use cases under consideration.
 
 ## Features
 
