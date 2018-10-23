@@ -53,7 +53,7 @@ vs.
 }
 ```
 
-**ISSUE 1b**: Schema.org does not define a `VideoBook` type, yet we might actually end up considering extending support for synchronizing text and video in a similar fashion to text + audio (details yet to be determined). Arguably, there is a long history in the publishing world / maketplace of synchronized "full-text full-audio" publications (i.e. DAISY Digital Talking Books, and later EPUB3 Media Overlays). However there isn't a well-defined design approach for synchronizing web documents with video media (obviously, other than video subtitling / captioning, which is already covered by other specifications). Use-cases include: mapping video timestamps with a full text transcript, or aligning sign language video with a text translation (note that there are ad-hoc solutions on the web for this, but no "publishing" standard for authoring / interchange / distribution). So the question is whether this should be examined further in this initial "sync media" iteration? If not, is there a risk of technical oversight / potential roadblock that would impede a future attempt to support some form of synchronized text + video. For example, the `readBy` property described below may have a `signedBy` equivalent for sign language. The `duration` property may need to be complemented with `width` and `height` in order for reading systems / user agents to render media content appropriately. To be discussed.
+**ISSUE 1b**: Schema.org does not define a `VideoBook` type, yet we might actually end up considering extending support for synchronizing text and video in a similar fashion to text + audio (details yet to be determined). Arguably, there is a long history in the publishing world / maketplace of synchronized "full-text full-audio" publications (i.e. DAISY Digital Talking Books, and later EPUB3 Media Overlays). However there isn't a well-defined design approach for synchronizing web documents with video media (obviously, other than video subtitling / captioning, which is already covered by other specifications). Use-cases include: mapping video timestamps with a full text transcript, or aligning sign language video with a text translation (note that there are ad-hoc solutions on the web for this, but no "publishing" standard for authoring / interchange / distribution). One of the design and technical challenges is that unlike audio tracks that can be played independently of the synchronized document, video media require a viewport to render into, so this would have to be defined somehow (for instance: an external / secondary web document, vs. an embedded `iframe`, vs. an injected `div` overlay). So the question is whether this should be examined further in this initial "sync media" iteration? If not, is there a risk of technical oversight / potential roadblock that would impede a future attempt to support some form of synchronized text + video. For example, the `readBy` property described below may have a `signedBy` equivalent for sign language. The `duration` property may need to be complemented with `width` and `height` in order for reading systems / user agents to render media content appropriately. To be discussed.
 
 ### The `readBy` property
 
@@ -226,14 +226,106 @@ Note that an `AudioBook` Web Publication (i.e. not necessarily a "sync media", b
 }
 ```
 
+**ISSUE 6**: food for thoughts - the `resources` section combines assets specific to the "sync media" overlay with those that pertain to the main publication. Would it be beneficial to identify / segregate the resources that *only* belong to the "sync media" overlay?
+
+For example (note the new `sync-media-resources` property):
+
+```json
+{
+    "@context": [
+        "https://schema.org",
+        "https://www.w3.org/ns/wp-context"
+    ],
+    "type": "Audiobook",
+    "url": "https://publisher.example.org/sync-media-demo",
+    "name": "WP sync-media demo",
+    "author": "Somebody",
+    "readBy": "Somebody Else",
+    "duration": 12345.67,
+    "sync-media": {
+        "css-class-active": "-epub-media-overlay-active",
+        "css-class-playing": "-epub-media-overlay-playing"
+    },
+    "readingOrder": [
+        "...",
+        "preface.html",
+        "...",
+        {
+            "type": "PublicationLink",
+            "url": "chapter1.html",
+            "encodingFormat": "text/html",
+            "sync-media": {
+                "type": "PublicationLink",
+                "url": "sync-media/chapter1.json",
+                "encodingFormat": "application/vnd.wp-sync-media+json",
+                "duration": 123.45
+            }
+        },
+        {
+            "type": "PublicationLink",
+            "url": "chapter2.html",
+            "encodingFormat": "text/html",
+            "sync-media": {
+                "type": "PublicationLink",
+                "url": "sync-media/chapter2.json",
+                "encodingFormat": "application/vnd.wp-sync-media+json",
+                "duration": 67.89
+            }
+        },
+        "...",
+        "postface.html",
+        "...",
+    ],
+    "resources": [
+        {
+            "type": "PublicationLink",
+            "url": "table-of-contents.html",
+            "encodingFormat": "text/html",
+            "sync-media": {
+                "type": "PublicationLink",
+                "url": "sync-media/table-of-contents.json",
+                "encodingFormat": "application/vnd.wp-sync-media+json",
+                "duration": 432.1
+            }
+        },
+        "...",
+        "cover.jpg",
+        "styles.css",
+        "...",
+    ],
+    "sync-media-resources": [
+        {
+            "type": "PublicationLink",
+            "url": "sync-media/chapter1.mp3",
+            "encodingFormat": "audio/mpeg",
+            "duration": 123.4
+        },
+        {
+            "type": "PublicationLink",
+            "url": "sync-media/chapter2.ogg",
+            "encodingFormat": "audio/ogg",
+            "duration": 567.8
+        },
+        {
+            "type": "PublicationLink",
+            "url": "sync-media/table-of-contents.mp4",
+            "encodingFormat": "audio/mp4",
+            "duration": 87.65
+        },
+        "...",
+    ],
+    "...": "..."
+}
+```
+
 ## The JSON "sync media" overlay format
 
 * The proposed JSON format is a compact adaptation of the EPUB3 Media Overlays SMIL syntax (see  http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html ).
 * This provides a tree representation of the synchronization points, i.e. mapping between DOM elements (HTML documents) and their associated audio fragments.
 * Just like with the SMIL format of EPUB3 Media Overlays, the root of the tree corresponds to the body of the content document.
 * Each tree node has an optional `children` property to contain one or more direct descendant(s), providing a "mirror" structural image of the HTML document to synchronize with.
-* The `role` property of a node encodes additional information about the type of HTML DOM element that is referenced (equivalent `epub:type` in the EPUB3 model), such as "bodymatter" or "section".
-* The `text` property is a URL that designates the targeted document and (optionally) a specific element via the URL "fragment" which is typically a unique identifier (e.g. `chapter1.html#section2.3`), but this can also be based on another "fragment" syntax such as EPUB CFI (e.g. for referencing a range of characters within the targeted HTML document).
+* The `role` property of a node encodes additional information about the type of HTML DOM element that is referenced (equivalent `epub:type` in the EPUB3 model), such as "bodymatter" or "section". **ISSUE 7**: what default vocabulary, what possible extensions, and what reading system affordances / behaviours (for example, well-defined skippability and escapability semantics, hints for multiple synchronization granularities, etc.).
+* The `text` property is a URL that designates the targeted document and (optionally) a specific element via the URL "fragment" which is typically a unique identifier (e.g. `chapter1.html#section2.3`), but this can also be based on another "fragment" syntax such as EPUB CFI (e.g. for referencing a range of characters within the targeted HTML document, for instance `#doc-cfi(/4[body_1]/10[paragraph_5],/2/1:1,/3:4)`, see https://www.idpf.org/epub/linking/cfi/epub-cfi.html ).
 * The `audio` property is a Media Fragment URL that points to an audio resource, referenced via a begin/end tuple of time values, such as `chapter1.mp3#t=123.45,678.9` (see https://www.w3.org/TR/media-frags/#naming-time ).
 * A `text` + `audio` "pair" in the tree is effectively the equivalent of a SMIL `par` in EPUB3 Media Overlays, whereas other instances of isolated `text` references are equivalent to the SMIL `seq` container. In this lighweight JSON syntax, the time containers are implicit, and can be inferred by the presence of `text` and `audio` properties.
 
