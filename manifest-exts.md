@@ -331,6 +331,8 @@ For example (note the new `sync-media-resources` property):
 
 Full example below.
 
+**ISSUE 8**: what would the process of "merging" a regular Web Publication with an AudioBook Web Publication, in order to create a "sync media" Web Publication?
+
 ## Complete Example
 
 ### Web Publications JSON manifest
