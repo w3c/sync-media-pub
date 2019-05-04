@@ -54,19 +54,8 @@
   <section id="syncnarr-introduction">
 			<h1>Introduction</h1>
 
-			<p>Synchronized Narration is defined as an audio narration overlay for an HTML document, consisting of a series of synchronization points between audio file clips and HTML content. The primary use case is in the context of Web Publications. The two-part proposal herein aims 1. to define Synchronized Narration for the Web, in isolation from Web Publications, and also 2. to cover the specific integration requirements of Web Publications.</p>
+			<p>Synchronized Narration is defined as an audio narration overlay for an HTML document, consisting of a series of synchronization points between audio file clips and HTML content. The primary use case is in the context of Web Publications. This proposal aims to define Synchronized Narration for the Web, in isolation from Web Publications. The accompanying <a href="packaging.html">Packaging Synchronized Narration for Web Publications</a> discusses integration.</p>
 
-			<p>This specification does not define how user agents are expected to render Synchronized Narration. Details about the types of afforances that user agents can provide to enhance the reading experience for users are instead defined in <a href="usecases.html">Use Cases</a>.</p>
-
-      <section id="syncnarrpub-history">
-
-        <p>The formal historical precedent for the concept of synchronized narration is the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays specification</a> (digital publications with synchronized text-audio playback).</p>
-
-        <p>EPUB3 Media Overlays itself can be seen as the "mainstream publishing" alternative to the <a href="http://www.daisy.org/daisypedia/daisy-digital-talking-book">DAISY Digital Talking Book format</a>, which serves the accessibility community more specifically.</p>
-
-        <p>Synchronized Narration is the evolution of these concepts, optimized for the open web platform and designed specifically with Web Publications in mind.</p>
-
-      </section>
 
 			<section id="syncnarrpub-terminology">
 				<h2>Terminology</h2>
@@ -113,11 +102,9 @@
       <section>
         <h3>Document Format</h3>
 
-        <p>The proposed JSON format is a compact, stripped-down adaptation of the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays SMIL syntax</a>.</p>
+        <p>The root of the Synchronized Narration JSON document corresponds to the body of the HTML content document.</p>
 
-        <p>The root of the Synchronized Narration document corresponds to the body of the HTML content document.</p>
-
-        <p>One Synchronized Narration document is associated with no more than one HTML content document</p>
+        <p>One Synchronized Narration document is associated with exactly one HTML content document</p>
 
         <p class="issue">How about synchronized narration with no HTML content? E.g. to enable fine-granularity audio navigation, a la DAISY Audio + TOC books (which account for the majority of produced DAISY content).</p>
 
@@ -242,18 +229,16 @@
 
         <p>Playing narration synchronized with HTML content introduces the idea of playback styling, so that authors can provide styling information to reading systems. For example, whenever an HTML element is being "narrated" (i.e. audio playback synchronized with this particular DOM fragment), the reading system injects a CSS class name into this HTML element so that the authored styles are applied dynamically for the currently-playing (aka "active") element. </p>
 
+        <p class="issue">Pseudoclasses would be preferable here: evaluate the applicability of the <code>:current</code> CSS pseudo class from CSS Selectors 4 (see https://www.w3.org/TR/selectors-4/#the-current-pseudo ). The <code>:past</code> and <code>:future</code> counterparts would provide additional semantics.</p>
+
         <p>Here we propose two descriptive properties for playback styling:</p>
         <ul>
           <li><code>css-class-active</code>: Applied to the HTML element whose corresponding audio is being played. Authors may use this to highlight narrated content.</li>
           <li><code>css-class-playing</code>: Applied to the entire HTML document being played. Authors may use this to de-emphasize content that is not currently being narrated.</li>
         </ul>
 
-        <p class="issue">Evaluate the applicability of the `:current` CSS pseudo class from CSS Selectors 4 (see https://www.w3.org/TR/selectors-4/#the-current-pseudo ). The `:past` and `:future` counterparts would provide additional semantics.</p>
+        <p>This recommendation does not specify actual classname values for these properties. Authors must define values as follows:</p>
 
-        <p>This recommendation does not specify which classnames authors should use but rather it provides default values and an override mechanism.</p>
-
-        <p>The default values are <code>-sync-media-active-element</code> and <code>-sync-media-document-playing</code>.</p>
-        <p>The override mechanism is to use <code>meta</code> in the head of the HTML document:</p>
         <pre>
           &lt;head&gt;
             &lt;meta name="sync-media-css-class-active" content="-my-active-element"&gt;
@@ -297,6 +282,10 @@
         </pre>
       </p>
     </section>
+  </section>
+  <section id="syncnarr-uaprocessing">
+    <h1>User Agent Processing</h1>
+    <p>TODO</p>
   </section>
   <!-- <div data-include="common/html/acknowledgements.html" data-include-replace="true"></div> -->
 </body>
