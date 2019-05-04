@@ -51,20 +51,22 @@
 
 			<p>Synchronized Narration is defined as an audio narration overlay for an HTML document, consisting of a series of synchronization points between audio file clips and HTML content. The primary use case is in the context of Web Publications. The two-part proposal herein aims 1. to define Synchronized Narration for the Web, in isolation from Web Publications, and also 2. to cover the specific integration requirements of Web Publications.</p>
 
-			<p>This specification does not define how user agents are expected to render Synchronized Narration. Details about the types of afforances that user agents can provide to enhance the reading experience for users are instead defined in [[TODO]].</p>
+			<p>This specification does not define how user agents are expected to render Synchronized Narration. Details about the types of afforances that user agents can provide to enhance the reading experience for users are instead defined in <a href="usecases.html">Use Cases</a>.</p>
 
       <section id="syncnarrpub-history">
 
-        <p>The formal historical precedent for the concept of synchronized narration is the EPUB3 Media Overlays specification (digital publications with synchronized text-audio playback): http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html</p>
+        <p>The formal historical precedent for the concept of synchronized narration is the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays specification</a> (digital publications with synchronized text-audio playback).</p>
 
-        <p>EPUB3 Media Overlays itself can be seen as the "mainstream publishing" alternative to the DAISY Digital Talking Book format, which serves the accessibility community more specifically: http://www.daisy.org/daisypedia/daisy-digital-talking-book</p>
+        <p>EPUB3 Media Overlays itself can be seen as the "mainstream publishing" alternative to the <a href="http://www.daisy.org/daisypedia/daisy-digital-talking-book">DAISY Digital Talking Book format</a>, which serves the accessibility community more specifically.</p>
+
+        <p>Synchronized Narration is the evolution of these concepts, optimized for the open web platform and designed specifically with Web Publications in mind.</p>
 
       </section>
 
 			<section id="syncnarrpub-terminology">
 				<h2>Terminology</h2>
 
-				<p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading System"). A complete list of these <a href="epub-spec.html#audio-terminology">terms and definitions</a> is provided in [[wpub]].</p>
+				<p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading System"). A complete list of these terms and definitions is provided in <a href="https://www.w3.org/TR/wpub/">Web Publications</a>.</p>
 
 				<p>Only the first instance of a term in a section is linked to its definition.</p>
 
@@ -89,7 +91,7 @@
 					</dd>
           <dt><dfn id="dfn-escape" data-lt="Escape">Escape</dfn></dt>
 					<dd>
-						<p>Move playback out of a structure and back into the parent container's sequence. E.g. leave a table instead of listening to the whole thing.</p>
+						<p>Move playback out of a structure and back into the parent container's sequence. E.g. stop playing a complex table and resume playing main body content.</p>
 					</dd>
 
 				</dl>
@@ -98,10 +100,10 @@
 		</section>
 
   <section>
-    <h1>Recommendation</h1>
+    <h1>Specification</h1>
 
     <section>
-      <h2>Construction</h2>
+      <h2>The Synchronized Narration Format</h2>
 
       <section>
         <h3>Document Format</h3>
@@ -110,7 +112,7 @@
 
         <p>The root of the Synchronized Narration document corresponds to the body of the HTML content document.</p>
 
-        <p>The Synchronized Narration document is associated with no more than one HTML content document</p>
+        <p>One Synchronized Narration document is associated with no more than one HTML content document</p>
 
         <p class="issue">How about synchronized narration with no HTML content? E.g. to enable fine-granularity audio navigation, a la DAISY Audio + TOC books (which account for the majority of produced DAISY content).</p>
 
@@ -212,7 +214,7 @@
     </pre>
     </section>
 
-    <section>
+    <section id="syncnarr-referencing">
       <h2>Referencing from an HTML document</h2>
 
       <section>
