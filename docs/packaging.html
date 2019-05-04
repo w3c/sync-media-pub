@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Packaging Synchronized Narration for Web Publications</title>
+  <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
+  <script class='remove'>
+    var respecConfig = {
+      specStatus: "ED",
+      wg: "Synchronized Media for Publications Community Group",
+      wgURI: "https://www.w3.org/community/sync-media-pub/",
+      wgPublicList: "public-sync-media-pub",
+      editors: [{
+        name: "Marisa DeMeglio",
+        url: "http://daisy.org",
+      }, {
+        name: "Daniel Weck",
+        url: "http://daisy.org",
+      }],
+      edDraftURI: "http://w3c.github.io/sync-media-pub/packaging.html",
+      shortName: "syncnarr",
+      noRecTrack: true,
+      copyrightStart: "2019",
+      // prevRecURI: "",
+      //postProcess: [show_orcid, create_wp],
+      includePermalinks: true,
+      permalinkEdge: true,
+      permalinkHide: false,
+      diffTool: "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
+      github: {
+        repoURL: "https://github.com/w3c/sync-media-pub",
+        branch: "master"
+      },
+      localBiblio: biblio
+    };
+  </script>
+</head>
+
+<body>
+  <section id="abstract">
+    <p>This specification provides a draft version of Packaging for Synchronized Narration.</p>
+  </section>
+
+  <section id="sotd">
+    <p>This draft is still under consideration within the Synchronized Media for Publications Community Group and is subject to change. The most prominent issues will be referenced in the document with links provided.</p>
+  </section>
+
+  <section id="syncnarr-packaging-introduction">
+		<h1>Introduction</h1>
+
+		<section id="syncnarr-packaging-terminology">
+			<h2>Terminology</h2>
+
+			<p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading System"). A complete list of these <a href="epub-spec.html#audio-terminology">terms and definitions</a> is provided in [[wpub]].</p>
+
+			<p>Only the first instance of a term in a section is linked to its definition.</p>
+
+			<p>In addition, the following terminology is defined for use in this specification:</p>
+
+			<dl class="termlist">
+				<dt><dfn id="dfn-file-name" data-lt="File Names">VOCAB</dfn></dt>
+				<dd>
+					<p>TODO</p>
+				</dd>
+			</dl>
+
+		</section>
+	</section>
+
+  <section>
+    <h1>Recommendation</h1>
+
+    <section>
+      <h2>Inclusion in a Web Publication</h2>
+
+      <p class="issue">Are we assuming that if you package narration with WPUB as described below, then you don't need to reference it from the actual HTML document(s)?</p>
+
+      <section>
+        <h3>Manifest Properties</h3>
+
+        <ul>
+          <li><code>alternative</code>: A Reading Order object has this property to indicate its accompanying synchronized narration document.</li>
+          <li><code>duration</code>: as in Audio publications</li>
+          <li><code>readBy</code>: as in Audio publications</li>
+          <li><code>encodingFormat</code>: <code>application/vnd.wp-sync-media+json</code>
+        </ul>
+
+        <p class="issue">What is the <code>type</code> of a web publication with synchronized narration? Is it <code>AudioBook</code>? Does it have multiple types?</p>
+
+
+        <p class="example">
+          <pre>
+            {
+              "@context": ["https://schema.org", "https://www.w3.org/ns/wp-context"],
+              "type": "AudioBook",
+              "url": "https://publisher.example.org/mobydick",
+              "author": "Herman Melville",
+              "dateModified": "2018-02-10T17:00:00Z",
+
+              "readBy": "Someone",
+              "duration": "20000s",
+
+              "sync-media-css-class-active": "-my-active-element",
+              "sync-media-css-class-playing" "-my-document-playing"
+
+              "readingOrder": [
+                {
+                  "url": "html/c001.html",
+                  "alternate": {
+                    "url": "narration1.json",
+                    "encodingFormat": "application/vnd.wp-sync-media+json",
+                    "duration": "10000s",
+                  }
+                },
+                {
+                  "url": "html/c002.html",
+                  "alternate": {
+                    "url": "narration2.json",
+                    "encodingFormat": "application/vnd.wp-sync-media+json",
+                    "duration": "10000s",
+                  }
+                }
+              ],
+
+              "resources": [
+                "css/mobydick.css",
+                {
+                  "type": "LinkedResource",
+                  "rel": "cover",
+                  "url": "images/cover.jpg",
+                  "encodingFormat": "image/jpeg"
+                },{
+                  "type": "LinkedResource",
+                  "url": "html/toc.html",
+                  "rel": "contents"
+                }
+              ]
+            }
+          </pre>
+        </p>
+      </section>
+
+    </section>
+
+  </section>
+
+  <section id="syncmediapub-manifest-examples" class="appendix informative">
+    <h1>Manifest examples</h1>
+    <p>TODO</p>
+    
+    <ul>
+      <li>Single document</li>
+      <li>Text + audio</li>
+      <li>Audio-only</li>
+    </ul>
+  </section>
+
+  <div data-include="common/html/acknowledgements.html" data-include-replace="true"></div>
+</body>
+</html>

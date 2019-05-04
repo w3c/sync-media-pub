@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  <title>Synchronized Narration</title>
+  <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove'></script>
+  <script class='remove'>
+    var respecConfig = {
+      specStatus: "ED",
+      wg: "Synchronized Media for Publications Community Group",
+      wgURI: "https://www.w3.org/community/sync-media-pub/",
+      wgPublicList: "public-sync-media-pub",
+      editors: [{
+        name: "Marisa DeMeglio",
+        url: "http://daisy.org",
+      }, {
+        name: "Daniel Weck",
+        url: "http://daisy.org",
+      }],
+      edDraftURI: "http://w3c.github.io/sync-media-pub",
+      shortName: "syncnarr",
+      noRecTrack: true,
+      copyrightStart: "2019",
+      // prevRecURI: "",
+      //postProcess: [show_orcid, create_wp],
+      includePermalinks: true,
+      permalinkEdge: true,
+      permalinkHide: false,
+      diffTool: "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
+      github: {
+        repoURL: "https://github.com/w3c/sync-media-pub",
+        branch: "master"
+      },
+      localBiblio: biblio
+    };
+  </script>
+</head>
+
+<body>
+  <section id="abstract">
+    <p>This specification provides a draft version of Synchronized Narration.</p>
+  </section>
+
+  <section id="sotd">
+    <p>This draft is still under consideration within the Synchronized Media for Publications Community Group and is subject to change. The most prominent issues will be referenced in the document with links provided.</p>
+  </section>
+
+  <section id="syncnarr-introduction">
+			<h1>Introduction</h1>
+
+			<p>Synchronized Narration is defined as an audio narration overlay for an HTML document, consisting of a series of synchronization points between audio file clips and HTML content. The primary use case is in the context of Web Publications. The two-part proposal herein aims 1. to define Synchronized Narration for the Web, in isolation from Web Publications, and also 2. to cover the specific integration requirements of Web Publications.</p>
+
+			<p>This specification does not define how user agents are expected to render Synchronized Narration. Details about the types of afforances that user agents can provide to enhance the reading experience for users are instead defined in [[TODO]].</p>
+
+      <section id="syncnarrpub-history">
+
+        <p>The formal historical precedent for the concept of synchronized narration is the EPUB3 Media Overlays specification (digital publications with synchronized text-audio playback): http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html</p>
+
+        <p>EPUB3 Media Overlays itself can be seen as the "mainstream publishing" alternative to the DAISY Digital Talking Book format, which serves the accessibility community more specifically: http://www.daisy.org/daisypedia/daisy-digital-talking-book</p>
+
+      </section>
+
+			<section id="syncnarrpub-terminology">
+				<h2>Terminology</h2>
+
+				<p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading System"). A complete list of these <a href="epub-spec.html#audio-terminology">terms and definitions</a> is provided in [[wpub]].</p>
+
+				<p>Only the first instance of a term in a section is linked to its definition.</p>
+
+				<p>In addition, the following terminology is defined for use in this specification:</p>
+
+				<dl class="termlist">
+					<dt><dfn id="dfn-audio-clip" data-lt="Audio Clip">Audio Clip</dfn></dt>
+					<dd>
+						<p>A contiguous portion of an audio file, defined by time offsets.</p>
+					</dd>
+          <dt><dfn id="dfn-text-fragment" data-lt="Text Fragment">Text Fragment</dfn></dt>
+					<dd>
+						<p>An element in an HTML document</p>
+					</dd>
+          <dt><dfn id="dfn-highlight" data-lt="Highlight">Playback Styling</dfn></dt>
+					<dd>
+						<p>Highlight or other style provided for text fragments as they are being played.</p>
+					</dd>
+          <dt><dfn id="dfn-skip" data-lt="Skip">Skip</dfn></dt>
+					<dd>
+						<p>Enable skipping playback of content, based on role. E.g. skip audio playback of page number announcements or footnote references.</p>
+					</dd>
+          <dt><dfn id="dfn-escape" data-lt="Escape">Escape</dfn></dt>
+					<dd>
+						<p>Move playback out of a structure and back into the parent container's sequence. E.g. leave a table instead of listening to the whole thing.</p>
+					</dd>
+
+				</dl>
+
+			</section>
+		</section>
+
+  <section>
+    <h1>Recommendation</h1>
+
+    <section>
+      <h2>Construction</h2>
+
+      <section>
+        <h3>Document Format</h3>
+
+        <p>The proposed JSON format is a compact, stripped-down adaptation of the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays SMIL syntax</a>.</p>
+
+        <p>The root of the Synchronized Narration document corresponds to the body of the HTML content document.</p>
+
+        <p>The Synchronized Narration document is associated with no more than one HTML content document</p>
+
+        <p class="issue">How about synchronized narration with no HTML content? E.g. to enable fine-granularity audio navigation, a la DAISY Audio + TOC books (which account for the majority of produced DAISY content).</p>
+
+      </section>
+
+      <section>
+        <h3>Properties</h3>
+
+        <dl>
+          <dt>REQUIRED:</dt>
+					<dd>
+						<ul>
+              <li>
+								<a href="https://w3c.github.io/sync-media-pub/narration.html#TODO">narration</a>
+                <p>Container for a playback sequence.</p>
+							</li>
+							<li>
+								<a href="https://w3c.github.io/sync-media-pub/narration.html#TODO">text</a>
+                <p>URL "fragment" which is typically a unique identifier that references a document element (e.g. <code>#section2.3</code>).</p>
+							</li>
+              <li>
+								<a href="https://w3c.github.io/sync-media-pub/narration.html#TODO">audio</a>
+                <p>Media Fragment URL that points to an audio resource, referenced via a begin/end tuple of time values, such as `audio.mp3#t=123.45,678.9` (see https://www.w3.org/TR/media-frags/#naming-time ).</p>
+							</li>
+						</ul>
+					</dd>
+					<dt>RECOMMENDED:</dt>
+					<dd>
+            <ul>
+              <li>
+								<a href="https://w3c.github.io/sync-media-pub/narration.html#TODO">role</a>
+                <p>Semantic information for a <code>narration</code> container or <code>text</code>/audio pair.</p>
+							</li>
+            </ul>
+          </dd>
+        </dl>
+
+
+      <p>Example:</p>
+
+      <p><code>narration/index.json</code> (referenced from <code>index.html</code>):
+
+      <pre>
+      {
+        "narration": [
+          {
+            "text": "#id1",
+            "audio": "audio.mp3#t=0.0,1.2"
+          },
+          {
+            "text": "#id2",
+            "audio": "audio.mp3#t=1.2,3.4"
+          },
+          {
+            "role": "footnote-ref",
+            "text": "#id3",
+            "audio": "audio.mp3#t=3.4,5.6"
+          },
+          {
+            "role": "aside",
+            "narration": [
+              {
+                "text": "#id4",
+                "audio": "audio.mp3#t=5.6,7.8"
+              },
+              {
+                "text": "#id5",
+                "audio": "audio.mp3#t=7.8,9.1"
+              },
+              {
+                "text": "#id6",
+                "audio": "audio.mp3#t=9.1,10.1"
+              }
+            ]
+          },
+          {
+            "text": "#id7",
+            "audio": "audio.mp3#t=10.1,11.2"
+          },
+          {
+            "text": "#id8",
+            "audio": "audio.mp3#t=11.2,13.3"
+          },
+          {
+            "role": "footnote",
+            "narration": [
+            {
+              "text": "#id9",
+              "audio": "audio.mp3#t=13.3,14.4"
+            },
+            {
+              "text": "#id10",
+              "audio": "audio.mp3#t=14.4,17.4"
+            },
+            ]
+          }
+        ]
+      }
+    </pre>
+    </section>
+
+    <section>
+      <h2>Referencing from an HTML document</h2>
+
+      <section>
+        <h3>Linking</h3>
+
+        <pre>
+        &lt;head&gt;
+          &lt;link
+            rel="sync-media"
+            href="sync-media/index.json"
+            type="application/vnd.wp-sync-media+json"&gt;
+        &lt;/head&gt;
+        </pre>
+
+        <p class="issue">Note that the <code>application/vnd.wp-sync-media+json</code> mime / media type (typically for the HTTP Content-Type header) used in the <code>encodingFormat</code> JSON property does not formally exist. Such value would need to be proposed for IANA registration (see <a href="https://www.iana.org/assignments/media-types/media-types.xhtml">IANA Media Types</a> ). To be discussed.</p>
+      </section>
+
+      <section>
+        <h3>Playback Styling</h3>
+
+        <p>Playing narration synchronized with HTML content introduces the idea of playback styling, so that authors can provide styling information to reading systems. For example, whenever an HTML element is being "narrated" (i.e. audio playback synchronized with this particular DOM fragment), the reading system injects a CSS class name into this HTML element so that the authored styles are applied dynamically for the currently-playing (aka "active") element. </p>
+
+        <p>Here we propose two descriptive properties for playback styling:</p>
+        <ul>
+          <li><code>css-class-active</code>: Applied to the HTML element whose corresponding audio is being played. Authors may use this to highlight narrated content.</li>
+          <li><code>css-class-playing</code>: Applied to the entire HTML document being played. Authors may use this to de-emphasize content that is not currently being narrated.</li>
+        </ul>
+
+        <p class="issue">Evaluate the applicability of the `:current` CSS pseudo class from CSS Selectors 4 (see https://www.w3.org/TR/selectors-4/#the-current-pseudo ). The `:past` and `:future` counterparts would provide additional semantics.</p>
+
+        <p>This recommendation does not specify which classnames authors should use but rather it provides default values and an override mechanism.</p>
+
+        <p>The default values are <code>-sync-media-active-element</code> and <code>-sync-media-document-playing</code>.</p>
+        <p>The override mechanism is to use <code>meta</code> in the head of the HTML document:</p>
+        <pre>
+          &lt;head&gt;
+            &lt;meta name="sync-media-css-class-active" content="-my-active-element"&gt;
+            &lt;meta name="sync-media-css-class-playing" content="-my-document-playing"&gt;
+          &lt;/head&gt;
+        </pre>
+
+        <p>The author then defines styles for these classnames in the corresponding CSS:</p>
+        <pre>
+        /* emphasize the active element */
+        .-my-active-element {
+            background-color: yellow;
+            color: black !important;
+        }
+
+        /* fade out the inactive text */
+        html.-my-document-playing * {
+            color: gray;
+        }
+        </pre>
+
+    </section>
+    <section>
+      <h3>Metadata</h3>
+
+      <p>The following properties are envisioned as metadata for Synchronized Narration.</p>
+
+      <p class="issue">What's required vs recommended?</p>
+
+      <ul>
+        <li>The <code>readBy</code> property: Defined by <a href="https://schema.org/readBy">https://schema.org/readBy</a>. Already included in the Web Publications draft (see https://w3c.github.io/wpub/#creators and https://w3c.github.io/wpub/#audiobook )</li>
+        <li>The <code>duration</code> property: Defined by <a href="https://w3c.github.io/audiobooks/index.html#duration">https://w3c.github.io/audiobooks/index.html#duration</a>.</li>
+      </ul>
+
+      <p class="example">
+        <pre>
+          &lt;head itemscope itemtype="https://bib.schema.org/Audiobook"&gt;
+            &lt;meta itemprop="readBy" content="Somebody Great"&gt;
+            &lt;meta itemprop="duration" content="123.45"&gt;
+          &lt;/head&gt;
+        </pre>
+      </p>
+    </section>
+  </section>
+  <div data-include="common/html/acknowledgements.html" data-include-replace="true"></div>
+</body>
+</html>
