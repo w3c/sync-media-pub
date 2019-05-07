@@ -3,7 +3,7 @@
 <head>
     <title>Ozymandias</title>
     <link href="#wpm" rel="publication" />
-    <link href="narration.json" rel="sync-media" href="sync-media/index.json" type="application/vnd.wp-sync-media+json"/>
+    <link href="narration.json" rel="sync-media" type="application/vnd.wp-sync-media+json"/>
 
     <script id="wpm" type="application/ld+json">
     {
@@ -24,9 +24,11 @@
                 "url"            : "ozymandias.mp3",
                 "encodingFormat" : "audio/mpeg"
             }
-        ],
+        ]
     }
     </script>
+    <script type="module" src="sync-media/main.js"></script>
+
     <style type="text/css">
       body {
         margin: auto;
@@ -68,5 +70,6 @@
     <p id="line13">Of that colossal wreck, boundless and bare,</p>
     <p id="line14">The lone and level sands stretch far away. </p>
   </div>
+  <script type="application/javascript" src="player.js"></script>
 </body>
 </html>
