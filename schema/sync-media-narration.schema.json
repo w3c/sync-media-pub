@@ -1,0 +1,61 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$id": "https://w3c.github.io/sync-media-pub/sync-media-narration.schema.json",
+    "title": "JSON Schema for Narration Sync Media",
+    "type": "object",
+    "properties": {
+        "role": {
+            "description": "Type associated with this synchronized narration sequence, similar to EPUB3 'epub:type' attribute semantics, e.g. 'aside'",
+            "type": [
+                "string",
+                "array"
+            ],
+            "items": {
+                "type": "string"
+            }
+        },
+        "narration": {
+            "description": "Ordered list of children, similar to SMIL 'seq' element (recursive JSON Schema property)",
+            "type": "array",
+            "items": {
+                "anyOf": [
+                    {
+                        "$ref": "sync-media-narration.schema.json"
+                    },
+                    {
+                        "type": "object",
+                        "properties": {
+                            "role": {
+                                "description": "Type associated with this synchronized text/audio pair, similar to EPUB3 'epub:type' attribute semantics, e.g. 'footnote-ref'",
+                                "type": [
+                                    "string",
+                                    "array"
+                                ],
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "text": {
+                                "description": "Document reference, similar to SMIL 'text' element, e.g. 'chapter1.html#paragraph1'",
+                                "type": "string",
+                                "format": "uri-reference"
+                            },
+                            "audio": {
+                                "description": "Audio reference, similar to SMIL 'audio' element, e.g. 'chapter1.mp3?t=0,123'",
+                                "type": "string",
+                                "format": "uri-reference"
+                            }
+                        },
+                        "required": [
+                            "text",
+                            "audio"
+                        ]
+                    }
+                ]
+            }
+        }
+    },
+    "required": [
+        "narration"
+    ]
+}

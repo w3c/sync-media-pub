@@ -1,0 +1,58 @@
+{
+    "narration": [
+        {
+            "text": "chapter1.html#id1",
+            "audio": "chapter1.mp3#t=0.0,1.2"
+        },
+        {
+            "text": "chapter1.html#id2",
+            "audio": "chapter1.mp3#t=1.2,3.4"
+        },
+        {
+            "role": "footnote-ref",
+            "text": "chapter1.html#id3",
+            "audio": "chapter1.mp3#t=3.4,5.6"
+        },
+        {
+            "role": [
+                "aside",
+                "some-other-type"
+            ],
+            "narration": [
+                {
+                    "text": "chapter1.html#id4",
+                    "audio": "chapter1.mp3#t=5.6,7.8"
+                },
+                {
+                    "text": "chapter1.html#id5",
+                    "audio": "chapter1.mp3#t=7.8,9.1"
+                },
+                {
+                    "text": "chapter1.html#id6",
+                    "audio": "chapter1.mp3#t=9.1,10.1"
+                }
+            ]
+        },
+        {
+            "text": "chapter1.html#id7",
+            "audio": "chapter1.mp3#t=10.1,11.2"
+        },
+        {
+            "text": "chapter1.html#id8",
+            "audio": "chapter1.mp3#t=11.2,13.3"
+        },
+        {
+            "role": "footnote",
+            "narration": [
+                {
+                    "text": "chapter1.html#id9",
+                    "audio": "chapter1.mp3#t=13.3,14.4"
+                },
+                {
+                    "text": "chapter1.html#id10",
+                    "audio": "chapter1.mp3#t=14.4,17.4"
+                }
+            ]
+        }
+    ]
+}
