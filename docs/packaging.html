@@ -63,10 +63,12 @@
 
 			<p>In addition, the following terminology is defined for use in this specification:</p>
 
+      <p><a href="https://github.com/w3c/sync-media-pub/issues/16">Issue #16: add packaging terminology </a></p>
+
 			<dl class="termlist">
 				<dt><dfn id="dfn-file-name" data-lt="File Names">VOCAB</dfn></dt>
 				<dd>
-					<p>TODO</p>
+          TODO
 				</dd>
 			</dl>
 
@@ -76,22 +78,28 @@
   <section>
     <h1>Specification</h1>
 
-    <section>
+    <section id="with-webpub">
       <h2>Inclusion in a Web Publication</h2>
 
-      <p class="issue">Are we assuming that if you package narration with WPUB as described below, then you don't need to reference it from the actual HTML document(s) as described in <a href="narration.html#syncnarr-referencing">Synchronized Narration</a>?</p>
+      <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/15">Issue #15: clarify packaging rules</a></p>
 
       <section>
         <h3>Manifest Properties</h3>
 
+        <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/14">Issue #14: we need a manifest property named "alternative"</a></p>
+
+        <p>Associating a synchronized narration document with a reading order resource is done by giving that resource a property called `alternative`:</p>
+
         <ul>
-          <li><code>alternative</code>: A Reading Order object has this property to indicate its accompanying synchronized narration document.</li>
-          <li><code>duration</code>: as in Audio publications</li>
-          <li><code>readBy</code>: as in Audio publications</li>
-          <li><code>encodingFormat</code>: <code>application/vnd.wp-sync-media+json</code>
+          <li><code>alternative</code>: A Linked Resource object in the reading order has this property to indicate its accompanying synchronized narration document.</li>
         </ul>
 
-        <p class="issue">What is the <code>type</code> of a web publication with synchronized narration? Is it <code>AudioBook</code>? Does it have multiple types?</p>
+        <p>A synchronized narration document is a Linked Resource outside of the reading order, and it can have the following properties:</p>
+        <ul>
+          <li><code>duration</code>: as in Audio publications</li>
+          <li><code>readBy</code>: as in Audio publications</li>
+          <li><code>encodingFormat</code>: [application/vnd.wp-sync-media+json](narration.html#mimetype)</li>
+        </ul>
 
 
         <p class="example">
@@ -112,11 +120,11 @@
               "readingOrder": [
                 {
                   "url": "html/c001.html",
-                  "alternate": "narration1.json"
+                  "alternative": "narration1.json"
                 },
                 {
                   "url": "html/c002.html",
-                  "alternate": "narration2.json"
+                  "alternative": "narration2.json"
                 }
               ],
 
@@ -158,7 +166,7 @@
 
   <section id="syncmediapub-manifest-examples" class="appendix informative">
     <h1>Manifest examples</h1>
-    <p>TODO</p>
+    <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/17">Issue #17: Add more manifest examples to packaging</a></p>
 
     <ul>
       <li>Single document</li>
@@ -166,7 +174,5 @@
       <li>Audio-only</li>
     </ul>
   </section>
-
-  <!-- <div data-include="common/html/acknowledgements.html" data-include-replace="true"></div> -->
 </body>
 </html>

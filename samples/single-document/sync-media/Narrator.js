@@ -6,7 +6,6 @@ export default class Narrator {
     this.htmlDocument = null;
     this.position = 0;
     this.audioPlayer = new AudioPlayer();
-
   }
 
   loadJson(json) {
@@ -15,6 +14,7 @@ export default class Narrator {
 
   setHtmlDocument(document) {
     this.htmlDocument = document;
+    document.getElementsByTagName("body")[0].classList.add("-sync-media-document-playing");
   }
 
   start(){
@@ -25,6 +25,9 @@ export default class Narrator {
     if (this.position+1 < this.items.length) {
       this.position++;
       this.render(this.items[this.position]);
+    }
+    else {
+      document.getElementsByTagName("body")[0].classList.remove("-sync-media-document-playing");
     }
   }
 
