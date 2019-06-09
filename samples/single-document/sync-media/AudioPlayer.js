@@ -7,7 +7,7 @@ export default class AudioPlayer {
     this.end = 0;
     this.doneCallback = null;
     this.waitForSeek = false;
-    console.log("HI I AM AUDIOPLAYRRR");
+    console.log("AudioPlayer constructor");
   }
   setFile(file) {
     console.log("Audio file:", file);
@@ -25,7 +25,7 @@ export default class AudioPlayer {
     this.end = end;
     this.doneCallback = callback;
 
-    if (file != this.file) {  
+    if (file != this.file) {
       this.setFile(file);
     }
     else {
