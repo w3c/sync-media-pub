@@ -7,22 +7,23 @@ export default class AudioPlayer {
     this.end = 0;
     this.doneCallback = null;
     this.waitForSeek = false;
+    this.isLastClip = 0;
     console.log("AudioPlayer constructor");
   }
   setFile(file) {
     console.log("Audio file:", file);
     this.file = file;
     this.audioElm = new Audio(this.file);
-    var bufferedTimeRanges = this.audioElm.buffered;
 
     this.audioElm.addEventListener('progress', ()=>{this.onAudioProgress()});
     this.audioElm.addEventListener('timeupdate', ()=>{this.onAudioTimeUpdate()});
 
   }
 
-  play(file, start, end, callback) {
-    this.start = start;
-    this.end = end;
+  playClip(file, start, end, isLastClip, callback) {
+    this.start = parseFloat(start);
+    this.end = parseFloat(end);
+    this.isLastClip = isLastClip;
     this.doneCallback = callback;
 
     if (file != this.file) {
@@ -30,28 +31,42 @@ export default class AudioPlayer {
     }
     else {
       this.waitForSeek = true;
-      this.audioElm.currentTime = start;
+      // check that the current time is far enough from the desired start time
+      // otherwise it stutters due to the coarse granularity of the browser's timeupdate event
+      if (this.audioElm.currentTime < this.start - .10 || this.audioElm.currentTime > this.start + .10) {
+        this.audioElm.currentTime = this.start;
+      }
+      else {
+        console.log(`${this.audioElm.currentTime} vs ${this.start}`);
+        console.log("close enough, not resetting");
+      }
     }
+  }
+
+  pause() {
+    this.audioElm.pause();
+  }
+  resume() {
+    this.audioElm.play();
   }
 
   // this event fires when the file downloads/is downloading
   onAudioProgress() {
-    console.log("Audio progress:", this.audioElm.duration);
     this.audioElm.currentTime = this.start;
     this.audioElm.play();
   }
 
   // this event fires when the playback position changes
-  // "this" is the audio element
   onAudioTimeUpdate() {
-    console.log("Current time:", this.audioElm.currentTime);
     if (this.waitForSeek) {
       this.waitForSeek = false;
       this.audioElm.play();
     }
     else {
       if (this.audioElm.currentTime >= this.end) {
-        this.audioElm.pause();
+        if (this.isLastClip) {
+          this.audioElm.pause();
+        }
         this.doneCallback();
       }
     }
