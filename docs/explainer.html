@@ -143,11 +143,13 @@
         <h4 id="smil">SMIL</h4>
         <p><a href="https://www.w3.org/AudioVideo/">https://www.w3.org/AudioVideo/</a></p>
         <p>While SMIL was successfully used in EPUB3 Media Overlays, it has a verbose syntax and no specific advantages that would make us keep using it.</p>
+        <p>The SMIL working group is no longer active, and proposing changes to SMIL to make it more usable for this context does not have any path forward at this point.</p>
 
         <h4 id="ttml2">TTML2</h4>
         <p><a href="https://www.w3.org/TR/ttml2/">https://www.w3.org/TR/ttml2/</a></p>
         <p>TTML2 is capable of complex media synchronization beyond text + video. However, the text lives in the same file as the timing information -- it does not support pointing to external text documents. It is possible to use custom metadata or
           hack ID values to insert a reference, but this still means no out of the box support for what we need. This makes it hard to integrate into the Web Publications environment.</p>
+        <p>At TPAC 2018, it was confirmed that inclusion of a mechanism to point to external text documents is out of scope.</p>
 
         <h4 id="webvtt">WebVTT</h4>
         <p><a href="https://www.w3.org/TR/webvtt1/">https://www.w3.org/TR/webvtt1/</a></p>
@@ -161,14 +163,13 @@
         <h4 id="webannotations">WebAnnotations</h4>
         <p><a href="https://www.w3.org/annotation/">https://www.w3.org/annotation/</a></p>
         <p>Web annotations could represent everything that we need it to, possibly with some customization for nesting, but there's no associated processing model for playback as a sequence of audio clips.</p>
+      
 
         <h4 id="custom">Custom</h4>
         <p>None of the candidates above that have browser support can adequately express what we require at minimum, so we can consider creating our own format that is developer-friendly, compact, and easily supports the features we want. We can
-          learn from <a href="drafts/readium2.md">Readium2 experiments</a> in representing Media Overlays in JSON. We can also tie our work into the Audio TF work, because we really don't want audio-only vs audio + text books to be done in wildly
-          different ways.</p>
+          learn from <a href="drafts/readium2.md">Readium2 experiments</a> in representing Media Overlays in JSON.</p>
       </section>
     </section>
-    <!-- <div data-include="common/html/acknowledgements.html" data-include-replace="true"></div> -->
 </body>
 
 </html>
