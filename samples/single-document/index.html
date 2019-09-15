@@ -2,48 +2,45 @@
 <html lang="en-US">
 <head>
     <title>Ozymandias</title>
-    <link href="#wpm" rel="publication" />
     <link href="narration.json" rel="sync-media" type="application/vnd.wp-sync-media+json"/>
-
-    <script id="wpm" type="application/ld+json">
-    {
-        "@context"        : ["https://schema.org", "https://www.w3.org/ns/wp-context"],
-        "type"            : "Poem",
-        "id"              : "sync-narration-demo-ozymandias",
-        "url"             : "http://www.publicdomainpoems.com/ozymandias.html",
-        "creator"         : ["Percy Shelley"],
-        "publisher" : {
-            "type" : "Organization",
-            "name" : "World Wide Web Consortium",
-            "id"   : "https://www.w3.org/"
-        },
-        "datePublished"         : "2019-05-02",
-        "resources"             : [
-            {
-                "type"           : "LinkedResource",
-                "url"            : "ozymandias.mp3",
-                "encodingFormat" : "audio/mpeg"
-            }
-        ]
-    }
-    </script>
     <script type="module" src="sync-media/main.js"></script>
 
     <style type="text/css">
       body {
-        margin: auto;
-        width: 30rem;
-        margin-top: 5rem;
         font-family: Helvetica;
         background-color: lightyellow;
         color: darkblue;
+        margin-left: 3rem;
+      }
+      .content {
+        margin-top: 1rem;
       }
       .poem {
+        margin: 3rem;
+        border: thin green solid;
+        border-radius: 8px;
+        padding: 1rem;
+      }
+      .poem p {
         margin-top: 3rem;
       }
-      .-sync-media-active-element {
-        background-color: yellow;
+      .cols {
+        display: flex;
+      }
+      #source {
+        background-color: white;
+        color: black;
+        margin-left: 3rem;
+      }
+
+      #showsource_wrapper {
+        display: block;
+        padding-top: 1rem;
+      }
+      .-sync-media-active-element, .-sync-media-active-element pre {
+        background-color: yellow !important;
         color: darkblue !important;
+          transition-timing-function: ease;
       }
       .-sync-media-document-playing {
         color: gray !important;
@@ -54,25 +51,249 @@
 <body>
   <div id="controls"></div>
 
-  <h1 id="title">Ozymandias</h1>
-  <p id="author">by Percy Bysshe Shelley</p>
+  
+  <div class="cols">
+    <div class="content">
+      <h1 id="doctitle">Synchronized Narration demo</h1>
+      <p id="s1">Audio narration is available for this document. Just press "Start".</p>
+      <p id="s2">It also supports escapability - just press "escape" to jump out of the poem and continue reading the body text.</p>
 
-  <div class="poem">
-    <p id="line1">I met a traveller from an antique land</p>
-    <p id="line2">Who said: Two vast and trunkless legs of stone</p>
-    <p id="line3">Stand in the desert. Near them on the sand,</p>
-    <p id="line4">Half sunk, a shatter'd visage lies, whose frown</p>
-    <p id="line5">And wrinkled lip and sneer of cold command</p>
-    <p id="line6">Tell that its sculptor well those passions read</p>
-    <p id="line7">Which yet survive, stamp'd on these lifeless things,</p>
-    <p id="line8">The hand that mock'd them and the heart that fed.</p>
-    <p id="line9">And on the pedestal these words appear:</p>
-    <p id="line10">"My name is Ozymandias, king of kings:</p>
-    <p id="line11">Look on my works, ye Mighty, and despair!"</p>
-    <p id="line12">Nothing beside remains: round the decay</p>
-    <p id="line13">Of that colossal wreck, boundless and bare,</p>
-    <p id="line14">The lone and level sands stretch far away. </p>
+      <div class="poem">
+        <h2 id="title">Ozymandias</h2>
+        <p id="author">by Percy Bysshe Shelley</p>
+        <p id="line1">I met a traveller from an antique land</p>
+        <p id="line2">Who said: Two vast and trunkless legs of stone</p>
+        <p id="line3">Stand in the desert. Near them on the sand,</p>
+        <p id="line4">Half sunk, a shatter'd visage lies, whose frown</p>
+        <p id="line5">And wrinkled lip and sneer of cold command</p>
+        <p id="line6">Tell that its sculptor well those passions read</p>
+        <p id="line7">Which yet survive, stamp'd on these lifeless things,</p>
+        <p id="line8">The hand that mock'd them and the heart that fed.</p>
+        <p id="line9">And on the pedestal these words appear:</p>
+        <p id="line10">"My name is Ozymandias, king of kings:</p>
+        <p id="line11">Look on my works, ye Mighty, and despair!"</p>
+        <p id="line12">Nothing beside remains: round the decay</p>
+        <p id="line13">Of that colossal wreck, boundless and bare,</p>
+        <p id="line14">The lone and level sands stretch far away. </p>
+      </div>
+      <p id="s3">Because this is just a demo, this is the end. Bye!</p>
+    </div>
+    <div id="source">
+<code>    
+<span>
+<pre>
+{
+  "narration": [
+</pre>
+</span>
+
+<span id="src_doctitle">
+<pre>
+  {
+    "text": "#doctitle",
+    "audio": "doc.mp3#t=0.0,2.60"
+  },
+</pre>
+</span>
+
+<span id="src_s1">
+<pre>
+  {
+    "text": "#s1",
+    "audio": "doc.mp3#t=2.60,8.11"
+  },
+</pre>
+</span>
+
+<span id="src_s2">
+<pre>
+  {
+    "text": "#s2",
+    "audio": "doc.mp3#t=8.11,17.46"
+  },
+</pre>
+</span>
+
+<span>
+<pre>
+  {
+    "role": "poem"
+    "narration": [
+</pre>
+</span>
+
+<span id="src_title">
+<pre>
+    {
+      "text": "#title",
+      "audio": "ozymandias.mp3#t=0.0,2.41"
+    }
+</pre>
+</span>
+
+<span id="src_author">
+<pre>
+    {
+      "text": "#author",
+      "audio": "ozymandias.mp3#t=3.62,5.91"
+    },
+</pre>
+</span>
+
+<span id="src_line1">
+<pre>
+    {
+      "text": "#line1",
+      "audio": "ozymandias.mp3#t=10.67,14.42"
+    },
+</pre>
+</span>
+
+<span id="src_line2">
+<pre>
+    {
+      "text": "#line2",
+      "audio": "ozymandias.mp3#t=14.42,19.72"
+    },
+</pre>
+</span>
+
+<span id="src_line3">
+<pre>
+    {
+      "text": "#line3",
+      "audio": "ozymandias.mp3#t=19.72,24.04"
+    },
+</pre>
+</span>
+
+<span id="src_line4">
+<pre>
+    {
+      "text": "#line4",
+      "audio": "ozymandias.mp3#t=24.04,29.25"
+    },
+</pre>
+</span>
+
+<span id="src_line5">
+<pre>
+    {
+      "text": "#line5",
+      "audio": "ozymandias.mp3#t=29.25,32.92"
+    },
+</pre>
+</span>
+
+<span id="src_line6">
+<pre>
+    {
+      "text": "#line6",
+      "audio": "ozymandias.mp3#t=32.92,37.24"
+    },
+</pre>
+</span>
+
+<span id="src_line7">
+<pre>
+    {
+      "text": "#line7",
+      "audio": "ozymandias.mp3#t=37.24,42.54"
+    },
+</pre>
+</span>
+
+<span id="src_line8">
+<pre>
+    {
+      "text": "#line8",
+      "audio": "ozymandias.mp3#t=42.54,46.29"
+    },
+</pre>
+</span>
+
+<span id="src_line9">
+<pre>
+    {
+      "text": "#line9",
+      "audio": "ozymandias.mp3#t=46.29,49.63"
+    },
+</pre>
+</span>
+
+<span id="src_line10">
+<pre>
+    {
+      "text": "#line10",
+      "audio": "ozymandias.mp3#t=49.63,54.27"
+    },
+</pre>
+</span>
+
+<span id="src_line11">
+<pre>
+    {
+      "text": "#line11",
+      "audio": "ozymandias.mp3#t=54.27,58.84"
+    },
+</pre>
+</span>
+
+<span id="src_line12">
+<pre>
+    {
+      "text": "#line12",
+      "audio": "ozymandias.mp3#t=58.84,63.73"
+    },
+</pre>
+</span>
+
+<span id="src_line13">
+<pre>
+    {
+      "text": "#line13",
+      "audio": "ozymandias.mp3#t=63.73,68.45"
+    },
+</pre>
+</span>
+
+<span id="src_line14">
+<pre>
+    {
+      "text": "#line14",
+      "audio": "ozymandias.mp3#t=68.45,73.42"
+    }
+</pre>
+</span>
+<span>
+<pre>
+  ]},
+</pre>
+</span>
+
+
+<span id="src_s3">
+<pre>
+  {
+    "text": "#s3",
+    "audio": "doc.mp3#t=17.46,22.93"
+  }
+</pre>
+</span>
+
+<span>
+<pre>
+]}
+</pre>
+</span>
+
+</code>
+
+
+
+
+    </div>
   </div>
-  <script type="application/javascript" src="player.js"></script>
+  <script type="application/javascript" src="sync-media/main.js"></script>
 </body>
 </html>

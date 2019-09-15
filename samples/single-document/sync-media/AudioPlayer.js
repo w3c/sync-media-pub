@@ -27,6 +27,9 @@ export default class AudioPlayer {
     this.doneCallback = callback;
 
     if (file != this.file) {
+      if (this.audioElm) {
+        this.audioElm.pause();
+      }
       this.setFile(file);
     }
     else {

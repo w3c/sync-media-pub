@@ -1,68 +1,89 @@
 {
   "narration": [
     {
-      "text": "#title",
-      "audio": "ozymandias.mp3#t=0.0,2.41"
+      "text": "#doctitle",
+      "audio": "doc.mp3#t=0.0,2.60"
     },
     {
-      "text": "#author",
-      "audio": "ozymandias.mp3#t=3.62,5.91"
+      "text": "#s1",
+      "audio": "doc.mp3#t=2.60,8.11"
     },
     {
-      "text": "#line1",
-      "audio": "ozymandias.mp3#t=10.67,14.42"
+      "text": "#s2",
+      "audio": "doc.mp3#t=8.11,17.46"
     },
     {
-      "text": "#line2",
-      "audio": "ozymandias.mp3#t=14.42,19.72"
+      "role": "poem",
+      "narration": [
+        {
+          "text": "#title",
+          "audio": "ozymandias.mp3#t=0.0,2.41"
+        },
+        {
+          "text": "#author",
+          "audio": "ozymandias.mp3#t=3.62,5.91"
+        },
+        {
+          "text": "#line1",
+          "audio": "ozymandias.mp3#t=10.67,14.42"
+        },
+        {
+          "text": "#line2",
+          "audio": "ozymandias.mp3#t=14.42,19.72"
+        },
+        {
+          "text": "#line3",
+          "audio": "ozymandias.mp3#t=19.72,23.67"
+        },
+        {
+          "text": "#line4",
+          "audio": "ozymandias.mp3#t=23.67,28.98"
+        },
+        {
+          "text": "#line5",
+          "audio": "ozymandias.mp3#t=28.98,32.92"
+        },
+        {
+          "text": "#line6",
+          "audio": "ozymandias.mp3#t=32.92,37.24"
+        },
+        {
+          "text": "#line7",
+          "audio": "ozymandias.mp3#t=37.24,42.54"
+        },
+        {
+          "text": "#line8",
+          "audio": "ozymandias.mp3#t=42.54,46.29"
+        },
+        {
+          "text": "#line9",
+          "audio": "ozymandias.mp3#t=46.29,49.63"
+        },
+        {
+          "text": "#line10",
+          "audio": "ozymandias.mp3#t=49.63,54.27"
+        },
+        {
+          "text": "#line11",
+          "audio": "ozymandias.mp3#t=54.27,58.84"
+        },
+        {
+          "text": "#line12",
+          "audio": "ozymandias.mp3#t=58.84,63.73"
+        },
+        {
+          "text": "#line13",
+          "audio": "ozymandias.mp3#t=63.73,68.45"
+        },
+        {
+          "text": "#line14",
+          "audio": "ozymandias.mp3#t=68.45,73.42"
+        }
+      ]
     },
     {
-      "text": "#line3",
-      "audio": "ozymandias.mp3#t=19.72,24.04"
-    },
-    {
-      "text": "#line4",
-      "audio": "ozymandias.mp3#t=24.04,29.25"
-    },
-    {
-      "text": "#line5",
-      "audio": "ozymandias.mp3#t=29.25,32.92"
-    },
-    {
-      "text": "#line6",
-      "audio": "ozymandias.mp3#t=32.92,37.24"
-    },
-    {
-      "text": "#line7",
-      "audio": "ozymandias.mp3#t=37.24,42.54"
-    },
-    {
-      "text": "#line8",
-      "audio": "ozymandias.mp3#t=42.54,46.29"
-    },
-    {
-      "text": "#line9",
-      "audio": "ozymandias.mp3#t=46.29,49.63"
-    },
-    {
-      "text": "#line10",
-      "audio": "ozymandias.mp3#t=49.63,54.27"
-    },
-    {
-      "text": "#line11",
-      "audio": "ozymandias.mp3#t=54.27,58.84"
-    },
-    {
-      "text": "#line12",
-      "audio": "ozymandias.mp3#t=58.84,63.73"
-    },
-    {
-      "text": "#line13",
-      "audio": "ozymandias.mp3#t=63.73,68.45"
-    },
-    {
-      "text": "#line14",
-      "audio": "ozymandias.mp3#t=68.45,73.42"
+      "text": "#s3",
+      "audio": "doc.mp3#t=17.46,22.93"
     }
   ]
 }
