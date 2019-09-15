@@ -44,7 +44,7 @@
 
 <body>
   <section id="abstract">
-    <p>This specification provides a draft version of Synchronized Narration.</p>
+    <p>This document provides a draft version of Synchronized Narration.</p>
   </section>
 
   <section id="sotd">
@@ -54,18 +54,12 @@
   <section id="syncnarr-introduction">
     <h1>Introduction</h1>
 
-    <p>Synchronized Narration is defined as a series of synchronization points between audio file clips and HTML content. The primary use case is in the context of Web Publications. This
-      proposal aims to define Synchronized Narration for the Web, in isolation from Web Publications. The accompanying <a href="packaging.html">Packaging Synchronized Narration for Web Publications</a> discusses integration.</p>
+    <p>Synchronized Narration is used to add spoken audio to text content. It is represented as a series of synchronization points between audio file clips and HTML content. This document defines Synchronized Narration for use with standalone HTML documents. However, as this work has been developed with Web Publications as a primary use case, there is an accompanying document called <a href="incorporating-sync-narr.html">Incorporating Synchronized Narration into Web Publications</a>, which covers integration with Web Publications.</p>
 
-
-    <section id="syncnarrpub-terminology">
+    <section id="syncnarr-terminology">
       <h2>Terminology</h2>
 
-      <p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading System"). A complete list of these terms and definitions is provided in <a href="https://www.w3.org/TR/wpub/">Web Publications</a>.</p>
-
-      <p>Only the first instance of a term in a section is linked to its definition.</p>
-
-      <p>In addition, the following terminology is defined for use in this specification:</p>
+      <p>The following terminology is defined for use in this specification:</p>
 
       <dl class="termlist">
         <dt><dfn id="dfn-audio-clip" data-lt="Audio Clip">Audio Clip</dfn></dt>
@@ -262,9 +256,9 @@
         <h1>User Agent Processing</h1>
         <p><code>narration</code>: each object in the array is played in sequence. Media properties on a single object are rendered in parallel.</p>
 
-        <p><code>audio</code>: play clip from begin to end</p>
+        <p><code>audio</code>: Play clip from begin to end</p>
 
-        <p><code>text</code>: render the text by bringing focus to the element in the browser</p>
+        <p><code>text</code>: Render the text by bringing focus to the element in the browser. Apply playback classnames while the element is active.</p>
 
       </section>
 </body>
