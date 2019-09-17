@@ -6,12 +6,13 @@ export default class Narrator {
     this.htmlDocument = null;
     this.position = 0;
     this.audioPlayer = new AudioPlayer();
-    this.onstart = null;
-    this.onpause = null;
-    this.ondone = null;
-    this.onresume = null;
-    this.oncanescape = null;
-    this.onescape = null;
+    this.onStart = null;
+    this.onPause = null;
+    this.onDone = null;
+    this.onResume = null;
+    this.onCanEscape = null;
+    this.onEscape = null;
+    this.onHighlight = null;
     this.syncSource = false;
   }
 
@@ -25,7 +26,7 @@ export default class Narrator {
 
   start(){
     console.log("Starting");
-    this.onstart();
+    this.onStart();
     this.position = 0;
     this.render(this.items[this.position]);
     document.getElementsByTagName("body")[0].classList.add("-sync-media-document-playing");
@@ -33,19 +34,19 @@ export default class Narrator {
 
   pause() {
     console.log("Pausing");
-    this.onpause();
+    this.onPause();
     this.audioPlayer.pause();
   }
 
   resume() {
     console.log("Resuming");
-    this.onresume();
+    this.onResume();
     this.audioPlayer.resume();
   }
 
   escape() {
     console.log("Escape");
-    this.onescape();
+    this.onEscape();
     this.audioPlayer.pause();
     let textid = this.items[this.position].text.split("#")[1];
     this.resetTextStyle(textid);
@@ -53,12 +54,20 @@ export default class Narrator {
       let srctextid = `src_${this.items[this.position].text.split("#")[1]}`;
       this.resetTextStyle(srctextid);
     }
-    this.position = this.items.slice(this.position).findIndex(thing => thing.role === '') 
+    this.position = this.items.slice(this.position).findIndex(thing => thing.groupId !== this.items[this.position].groupId) 
       + (this.items.length - this.items.slice(this.position).length) - 1;
     this.next();
   }
 
   next() {
+    let textid = this.items[this.position].text.split("#")[1];
+
+    this.resetTextStyle(textid);
+    if (this.syncSource) {
+      let srctextid = `src_${this.items[this.position].text.split("#")[1]}`;
+      this.resetTextStyle(srctextid);
+    }
+    
     if (this.position+1 < this.items.length) {
       this.position++;
       console.log("Loading clip " + this.position);
@@ -69,14 +78,14 @@ export default class Narrator {
     else {
       document.getElementsByTagName("body")[0].classList.remove("-sync-media-document-playing");
       console.log("Document done");
-      this.ondone();
+      this.onDone();
     }
   }
 
   render(item, isLast) {
     if (item['role'] != '') {
       // this is a substructure
-      this.oncanescape(item["role"]);
+      this.onCanEscape(item["role"]);
     }
     let textid = item.text.split("#")[1];
     this.highlightText(textid);
@@ -106,6 +115,7 @@ export default class Narrator {
     if (!isInViewport(elm)) {
       elm.scrollIntoView();
     }
+    this.onHighlight(id);
   }
 
   resetTextStyle(id) {
@@ -125,17 +135,20 @@ var isInViewport = function (elem) {
   );
 };
 
+let groupId = 0;
 // flatten out any nested items
 var flatten = function(itemsArr, roleValue) {
   var flatter = itemsArr.map(item => {
     if (item.hasOwnProperty("narration")) {
+      groupId++;
       return flatten(item['narration'], item['role']);
     }
     else {
       item.role = roleValue ? roleValue : '';
+      item.groupId = groupId;
       return item;
     }
   }).reduce((acc, curr) => acc.concat(curr), []);
-
+  groupId--;
   return flatter;
 }

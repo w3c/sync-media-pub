@@ -12,7 +12,7 @@
         color: darkblue;
         margin-left: 3rem;
       }
-      .content {
+      #content {
         margin-top: 1rem;
       }
       .poem {
@@ -20,11 +20,12 @@
         border: thin green solid;
         border-radius: 8px;
         padding: 1rem;
-      }
-      .poem p {
         margin-top: 3rem;
       }
-      .cols {
+      .poem p {
+        margin-top: 1rem;
+      }
+      .sidebyside {
         display: flex;
       }
       #source {
@@ -32,10 +33,14 @@
         color: black;
         margin-left: 3rem;
       }
-
-      #showsource_wrapper {
-        display: block;
-        padding-top: 1rem;
+      #controls {
+        padding-bottom: 2rem;
+        margin-bottom: 2rem;
+        border-bottom: thin solid black;
+      }
+      #caption {
+        width: 40%;
+        font-size: xx-large;
       }
       .-sync-media-active-element, .-sync-media-active-element pre {
         background-color: yellow !important;
@@ -50,10 +55,9 @@
 </head>
 <body>
   <div id="controls"></div>
-
   
-  <div class="cols">
-    <div class="content">
+  <div class="sidebyside">
+    <div id="content">
       <h1 id="doctitle">Synchronized Narration demo</h1>
       <p id="s1">Audio narration is available for this document. Just press "Start".</p>
       <p id="s2">It also supports escapability - just press "escape" to jump out of the poem and continue reading the body text.</p>
@@ -78,222 +82,12 @@
       </div>
       <p id="s3">Because this is just a demo, this is the end. Bye!</p>
     </div>
-    <div id="source">
-<code>    
-<span>
-<pre>
-{
-  "narration": [
-</pre>
-</span>
-
-<span id="src_doctitle">
-<pre>
-  {
-    "text": "#doctitle",
-    "audio": "doc.mp3#t=0.0,2.60"
-  },
-</pre>
-</span>
-
-<span id="src_s1">
-<pre>
-  {
-    "text": "#s1",
-    "audio": "doc.mp3#t=2.60,8.11"
-  },
-</pre>
-</span>
-
-<span id="src_s2">
-<pre>
-  {
-    "text": "#s2",
-    "audio": "doc.mp3#t=8.11,17.46"
-  },
-</pre>
-</span>
-
-<span>
-<pre>
-  {
-    "role": "poem"
-    "narration": [
-</pre>
-</span>
-
-<span id="src_title">
-<pre>
-    {
-      "text": "#title",
-      "audio": "ozymandias.mp3#t=0.0,2.41"
-    }
-</pre>
-</span>
-
-<span id="src_author">
-<pre>
-    {
-      "text": "#author",
-      "audio": "ozymandias.mp3#t=3.62,5.91"
-    },
-</pre>
-</span>
-
-<span id="src_line1">
-<pre>
-    {
-      "text": "#line1",
-      "audio": "ozymandias.mp3#t=10.67,14.42"
-    },
-</pre>
-</span>
-
-<span id="src_line2">
-<pre>
-    {
-      "text": "#line2",
-      "audio": "ozymandias.mp3#t=14.42,19.72"
-    },
-</pre>
-</span>
-
-<span id="src_line3">
-<pre>
-    {
-      "text": "#line3",
-      "audio": "ozymandias.mp3#t=19.72,24.04"
-    },
-</pre>
-</span>
-
-<span id="src_line4">
-<pre>
-    {
-      "text": "#line4",
-      "audio": "ozymandias.mp3#t=24.04,29.25"
-    },
-</pre>
-</span>
-
-<span id="src_line5">
-<pre>
-    {
-      "text": "#line5",
-      "audio": "ozymandias.mp3#t=29.25,32.92"
-    },
-</pre>
-</span>
-
-<span id="src_line6">
-<pre>
-    {
-      "text": "#line6",
-      "audio": "ozymandias.mp3#t=32.92,37.24"
-    },
-</pre>
-</span>
-
-<span id="src_line7">
-<pre>
-    {
-      "text": "#line7",
-      "audio": "ozymandias.mp3#t=37.24,42.54"
-    },
-</pre>
-</span>
-
-<span id="src_line8">
-<pre>
-    {
-      "text": "#line8",
-      "audio": "ozymandias.mp3#t=42.54,46.29"
-    },
-</pre>
-</span>
-
-<span id="src_line9">
-<pre>
-    {
-      "text": "#line9",
-      "audio": "ozymandias.mp3#t=46.29,49.63"
-    },
-</pre>
-</span>
-
-<span id="src_line10">
-<pre>
-    {
-      "text": "#line10",
-      "audio": "ozymandias.mp3#t=49.63,54.27"
-    },
-</pre>
-</span>
-
-<span id="src_line11">
-<pre>
-    {
-      "text": "#line11",
-      "audio": "ozymandias.mp3#t=54.27,58.84"
-    },
-</pre>
-</span>
-
-<span id="src_line12">
-<pre>
-    {
-      "text": "#line12",
-      "audio": "ozymandias.mp3#t=58.84,63.73"
-    },
-</pre>
-</span>
-
-<span id="src_line13">
-<pre>
-    {
-      "text": "#line13",
-      "audio": "ozymandias.mp3#t=63.73,68.45"
-    },
-</pre>
-</span>
-
-<span id="src_line14">
-<pre>
-    {
-      "text": "#line14",
-      "audio": "ozymandias.mp3#t=68.45,73.42"
-    }
-</pre>
-</span>
-<span>
-<pre>
-  ]},
-</pre>
-</span>
-
-
-<span id="src_s3">
-<pre>
-  {
-    "text": "#s3",
-    "audio": "doc.mp3#t=17.46,22.93"
-  }
-</pre>
-</span>
-
-<span>
-<pre>
-]}
-</pre>
-</span>
-
-</code>
-
-
-
-
+    <div id="caption">
     </div>
+    <code id="source"></code>
   </div>
+  
   <script type="application/javascript" src="sync-media/main.js"></script>
 </body>
+
 </html>

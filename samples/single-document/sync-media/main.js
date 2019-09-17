@@ -1,19 +1,29 @@
 import Narrator from "./Narrator.js";
+import Utils from "./utils.js";
 
 let narrator = new Narrator();
+let utils = new Utils();
 narrator.setHtmlDocument(document);
 narrator.syncSource = true;
 
 let states = {0: "NOTSTARTED", 1: "PLAYING", 2: "PAUSED"};
 let state = 0;
+let captionMode = false;
+/* 
+add controls
+*/
 
 let controls = document.querySelector("[id=controls]");
-//controls.setAttribute("aria-live", "polite");
-let button = document.createElement("button");
-button.textContent = "Start";
-button.onclick = (e) => {
+let content = document.querySelector("[id=content]");
+let caption = document.querySelector("[id=caption]");
+let source = document.querySelector("[id=source]");
+
+/* 
+play button
+*/
+let playButton = utils.makeButton("Start", controls);
+playButton.onclick = (e) => {
   e.preventDefault();
-  console.log("CLICK");
   if (state === 0) {
     narrator.start();
   }
@@ -24,71 +34,95 @@ button.onclick = (e) => {
     narrator.resume();
   }
 }
-controls.appendChild(button);
 
-let escapeButton = document.createElement("button");
-escapeButton.textContent = "Escape";
+
+
+/*
+next button
+*/
+let nextButton = utils.makeButton("Next", controls);
+nextButton.onclick = (e) => {
+  e.preventDefault();
+  narrator.next();
+}
+/* 
+escape button
+*/
+let escapeButton = utils.makeButton("Escape", controls);
 escapeButton.onclick = (e) => {
   e.preventDefault();
   narrator.escape();
 }
 escapeButton.hidden = true;
-controls.append(escapeButton);
 
-narrator.onstart = () => {
-  button.textContent = "Pause";
-  state = 1;
-}
-narrator.onpause = () => {
-  button.textContent = "Play";
-  state = 2;
-}
-narrator.onresume = () => {
-  button.textContent = "Pause";
-  state = 1;
-}
-narrator.ondone = () => {
-  button.textContent = "Start";
-  state = 0;
-}
-narrator.oncanescape = rolevalue => {
-  escapeButton.hidden = false;
-  escapeButton.textContent = `Escape ${rolevalue}`;
-}
-narrator.onescape = () => {
-  escapeButton.hidden = true;
-}
-
-let narrationFile = document.querySelector("[rel=sync-media]").getAttribute("href");
-fetch(narrationFile)
-.then(res => res.text())
-.then(text => {
-  narrator.loadJson(JSON.parse(text));
-})
-.catch(err => console.log(err));
-
-let showsource_wrapper = document.createElement("div");
-showsource_wrapper.id = "showsource_wrapper";
-
-let showsource = document.createElement("input");
-showsource.id = "showsource";
-
-let showsource_label = document.createElement("label");
-showsource_label.id = "showsource_label";
-showsource_label.for = "showsource";
-showsource_label.textContent ="Show source";
-
-showsource.textContent = "Show source";
-showsource.type = "checkbox";
-showsource_wrapper.appendChild(showsource);
-showsource_wrapper.appendChild(showsource_label);
-
-controls.appendChild(showsource_wrapper);
-
-let source = document.querySelector("[id=source]");
-source.hidden = true;
-
+/* 
+show source
+*/
+let showsource = utils.makeCheckbox("showsource", "Show source", controls);
 showsource.onclick = (e) => {
   source.hidden = !e.target.checked;
 }
+
+/* 
+show caption
+*/
+let showcaption = utils.makeCheckbox("showcaption", "Caption mode", controls);
+showcaption.onclick = (e) => {
+  captionMode = e.target.checked;
+  content.hidden = captionMode;
+  caption.hidden = !captionMode;
+}
+
+/* 
+events
+*/
+narrator.onStart = () => {
+  playButton.textContent = "Pause";
+  state = 1;
+}
+narrator.onPause = () => {
+  playButton.textContent = "Play";
+  state = 2;
+}
+narrator.onResume = () => {
+  playButton.textContent = "Pause";
+  state = 1;
+}
+narrator.onDone = () => {
+  playButton.textContent = "Start";
+  state = 0;
+}
+narrator.onCanEscape = rolevalue => {
+  escapeButton.hidden = false;
+  escapeButton.textContent = `Escape ${rolevalue}`;
+}
+narrator.onEscape = () => {
+  escapeButton.hidden = true;
+}
+narrator.onHighlight = (id) => {
+  if (id.indexOf("src_") == -1) {
+    // extract the text and display it
+    let elm = document.querySelector(`[id=${id}]`);
+    caption.textContent = elm.textContent;
+  }
+}
+
+let narrationFile = document.querySelector("[rel=sync-media]").getAttribute("href");
+let narrationJson; 
+
+fetch(narrationFile)
+.then(res => res.text())
+.then(text => {
+  narrationJson = JSON.parse(text);
+  utils.loadSource(narrationJson, 0);
+  narrator.loadJson(narrationJson);
+  
+})
+.catch(err => console.log(err));
+
+
+source.hidden = true;
+caption.hidden = true;
+
+
 
