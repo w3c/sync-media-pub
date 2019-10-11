@@ -52,9 +52,8 @@
     
   </section>
 
-  <section id="syncnarr-explainer">
   <section id="history">
-      <h2>History</h2>
+      <h1>History</h1>
 
       <p>The formal historical precedent for the concept of synchronized narration is the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays specification</a> (digital publications with synchronized text-audio playback).</p>
 
@@ -64,8 +63,8 @@
 
     </section>
 
-    <section>
-      <h2>Scope</h2>
+    <section id="scope">
+      <h1>Scope</h1>
 
       <p>Initially, the work of the Synchronized Media CG was envisioned to potentially develop a recommendation for how to integrate many different types of media into Web Publications, from video to captioning to audio narration. The concrete use
         cases with the most interest expressed by user agent and content creators were all centered around audio narration synchronized with text, similar to <a href="https://w3c.github.io/publ-epub-revision/epub32/spec/epub-mediaoverlays.html">EPUB 3 Media Overlays</a>.</p>
@@ -82,18 +81,16 @@
 
     </section>
 
-    <section>
-      <h2>Technology Selection</h2>
+    <section id="technology-selection">
+      <h1>Technology Selection</h1>
 
-      <section>
-        <h3 id="features">Features</h3>
-        <p>The following aspects were considered:</p>
-        <ul>
-          <li>Browser support</li>
-          <li>Ability to point to text in an external HTML5 document</li>
-          <li>Developer-friendly syntax (XML is ok; JSON is better)</li>
-          <li>Nested structure support, used for skip/escape features and multiple granularities</li>
-        </ul>
+      <p>The following aspects were considered:</p>
+      <ul>
+        <li>Browser support</li>
+        <li>Ability to point to text in an external HTML5 document</li>
+        <li>Developer-friendly syntax (XML is ok; JSON is better)</li>
+        <li>Nested structure support, used for skip/escape features and multiple granularities</li>
+      </ul>
 
         <table>
           <thead>
@@ -151,32 +148,31 @@
           </tbody>
         </table>
 
-        <h4 id="smil">SMIL</h4>
+        <h2 id="smil">SMIL</h2>
         <p><a href="https://www.w3.org/AudioVideo/">https://www.w3.org/AudioVideo/</a></p>
         <p>While SMIL was successfully used in EPUB3 Media Overlays, it has a verbose syntax and no specific advantages that would make us keep using it.</p>
         <p>The SMIL working group is no longer active, and proposing changes to SMIL to make it more usable for this context does not have any path forward at this point.</p>
 
-        <h4 id="ttml2">TTML2</h4>
+        <h2 id="ttml2">TTML2</h2>
         <p><a href="https://www.w3.org/TR/ttml2/">https://www.w3.org/TR/ttml2/</a></p>
         <p>TTML2 is capable of complex media synchronization beyond text + video. However, the text lives in the same file as the timing information -- it does not support pointing to external text documents. It is possible to use custom metadata or
           hack ID values to insert a reference, but this still means no out of the box support for what we need. This makes it hard to integrate into the Web Publications environment.</p>
         <p>At TPAC 2018, it was confirmed that inclusion of a mechanism to point to external text documents is out of scope.</p>
 
-        <h4 id="webvtt">WebVTT</h4>
+        <h2 id="webvtt">WebVTT</h2>
         <p><a href="https://www.w3.org/TR/webvtt1/">https://www.w3.org/TR/webvtt1/</a></p>
         <p>The only way to reference external text references would be via custom metadata that sits alongside audio sync points. However, we can't leverage existing browser support - our custom metadata would not be recognized by any implementations
           except ours. Nesting is also not supported, so we couldn't represent multiple granularities or skippable/escapable structures.</p>
 
-        <h4 id="webanimations">WebAnimations</h4>
+        <h2 id="webanimations">WebAnimations</h2>
         <p><a href="https://www.w3.org/TR/web-animations-1/">https://www.w3.org/TR/web-animations-1/</a></p>
         <p>While web animations provides good timing and playback support, the lack of a declarative syntax makes it not an option.</p>
 
-        <h4 id="webannotations">WebAnnotations</h4>
+        <h2 id="webannotations">WebAnnotations</h2>
         <p><a href="https://www.w3.org/annotation/">https://www.w3.org/annotation/</a></p>
         <p>Web annotations could represent everything that we need it to, possibly with some customization for nesting, but there's no associated processing model for playback as a sequence of audio clips.</p>
       
-
-        <h4 id="custom">Custom</h4>
+        <h2 id="custom">Custom</h2>
         <p>None of the candidates above that have browser support can adequately express what we require at minimum, so we can consider creating our own format that is developer-friendly, compact, and easily supports the features we want. We can
           learn from <a href="https://github.com/w3c/sync-media-pub/blob/master/drafts/readium2.md">Readium2 experiments</a> in representing Media Overlays in JSON.</p>
       </section>
