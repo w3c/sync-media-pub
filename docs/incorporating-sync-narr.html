@@ -94,47 +94,30 @@
 
     <p class="example">
       <pre>
-        {
-          "@context": ["https://schema.org", "https://www.w3.org/ns/wp-context"],
-          "url": "https://publisher.example.org/mobydick",
-          "author": "Herman Melville",
-          "dateModified": "2018-02-10T17:00:00Z",
-
-          "readBy": "Someone",
-          "duration": "20000s",
-
-          "sync-media-css-class-active": "-my-active-element",
-          "sync-media-css-class-playing": "-my-document-playing",
-
-          "readingOrder": [
+      {
+        "readingOrder": [
             {
               "url": "html/c001.html",
-              "alternate": [{
+              "alternate": {
                 "type": "LinkedResource",
                 "url": "narration1.json",
                 "encodingFormat": "application/vnd.wp-sync-media+json",
                 "duration": "10000s"
-              }]
+              }
             },
-            {
-              "url": "html/c002.html",
-              "alternative": [{
-                "type": "LinkedResource",
-                "url": "narration2.json",
-                "encodingFormat": "application/vnd.wp-sync-media+json",
-                "duration": "10000s"
-              }]
-            }
+            ...
           ]
-        }
+          ...
+      }          
       </pre>
     </p>
         
     <p>A synchronized narration document is a LinkedResource and uses the following properties: </p>
     <ul>
       <li><code>duration</code>: as in Audiobooks</li>
-      <li><code>readBy</code>: as in <a href="https://w3c.github.io/audiobooks/#audio-creators">Audiobooks</a></li>
       <li><code>encodingFormat</code>: [application/vnd.wp-sync-media+json](narration.html#mimetype)</li>
+      <li><code>readBy</code>: as in <a href="https://w3c.github.io/audiobooks/#audio-creators">Audiobooks</a></li>
+      <li><code>url</code>: as in pub manifest</li>
     </ul>
   </section>
 
@@ -142,11 +125,83 @@
     <h1>Publication Manifest Examples</h1>
     <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/17">Issue #17: Add more manifest examples</a></p>
 
-    <ul>
-      <li>Single document</li>
-      <li>Text + audio</li>
-      <li>Audio-only</li>
-    </ul>
+    <h2>Audiobook</h2>
+    <p>An audio book can add Synchronized Media resources to enable phrase-by-phrase playback:</p>
+    <p class="example">
+    <pre>
+{
+	"@context" : ["https://schema.org", "https://www.w3.org/ns/pub-context"],
+	"type"		 : "Audiobook",
+	"url"      : "https://publisher.example.org/janeeyre",
+	"name"     : "Jane Eyre",
+	"readingOrder" : [{
+		"type"	: "LinkedResource",
+		"url"   : "audio/part001.wav#0",
+		"encodingFormat" : "audio/vnd-wav",
+		"name"  : "Chapter 1",
+		"duration" : "457.931",
+		"alternate" : {
+      "type": "LinkedResource",
+      "url": "sync-media/part001-1.json",
+      "encodingFormat" : "application/vnd.wp-sync-media+json"
+    }
+	}, {
+		"type"  : "LinkedResource",
+		"url"   : "audio/part001.wav#457.932",
+		"encodingFormat" : "audio/vnd-wav",
+		"name"  : "Chapter 2",
+		"duration" : "234.245",
+		"alternate" : {
+      "type": "LinkedResource",
+      "url" : "sync-media/part001-2.json",
+      "encodingFormat" : "application/vnd.wp-sync-media+json"
+    }
+	}]
+}
+</pre>
+    </p>
+
+    <h2>Multi-document web publication</h2>
+    <p>This is a hypothetical example based on TODO</p>
+    <p class="example">
+<pre>
+{
+  "@context": ["https://schema.org", "https://www.w3.org/ns/wp-context"],
+  "url": "https://publisher.example.org/mobydick",
+  "author": "Herman Melville",
+  "dateModified": "2018-02-10T17:00:00Z",
+
+  "readBy": "Someone",
+  "duration": "20000s",
+
+  "sync-media-css-class-active": "-my-active-element",
+  "sync-media-css-class-playing": "-my-document-playing",
+
+  "readingOrder": [
+    {
+      "url": "html/c001.html",
+      "alternate": [{
+        "type": "LinkedResource",
+        "url": "narration1.json",
+        "encodingFormat": "application/vnd.wp-sync-media+json",
+        "length": "10000s"
+      }]
+    },
+    {
+      "url": "html/c002.html",
+      "alternative": [{
+        "type": "LinkedResource",
+        "url": "narration2.json",
+        "encodingFormat": "application/vnd.wp-sync-media+json",
+        "length": "10000s"
+      }]
+    }
+  ]
+}
+</pre>
+    </p>
+
+    
   </section>
 </body>
 </html>
