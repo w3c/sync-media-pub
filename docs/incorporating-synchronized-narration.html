@@ -23,7 +23,7 @@
         "companyURL": "http://www.daisy.org",
         "w3cid": 45653
       }],
-      edDraftURI: "https://w3c.github.io/sync-media-pub/sync-narr-in-pub-manifest.html",
+      edDraftURI: "https://w3c.github.io/sync-media-pub/incorporating-synchronized-narration.html",
       shortName: "incorporating-syncnarr",
       noRecTrack: true,
       copyrightStart: "2019",
@@ -48,39 +48,46 @@
   </section>
 
   <section id="sotd">
-    <p>This draft is still under consideration within the Synchronized Media for Publications Community Group and is subject to change. The most prominent issues will be referenced in the document with links provided.</p>
+    <p>This draft is still under consideration within the Synchronized Media for Publications Community Group and is
+      subject to change. The most prominent issues will be referenced in the document with links provided.</p>
   </section>
 
   <section id="syncnarr-incorporation-introduction">
-		<h1>Introduction</h1>
+    <h1>Introduction</h1>
 
-    <p>The Synchronized Narration document covers how to associate Synchronized Narration with an HTML document, by pointing to it from within the HTML document itself. This document shows how to incorporate Synchronized Narration at the Publication Manifest level. Reasons for wanting to do this include:</p> 
+    <p>The Synchronized Narration document covers how to associate Synchronized Narration with an HTML document, by
+      pointing to it from within the HTML document itself. This document shows how to incorporate Synchronized Narration
+      at the Publication Manifest level. Reasons for wanting to do this include:</p>
     <ul>
-    <li>The primary resource with which Synchronized Narration is being associated may be an audio file and cannot contain a reference to an external document.</li>
-    <li>It is more convenient for Reading Systems to discover alternative formats at the manifest level rather than to introspect every HTML document.</li>
+      <li>The primary resource with which Synchronized Narration is being associated may be an audio file and cannot
+        contain a reference to an external document.</li>
+      <li>It is more convenient for Reading Systems to discover alternative formats at the manifest level rather than to
+        introspect every HTML document.</li>
     </ul>
 
-    
-		<section id="syncnarr-incorporation-terminology">
-			<h2>Terminology</h2>
 
-			<p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading System"). A complete list of these <a href="epub-spec.html#audio-terminology">terms and definitions</a> is provided in [[wpub]].</p>
+    <section id="syncnarr-incorporation-terminology">
+      <h2>Terminology</h2>
 
-			<p>Only the first instance of a term in a section is linked to its definition.</p>
+      <p>Terms with meanings specific to the publishing industry are capitalized in this document (e.g., "Reading
+        System"). A complete list of these <a href="epub-spec.html#audio-terminology">terms and definitions</a> is
+        provided in [[wpub]].</p>
 
-			<p>In addition, the following terminology is defined for use in this specification:</p>
+      <p>Only the first instance of a term in a section is linked to its definition.</p>
+
+      <p>In addition, the following terminology is defined for use in this specification:</p>
 
       <p><a href="https://github.com/w3c/sync-media-pub/issues/16">Issue #16: add packaging terminology </a></p>
 
-			<dl class="termlist">
-				<dt><dfn id="dfn-file-name" data-lt="File Names">VOCAB</dfn></dt>
-				<dd>
-          TODO: what terms do we need to define that are specific to incorporation into web publications? 
-				</dd>
-			</dl>
+      <dl class="termlist">
+        <dt><dfn id="dfn-file-name" data-lt="File Names">VOCAB</dfn></dt>
+        <dd>
+          TODO: what terms do we need to define that are specific to incorporation into web publications?
+        </dd>
+      </dl>
 
-		</section>
-	</section>
+    </section>
+  </section>
 
   <section>
     <h1>Specification</h1>
@@ -88,12 +95,15 @@
     <section id="with-webpub">
       <h2>Inclusion in a Publication Manifest</h2>
 
-      <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/15">Issue #15: clarify packaging rules</a></p>
+      <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/15">Issue #15: clarify packaging rules</a>
+      </p>
 
-      <p>A Synchronized Narration document may be associated with a reading order entry in a Publication Manifest. This is done by creating a LinkedResource object for the Synchronized Narration document and adding it to the reading order entry's <code>alternate</code> property:</p>
+      <p>A Synchronized Narration document may be associated with a reading order entry in a Publication Manifest. This
+        is done by creating a LinkedResource object for the Synchronized Narration document and adding it to the reading
+        order entry's <code>alternate</code> property:</p>
 
-    <p class="example">
-      <pre>
+      <p class="example">
+        <pre>
       {
         "readingOrder": [
             {
@@ -110,25 +120,27 @@
           ...
       }          
       </pre>
-    </p>
-        
-    <p>A synchronized narration document is a LinkedResource and uses the following properties: </p>
-    <ul>
-      <li><code>duration</code>: as in <a href="https://w3c.github.io/audiobooks/index.html#audio-duration">Audiobooks</a></li>
-      <li><code>encodingFormat</code>: [application/vnd.wp-sync-media+json](narration.html#mimetype)</li>
-      <li><code>readBy</code>: as in <a href="https://w3c.github.io/audiobooks/#audio-creators">Audiobooks</a></li>
-      <li><code>url</code>: as in pub manifest</li>
-    </ul>
-  </section>
+      </p>
 
-  <section id="syncmediapub-manifest-examples" class="appendix informative">
-    <h1>Publication Manifest Examples</h1>
-    <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/17">Issue #17: Add more manifest examples</a></p>
+      <p>A synchronized narration document is a LinkedResource and uses the following properties: </p>
+      <ul>
+        <li><code>duration</code>: as in <a
+            href="https://w3c.github.io/audiobooks/index.html#audio-duration">Audiobooks</a></li>
+        <li><code>encodingFormat</code>: [application/vnd.wp-sync-media+json](narration.html#mimetype)</li>
+        <li><code>readBy</code>: as in <a href="https://w3c.github.io/audiobooks/#audio-creators">Audiobooks</a></li>
+        <li><code>url</code>: as in pub manifest</li>
+      </ul>
+    </section>
 
-    <h2>Audiobook</h2>
-    <p>An audio book can add Synchronized Media resources to enable phrase-by-phrase playback:</p>
-    <p class="example">
-    <pre>
+    <section id="syncmediapub-manifest-examples" class="appendix informative">
+      <h1>Publication Manifest Examples</h1>
+      <p class="issue"><a href="https://github.com/w3c/sync-media-pub/issues/17">Issue #17: Add more manifest
+          examples</a></p>
+
+      <h2>Audiobook</h2>
+      <p>An audio book can add Synchronized Media resources to enable phrase-by-phrase playback:</p>
+      <p class="example">
+        <pre>
 {
 	"@context" : ["https://schema.org", "https://www.w3.org/ns/pub-context"],
 	"type"		 : "Audiobook",
@@ -159,12 +171,12 @@
 	}]
 }
 </pre>
-    </p>
+      </p>
 
-    <h2>Multi-document web publication</h2>
-    <p>This is a hypothetical example based on TODO</p>
-    <p class="example">
-<pre>
+      <h2>Multi-document web publication</h2>
+      <p>This is a hypothetical example based on TODO</p>
+      <p class="example">
+        <pre>
 {
   "@context": ["https://schema.org", "https://www.w3.org/ns/wp-context"],
   "url": "https://publisher.example.org/mobydick",
@@ -199,9 +211,10 @@
   ]
 }
 </pre>
-    </p>
+      </p>
 
-    
-  </section>
+
+    </section>
 </body>
+
 </html>
