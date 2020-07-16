@@ -128,7 +128,7 @@ If you're curious how this would look in JSON, here is a [comparison](https://ra
 ## Notes about SMIL
 
 If you're familiar with [SMIL](https://www.w3.org/TR/SMIL3/), you will notice some similarities:
-* [`sequence`](#sequence) and [`SMIL seq`](#https://www.w3.org/TR/SMIL3/smil-timing.html#edef-seq) 
+* [`sequence`](#sequence) and [`SMIL seq`](https://www.w3.org/TR/SMIL3/smil-timing.html#edef-seq) 
 * [`step`](#step) and [`SMIL par`](https://www.w3.org/TR/SMIL3/smil-timing.html#edef-par)
 * [`media`](#media) and [`SMIL ref`](https://www.w3.org/TR/SMIL3/smil-extended-media-object.html#edef-ref)
 * [`property`](#property) and [`SMIL param`](https://www.w3.org/TR/SMIL3/smil-extended-media-object.html#edef-param)
