@@ -123,7 +123,7 @@ Children:
 </syncNarration>
 ```
 
-If you're curious how this would look in JSON, here is a [comparison](xml-json.html).
+If you're curious how this would look in JSON, here is a [comparison](https://raw.githack.com/w3c/sync-media-pub/master/drafts/xml-json.html).
 
 ## Notes about SMIL
 
@@ -148,7 +148,7 @@ Another way forward for us could be to build on the existing EPUB3 Media Overlay
 * Replace `epub:type` with `role` or some as-of-yet-not-thought-of not-loaded term.
 * Use [`selectors`](https://www.w3.org/TR/selectors-states/#selectors)
 
-Just for fun, see an [example](xml-json.html#smil) of what this could look like.
+Just for fun, see an [example](https://raw.githack.com/w3c/sync-media-pub/master/drafts/xml-json.html#smil) of what this could look like.
 
 # Possible changes
 
