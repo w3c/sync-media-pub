@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Sync Narration XML vs JSON</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/styles/default.min.css">
+    <script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@9.17.1/build/highlight.min.js"></script>
+    <style>
+        div {
+            display: flex;
+            gap: 2rem;
+        }
+    </style>    
+</head>
+<body>
+<p>The examples below represent the same synchronized narration presentation. One is XML; the other JSON.</p>
+    
+<div>
+<pre class="xml">
+<code>
+&lt;syncNarration&gt;
+    &lt;assets&gt;
+        &lt;asset id=&quot;chapter&quot; src=&quot;file.html&quot; mediaType=&quot;text/html&quot;&gt;
+            &lt;property name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+        &lt;/asset&gt;
+        &lt;asset id=&quot;narration&quot; src=&quot;audio.mp3&quot; mediaType=&quot;audio/mpeg&quot;/&gt;
+    &lt;/assets&gt;
+    &lt;sequence&gt;
+        &lt;step&gt;
+            &lt;media assetRef=&quot;chapter&quot; selector=&quot;#p1&quot;/&gt;
+            &lt;media assetRef=&quot;narration&quot; selector=&quot;#t=0,10&quot;/&gt;
+        &lt;/step&gt;
+        &lt;step&gt;
+            &lt;media assetRef=&quot;chapter&quot; selector=&quot;#p2&quot;/&gt;
+            &lt;media assetRef=&quot;narration&quot; selector=&quot;#t=10,20&quot;/&gt;
+        &lt;/step&gt;
+        &lt;step role=&quot;sidebar&quot;&gt;
+            &lt;!-- nested highlights --&gt;
+            &lt;media assetRef=&quot;chapter&quot; selector=&quot;#sidebar&quot;/&gt;
+            &lt;sequence&gt;
+                &lt;step&gt;
+                    &lt;media assetRef=&quot;chapter&quot; selector=&quot;#sidebar-p1&quot;&gt;
+                        &lt;property name=&quot;cssClass&quot; value=&quot;outline highlight&quot;/&gt;
+                    &lt;/media&gt;
+                    &lt;media assetRef=&quot;narration&quot; selector=&quot;#t=20,30&quot;/&gt;
+                &lt;/step&gt;
+                &lt;step&gt;
+                    &lt;media assetRef=&quot;chapter&quot; selector=&quot;#sidebar-p2&quot;/&gt;
+                    &lt;media assetRef=&quot;narration&quot; selector=&quot;#t=30,40&quot;/&gt;
+                &lt;/step&gt;
+            &lt;/sequence&gt;
+        &lt;/step&gt;
+    &lt;/sequence&gt;
+&lt;/syncNarration&gt;
+</code>
+</pre>
+<pre class="json">
+<code>
+{
+    "assets": [
+        {
+            "id": "chapter",
+            "src": "file.html",
+            "mediaType": "text/html",
+            "properties": {
+                "cssClass": "highlight"
+            }
+        },
+        {
+            "id": "narration", 
+            "src": "audio.mp3",
+            "mediaType": "audio/mpeg"
+        }
+    ],
+    "sequence": {
+        "steps": [
+            {
+                "media": [
+                    {
+                        "assetRef": "chapter",
+                        "selector": "#p1"
+                    },
+                    {
+                        "assetRef": "narration",
+                        "selector": "#t=0,10"
+                    }
+                ]
+            },
+            {
+                "media": [
+                    {
+                        "assetRef": "chapter",
+                        "selector": "#p2"
+                    },
+                    {
+                        "assetRef": "narration",
+                        "selector": "#t=10,20"
+                    }
+                ]
+            },
+            {
+                "role": "sidebar",
+                "media": [
+                    {
+                        "assetRef": "chapter",
+                        "selector": "#sidebar"
+                    },
+                    {
+                        "sequence": {
+                            "steps": [
+                                {
+                                    "media": [
+                                        {
+                                            "assetRef": "chapter",
+                                            "selector": "#sidebar-p1",
+                                            "properties": {
+                                                "cssClass": ["outline", "highlight"]
+                                            }
+                                        },
+                                        {
+                                            "assetRef": "narration",
+                                            "selector": "#t=20,30"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "media": [
+                                        {
+                                            "assetRef": "chapter",
+                                            "selector": "#sidebar-p2"
+                                        },
+                                        {
+                                            "assetRef": "narration",
+                                            "selector": "#t=30,40"
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    }
+}
+</code>
+</pre>
+</div>
+<h2 id="smil">SMIL-like version</h2>
+<div>
+<code>
+<pre class="xml">
+    &lt;smil&gt;
+    &lt;assets&gt;
+        &lt;asset id=&quot;chapter&quot; src=&quot;file.html&quot; mediaType=&quot;text/html&quot;&gt;
+            &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+        &lt;/asset&gt;
+        &lt;asset id=&quot;narration&quot; src=&quot;audio.mp3&quot; mediaType=&quot;audio/mpeg&quot;/&gt;
+    &lt;/assets&gt;
+    &lt;seq&gt;
+        &lt;par&gt;
+            &lt;ref assetRef=&quot;chapter&quot; selector=&quot;#p1&quot;/&gt;
+            &lt;ref assetRef=&quot;narration&quot; selector=&quot;#t=0,10&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par&gt;
+            &lt;ref assetRef=&quot;chapter&quot; selector=&quot;#p2&quot;/&gt;
+            &lt;ref assetRef=&quot;narration&quot; selector=&quot;#t=10,20&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par role=&quot;sidebar&quot;&gt;
+            &lt;!-- nested highlights --&gt;
+            &lt;ref assetRef=&quot;chapter&quot; selector=&quot;#sidebar&quot;/&gt;
+            &lt;seq&gt;
+                &lt;par&gt;
+                    &lt;ref assetRef=&quot;chapter&quot; selector=&quot;#sidebar-p1&quot;&gt;
+                        &lt;param name=&quot;cssClass&quot; value=&quot;outline highlight&quot;/&gt;
+                    &lt;/ref&gt;
+                    &lt;ref assetRef=&quot;narration&quot; selector=&quot;#t=20,30&quot;/&gt;
+                &lt;/par&gt;
+                &lt;par&gt;
+                    &lt;ref assetRef=&quot;chapter&quot; selector=&quot;#sidebar-p2&quot;/&gt;
+                    &lt;ref assetRef=&quot;narration&quot; selector=&quot;#t=30,40&quot;/&gt;
+                &lt;/par&gt;
+            &lt;/seq&gt;
+        &lt;/par&gt;
+    &lt;/seq&gt;
+&lt;/smil&gt;
+</pre>
+</code>
+</div>
+<script>
+    document.querySelectorAll('pre code').forEach((block) => {
+        hljs.highlightBlock(block);
+    });
+</script>
+</body>
+</html>
+
