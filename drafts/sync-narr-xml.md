@@ -3,7 +3,6 @@
 * [Concepts](#concepts)
 * [Notes about SMIL](#notes-about-smil)
 * [Example](#example)
-* [Possible changes](#possible-changes)
 
 ## Concepts
 
@@ -57,6 +56,9 @@ A segment of an asset.
 Properties:
 * `assetRef`: the ID of the asset
 * `selector`: space-separated list of the segment(s) of the asset to render. If there is more than one segment, render them at the same time.
+
+_Idea_: Add a `selectorType` property to [`media`](#media), which would have as its value a string expressing the type of the selector, to align with [Selectors](https://www.w3.org/TR/selectors-states/#selectors).
+
 
 Children: 
 * [`property`](#property) (zero or more): overrides default `asset` properties.
@@ -150,6 +152,3 @@ Another way forward for us could be to build on the existing EPUB3 Media Overlay
 
 Just for fun, see an [example](https://raw.githack.com/w3c/sync-media-pub/master/drafts/xml-json.html#smil) of what this could look like.
 
-# Possible changes
-
-* Add a `selectorType` property to [`media`](#media), which would have as its value a string expressing the type of the selector, to align with [Selectors](https://www.w3.org/TR/selectors-states/#selectors).
