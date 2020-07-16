@@ -1,8 +1,8 @@
 # Synchronized Narration
 
 * [Concepts](#concepts)
-* [Notes about SMIL](#notes-about-smil)
 * [Example](#example)
+* [Notes about SMIL](#notes-about-smil)
 
 ## Concepts
 
