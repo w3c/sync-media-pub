@@ -1,4 +1,4 @@
-# Synchronized Narration
+# Synchronized Narration: New Ideas
 
 * [Concepts](#concepts)
 * [Example](#example)
