@@ -32,7 +32,7 @@ Name-value pair specifying a parameter that affects media rendering, such as CSS
 
 Properties:
 * `name`: a single string
-* `value`: a space-separated list
+* `value`: a list of values
 
 ### `sequence`
 
@@ -55,10 +55,11 @@ A segment of an asset.
 
 Properties:
 * `assetRef`: the ID of the asset
-* `selector`: space-separated list of the segment(s) of the asset to render. If there is more than one segment, render them at the same time.
+* `selector`: segment to render
 
 _Idea_: Add a `selectorType` property to [`media`](#media), which would have as its value a string expressing the type of the selector, to align with [Selectors](https://www.w3.org/TR/selectors-states/#selectors).
 
+_Idea_: allow `selector` to be a list of the segments of the asset to render. If there is more than one segment, render them at the same time.
 
 Children: 
 * [`property`](#property) (zero or more): overrides default `asset` properties.
