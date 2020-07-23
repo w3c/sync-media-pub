@@ -65,7 +65,7 @@ Children:
 
 ## Playback rules
 
-### Rendering `syncNarration
+### Rendering a Sync Narration document
 * Starts at beginning of top-level `sequence` and renders it.
 
 ### Rendering a `sequence`
