@@ -1,2 +1,4 @@
 .DS_Store
-samples/single-document/sync-media/AudioPlayer2.js
+node_modules
+demo
+notes
