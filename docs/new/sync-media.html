@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Synchronized Media for Publications CG: SyncMedia Specification</title>
+    <link rel="stylesheet" href="style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove' defer="defer"></script>
+    <script class='remove'>
+        var respecConfig = {
+            specStatus: "CG-DRAFT",
+            // specStatus: "ED"
+            wg: "Synchronized Media for Publications Community Group",
+            wgURI: "https://www.w3.org/community/sync-media-pub/",
+            wgPublicList: "public-sync-media-pub",
+            editors: [{
+                name: "Marisa DeMeglio",
+                "company": "DAISY Consortium",
+                "companyURL": "http://www.daisy.org",
+                "w3cid": 35713
+            }, {
+                name: "Daniel Weck",
+                "company": "DAISY Consortium",
+                "companyURL": "http://www.daisy.org",
+                "w3cid": 45653
+            }],
+            edDraftURI: "https://w3c.github.io/sync-media-pub",
+            shortName: "sync-media-pub",
+            noRecTrack: true,
+            copyrightStart: "2019",
+            // prevRecURI: "",
+            //postProcess: [create_wp],
+            includePermalinks: true,
+            permalinkEdge: true,
+            permalinkHide: false,
+            diffTool: "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
+            github: {
+                repoURL: "https://github.com/w3c/sync-media-pub",
+                branch: "master"
+            },
+            localBiblio: {},
+        };
+    </script>
+</head>
+
+<body>
+    <section id="abstract">
+        <h1>Introduction</h1>
+        <p>This is an abstract model to represent synchronized text and audio presentations for the web.</p>
+        <p>This model has been created by extending selections from SMIL with custom features. Extensions are prefixed with <code>sync:</code>.</p>
+        <p>There is as of yet no serialization format.</p>
+    </section>
+    <section id="sync-media">
+        <h1>Sync Media</h1>
+        <section id="model">
+            <h2>Model</h2>
+            <section id="smil">
+                <h3><code>smil</code></h3>
+                <section id="description">
+                    <h4>Description</h4>
+                    <p>Root-level container</p>
+                </section>
+                <section id="content">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#head"><code>head</code></a> (zero or 1)</li>
+                        <li><a href="#body"><code>body</code></a> (exactly 1)</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="head">
+                <h3><code>head</code></h3>
+                <section id="description-2">
+                    <h4>Description</h4>
+                    <p>Information not related to temporal behavior</p>
+                </section>
+                <section id="content-2">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#metadata"><code>metadata</code></a> (zero or one)</li>
+                        <li><a href="#paramGroup"><code>paramGroup</code></a> (zero or more)</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="metadata">
+                <h3><code>metadata</code></h3>
+                <section id="description-3">
+                    <h4>Description</h4>
+                    <p>Extension point that allows the inclusion of metadata from any metainformation structuring language</p>
+                </section>
+                <section id="content-3">
+                    <h4>Content</h4>
+                    <p>Zero or more items</p>
+                </section>
+            </section>
+            <section id="paramgroup">
+                <h3><code>paramGroup</code></h3>
+                <section id="description-4">
+                    <h4>Description</h4>
+                    <p>A collection of media parameters</p>
+                </section>
+                <section id="properties">
+                    <h4>Properties</h4>
+                    <ul>
+                        <li><code>id</code>: required</li>
+                    </ul>
+                </section>
+                <section id="content-4">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#param"><code>param</code></a> (zero or more)</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="param">
+                <h3><code>param</code></h3>
+                <section id="description-5">
+                    <h4>Description</h4>
+                    <p>Allows a general parameter value to be sent to a media object renderer as a name/value pair.</p>
+                </section>
+                <section id="properties-2">
+                    <h4>Properties</h4>
+                    <ul>
+                        <li><code>name</code>: a single string</li>
+                        <li><code>value</code>: a space-separated list</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="body">
+                <h3><code>body</code></h3>
+                <section id="description-6">
+                    <h4>Description</h4>
+                    <p>Temporal behavior of the presentation</p>
+                </section>
+                <section id="content-5">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#seq"><code>seq</code></a> (zero or more)</li>
+                        <li><a href="#par"><code>par</code></a> (zero or more)</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="seq">
+                <h3><code>seq</code></h3>
+                <section id="description-7">
+                    <h4>Description</h4>
+                    <p>A sequence of elements</p>
+                </section>
+                <section id="content-6">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#seq"><code>seq</code></a> (zero or more)</li>
+                        <li><a href="#par"><code>par</code></a> (zero or more)</li>
+                        <li><a href="#text"><code>text</code></a> (zero or more)</li>
+                        <li><a href="#audio"><code>audio</code></a> (zero or more)</li>
+                    </ul>
+                    <p>At least one <code>par</code> or <code>seq</code> is required.</p>
+                </section>
+                <section id="properties-3">
+                    <h4>Properties</h4>
+                    <ul>
+                        <li><code>sync:role</code>: semantic role</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="par">
+                <h3><code>par</code></h3>
+                <section id="description-8">
+                    <h4>Description</h4>
+                    <p>Contains media objects which are to be rendered in parallel.</p>
+                </section>
+                <section id="content-7">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#seq"><code>seq</code></a> (zero or more)</li>
+                        <li><a href="#par"><code>par</code></a> (zero or more)</li>
+                        <li><a href="#text"><code>text</code></a> (zero or more)</li>
+                        <li><a href="#audio"><code>audio</code></a> (zero or more)</li>
+                    </ul>
+                </section>
+                <section id="properties-4">
+                    <h4>Properties</h4>
+                    <ul>
+                        <li><code>sync:role</code>: semantic role</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="text">
+                <h3><code>text</code></h3>
+                <section id="description-9">
+                    <h4>Description</h4>
+                    <p>References an element in a markup document</p>
+                </section>
+                <section id="properties-5">
+                    <h4>Properties</h4>
+                    <ul>
+                        <li><code>paramGroup</code>: the ID of a paramGroup</li>
+                        <li><code>src</code>: Location of media file, [optionally] including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">fragment selector</a></li>
+                    </ul>
+                </section>
+                <section id="content-8">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#param"><code>param</code></a> (zero or more)</li>
+                    </ul>
+                </section>
+            </section>
+            <section id="audio">
+                <h3><code>audio</code></h3>
+                <section id="description-10">
+                    <h4>Description</h4>
+                    <p>References a clip of audio media</p>
+                </section>
+                <section id="properties-6">
+                    <h4>Properties</h4>
+                    <ul>
+                        <li><code>paramGroup</code>: the ID of a paramGroup</li>
+                        <li><code>src</code>: Location of media file, [optionally] including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
+                    </ul>
+                </section>
+                <section id="content-9">
+                    <h4>Content</h4>
+                    <ul>
+                        <li><a href="#param"><code>param</code></a> (zero or more)</li>
+                    </ul>
+                </section>
+            </section>
+        </section>
+        <section id="playback-rules">
+            <h2>Playback rules</h2>
+            <section id="rendering-body">
+                <h3>Rendering <code>body</code></h3>
+                <ul>
+                    <li><code>body</code> behaves like a <code>seq</code></li>
+                </ul>
+            </section>
+            <section id="rendering-seq">
+                <h3>Rendering <code>seq</code></h3>
+                <ul>
+                    <li>Render each child in order, each starting after the previous completes.</li>
+                </ul>
+            </section>
+            <section id="rendering-par">
+                <h3>Rendering <code>par</code></h3>
+                <ul>
+                    <li>Render each child in parallel.</li>
+                </ul>
+            </section>
+            <section id="rendering-text-and-audio">
+                <h3>Rendering <code>text</code> and <code>audio</code></h3>
+                <ul>
+                    <li>Locate the segment of the referenced media and render it</li>
+                    <li>Apply <code>param</code> values from the <code>paramGroup</code> (if referenced)</li>
+                    <li>Apply <code>param</code> values local to the media object instance</li>
+                </ul>
+            </section>
+        </section>
+        <section id="issues">
+            <h2>Issues</h2>
+            <ul>
+                <li>Are there issues with using the term <code>role</code>?</li>
+                <li>Should we specify a role vocabulary or stay agnostic? If the latter, where do authors indicate their role vocabulary?</li>
+                <li>What should the approach be to referencing timed media in an HTML file? E.g. can you have <code>&lt;ref src=&quot;file.html#video&quot;/&gt;</code> where <code>#video</code> is an HTML video element?</li>
+                <li>How to refer to a SyncMedia file from an HTML document? How about <code>&lt;link rel=&quot;alternate&quot; type=&quot;syncmedia-mimetype-TODO&quot; href=&quot;sync.xml&quot;&gt;</code> ? This goes along with using <code>alternate</code> for <a href="incorporating-into-pubmanifest.html">incorporating SyncMedia into a Publication Manifest</a>.</li>
+                <li>Would a <code>sync:selectorType</code> property help?</li>
+            </ul>
+        </section>
+    </section>
+</body>
+
+</html>

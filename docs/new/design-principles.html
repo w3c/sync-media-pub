@@ -47,19 +47,27 @@
 <body>
     <section id="design-principles">
         <h1>Design Principles</h1>
-        <section id="storing-and-retrieving-presentations">
-            <h2>Storing and retrieving presentations</h2>
+        <section id="storing-and-retrieving-sync-documents">
+            <h2>Storing and retrieving sync documents</h2>
             <ul>
-                <li>Side-loading synchronized overlays <ul>
-                        <li>requires that they can be packaged independently of the publication</li>
-                    </ul>
-                </li>
+                <li>Package sync documents independently of the publication they correspond to (for side-loading)</li>
             </ul>
         </section>
         <section id="addressibility">
             <h2>Addressibility</h2>
             <ul>
-                <li>Locate a position in the sync document based on a media src and segment</li>
+                <li>Reference a position in the sync document by <ul>
+                        <li>ID</li>
+                        <li>Media src + segment</li>
+                    </ul>
+                </li>
+                <li>Reference the sync document itself by URL</li>
+            </ul>
+        </section>
+        <section id="processing-requirements">
+            <h2>Processing requirements</h2>
+            <ul>
+                <li>Serialization format must work with an off-the-shelf parser</li>
             </ul>
         </section>
     </section>
