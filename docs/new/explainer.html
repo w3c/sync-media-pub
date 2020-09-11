@@ -1,13 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Synchronized Media for Publications CG: </title>
-        <link rel="stylesheet" href="css/style.css"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="utf-8">
-        <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove' defer="defer"></script>
-        <script class='remove'>
-            var respecConfig = {
+
+<head>
+    <title>Synchronized Media for Publications CG: </title>
+    <link rel="stylesheet" href="css/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove' defer="defer"></script>
+    <script class='remove'>
+        var respecConfig = {
             specStatus: "CG-DRAFT",
             // specStatus: "ED"
             wg: "Synchronized Media for Publications Community Group",
@@ -18,8 +19,7 @@
                 company: "DAISY Consortium",
                 companyURL: "http://www.daisy.org",
                 w3cid: 35713
-            }
-            ],
+            }],
             edDraftURI: "https://w3c.github.io/sync-media-pub//explainer.html",
             shortName: "sync-media-pub",
             noRecTrack: true,
@@ -35,151 +35,114 @@
                 branch: "master"
             },
             localBiblio: {},
-            };
-        </script>
-    </head>
-    <body>
-    <section id="explainer">
-<h1>Explainer</h1>
-<section id="background">
-<h2>Background</h2>
-<p>The formal historical precedent for the concept of SyncMedia is the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays specification</a> (digital publications with synchronized text-audio playback).</p>
-<p>EPUB3 Media Overlays itself can be seen as the &quot;mainstream publishing&quot; alternative to the <a href="http://www.daisy.org/daisypedia/daisy-digital-talking-book">DAISY Digital Talking Book format</a>, which is an accessible book format for people with print disabilities.</p>
-<p>SyncMedia is the evolution of these concepts, optimized for the open web platform, and expanded to incorporate additional media types.</p>
-</section>
-<section id="concepts">
-<h2>Concepts</h2>
-<p>A SyncMedia presentation is a linear timeline of external media objects. The timeline is arranged into parallel and sequential groupings of media references. Groupings carry semantic inflection via a <code>sync:role</code> property.</p>
-<p>Examples of SyncMedia use cases are:</p>
-<ul>
-<li>HTML document synchronized with audio narration</li>
-<li>Audio-only presentation, structured with SyncMedia to provide sentence-level previous/next controls</li>
-<li>SVG synchronized with audio</li>
-<li>Video synchronized with a transcript</li>
-</ul>
-<p>In each of these use cases, the presentation is composed of external media objects, organized into fragments, and synchronized on a timeline.</p>
-<p>Just like EPUB Media Overlays, Sync Media is based on <a href="https://www.w3.org/TR/REC-smil/smil30.html">SMIL 3.0</a>. It is designed to offer a lossless upgrade path for existing Media Overlays documents.</p>
-</section>
-<section id="technology-candidates">
-<h2>Technology Candidates</h2>
-<p>The primary considerations when choosing a language to represent the concepts required for the <a href="use-cases.html">use cases</a> were:</p>
-<ul>
-<li><strong>Has declarative syntax</strong>: As opposed to a purely scripted custom solution, a declarative syntax provides a more rigid framework for content that will be played on a variety of systems, and will persist in publisher and library collections for years to come.</li>
-<li><strong>Supports nested structures</strong>: Required for putting complex content (e.g. tables) in a subtree, out of the way of the main presentation, and offering users options for <em>escaping</em>.</li>
-<li>External media references: The media objects in a SyncMedia presentation exist on their own and do not need to be duplicated in the presentation format. They just need to be referenced.</li>
-</ul>
-<p>That said, here are the candidates and how each fares regarding the requirements.</p>
-<section id="smil">
-<h3>SMIL</h3>
-<p><a href="https://www.w3.org/TR/SMIL3/">SMIL3</a></p>
-<section id="pros">
-<h4>Pros</h4>
-<ul>
-<li>Successfully used in EPUB3 Media Overlays</li>
-<li>Declarative syntax</li>
-<li>Supports nesting</li>
-</ul>
-</section>
-<section id="cons">
-<h4>Cons</h4>
-<ul>
-<li>Never was broadly adopted</li>
-<li>WG is no longer active to propose changes to</li>
-</ul>
-</section>
-</section>
-<section id="ttml2">
-<h3>TTML2</h3>
-<p><a href="https://www.w3.org/TR/ttml2/">TTML2</a></p>
-<section id="pros-2">
-<h4>Pros</h4>
-<p>Capable of complex media synchronization</p>
-</section>
-<section id="cons-2">
-<h4>Cons</h4>
-<ul>
-<li>Text lives in the same file as the timing information -- pointing to an external text document is not supported.</li>
-<li>It is possible to use custom metadata or hack ID values to insert a reference, but this still means no out of the box support for what we need.</li>
-</ul>
-</section>
-</section>
-<section id="webvtt">
-<h3>WebVTT</h3>
-<p><a href="https://www.w3.org/TR/webvtt1/">WebVTT</a></p>
-<section id="pros-3">
-<h4>Pros</h4>
-<p>Browser support</p>
-</section>
-<section id="cons-3">
-<h4>Cons</h4>
-<ul>
-<li>No external text referencing</li>
-<li>No nested structures</li>
-</ul>
-</section>
-</section>
-<section id="webanimations">
-<h3>WebAnimations</h3>
-<p><a href="https://www.w3.org/TR/web-animations-1/">WebAnimations</a></p>
-<section id="pros-4">
-<h4>Pros</h4>
-<p>Enables timing and playback</p>
-</section>
-<section id="cons-4">
-<h4>Cons</h4>
-<p>No declarative syntax</p>
-</section>
-</section>
-<section id="webannotations">
-<h3>WebAnnotations</h3>
-<p><a href="https://www.w3.org/annotation/">WebAnnotations</a></p>
-<section id="pros-5">
-<h4>Pros</h4>
-<p>Good range of selectors</p>
-</section>
-<section id="cons-5">
-<h4>Cons</h4>
-<ul>
-<li>No nesting</li>
-<li>No processing model for playback</li>
-</ul>
-</section>
-</section>
-<section id="custom">
-<h3>Custom</h3>
-<section id="pros-6">
-<h4>Pros</h4>
-<p>Complete control</p>
-</section>
-<section id="cons-6">
-<h4>Cons</h4>
-<p>Risk reinventing the wheel</p>
-</section>
-</section>
-<section id="customized-version-of-existing-language">
-<h3>Customized version of existing language</h3>
-<section id="pros-7">
-<h4>Pros</h4>
-<ul>
-<li>Take advantage of what exists</li>
-<li>Add what's missing</li>
-</ul>
-</section>
-<section id="cons-7">
-<h4>Cons</h4>
-<ul>
-<li>Inherit complexity of existing language</li>
-<li>Risk of additions being short-sighted</li>
-</ul>
-</section>
-</section>
-</section>
-<section id="technology-selection">
-<h2>Technology Selection</h2>
-<p>The final conclusion is to create a custom specification that draws heavily on SMIL. Given the success of SMIL with EPUB Media Overlays, it makes sense to continue down this path. And given that SMIL has not had a refresh for the modern web platform, we anticipate extending it with some customizations to fill these gaps.</p>
-<p>Choosing a serialization format (e.g. XML or JSON) was not part of this selection process, as the Synchronized Media for Publications CG felt <a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/2020Jul/0005.html">it is more desireable to define a model first</a> before deciding on one or multiple serializations.</p>
-</section>
-</section>
+        };
+    </script>
+</head>
 
-    </body>
+<body>
+    <section id="explainer">
+        <h1>Explainer</h1>
+        <section id="background">
+            <h2>Background</h2>
+            <p>The formal historical precedent for the concept of SyncMedia is the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays specification</a> (digital publications with synchronized text-audio playback).</p>
+            <p>EPUB3 Media Overlays itself can be seen as the &quot;mainstream publishing&quot; alternative to the <a href="http://www.daisy.org/daisypedia/daisy-digital-talking-book">DAISY Digital Talking Book format</a>, which is an accessible book format for people with print disabilities.</p>
+            <p>SyncMedia is the evolution of these concepts, optimized for the open web platform, and expanded to incorporate additional media types.</p>
+        </section>
+        <section id="concepts">
+            <h2>Concepts</h2>
+            <p>A SyncMedia presentation is a linear timeline of external media objects. The timeline is arranged into parallel and sequential groupings of media references. Groupings carry semantic inflection via a <code>sync:role</code> property.</p>
+            <p>Examples of SyncMedia use cases are:</p>
+            <ul>
+                <li>HTML document synchronized with audio narration</li>
+                <li>Audio-only presentation, structured with SyncMedia to provide sentence-level previous/next controls</li>
+                <li>SVG synchronized with audio</li>
+                <li>Video synchronized with a transcript</li>
+            </ul>
+            <p>In each of these use cases, the presentation is composed of external media objects, organized into fragments, and synchronized on a timeline.</p>
+            <p>However, straight-through beginning-to-end playback is not the only way that the timeline will be consumed. Users may start in at a mid-point. They may escape out of complex structures (e.g. tables or asides). They may navigate through the presentation via an authored granularity (e.g. previous/next sentence). In addition, they may control other aspects of the presentation: lower the volume of background music, turn off sound effects, change the highlight color of text, or slow down a video. Therefore, the format must allow a standard way to expose this information to a user agent.</p>
+            <p>Just like EPUB Media Overlays, Sync Media is based on <a href="https://www.w3.org/TR/REC-smil/smil30.html">SMIL 3.0</a>. It is designed to offer a lossless upgrade path for existing Media Overlays documents.</p>
+        </section>
+        <section id="technology-candidates">
+            <h2>Technology Candidates</h2>
+            <p>The primary considerations when choosing a language to represent the concepts required for the <a href="use-cases.html">use cases</a> were:</p>
+            <ul>
+                <li><strong>Has declarative syntax</strong>: As opposed to a purely scripted custom solution, a declarative syntax provides a more rigid framework for content that will be played on a variety of systems, and will persist in publisher and library collections for years to come.</li>
+                <li><strong>Supports nested structures</strong>: Required for putting complex content (e.g. tables) in a subtree, out of the way of the main presentation, and offering users options for <em>escaping</em>.</li>
+                <li><strong>External media references</strong>: The media objects in a SyncMedia presentation exist on their own and do not need to be duplicated in the presentation format. They just need to be referenced.</li>
+            </ul>
+            <p>That said, here are the candidates and how each fares regarding the requirements.</p>
+            <section id="smil">
+                <h3>SMIL</h3>
+                <p><a href="https://www.w3.org/TR/SMIL3/">SMIL3</a></p>
+                <p>Pros:</p>
+                <ul>
+                    <li>Successfully used in EPUB3 Media Overlays</li>
+                    <li>Declarative syntax</li>
+                    <li>Supports nesting</li>
+                </ul>
+                <p>Cons:</p>
+                <ul>
+                    <li>Never was broadly adopted</li>
+                    <li>WG is no longer active to propose changes to</li>
+                </ul>
+            </section>
+            <section id="ttml2">
+                <h3>TTML2</h3>
+                <p><a href="https://www.w3.org/TR/ttml2/">TTML2</a></p>
+                <p>Pros: Capable of complex media synchronization</p>
+                <p>Cons: Text lives in the same file as the timing information -- pointing to an external text document is not supported.</p>
+            </section>
+            <section id="webvtt">
+                <h3>WebVTT</h3>
+                <p><a href="https://www.w3.org/TR/webvtt1/">WebVTT</a></p>
+                <p>Pros: Browser support</p>
+                <p>Cons:</p>
+                <ul>
+                    <li>No external text referencing</li>
+                    <li>No nested structures</li>
+                </ul>
+            </section>
+            <section id="webanimations">
+                <h3>WebAnimations</h3>
+                <p><a href="https://www.w3.org/TR/web-animations-1/">WebAnimations</a></p>
+                <p>Pros: Enables timing and playback</p>
+                <p>Cons: No declarative syntax</p>
+            </section>
+            <section id="webannotations">
+                <h3>WebAnnotations</h3>
+                <p><a href="https://www.w3.org/annotation/">WebAnnotations</a></p>
+                <p>Pros: Good range of selectors</p>
+                <p>Cons:</p>
+                <ul>
+                    <li>No nesting</li>
+                    <li>No processing model for playback</li>
+                </ul>
+            </section>
+            <section id="custom">
+                <h3>Custom</h3>
+                <p>Pros: Complete control</p>
+                <p>Cons: Risk reinventing the wheel</p>
+            </section>
+            <section id="existing-language-%2B-custom-extensions">
+                <h3>Existing language + custom extensions</h3>
+                <p>Pros:</p>
+                <ul>
+                    <li>Take advantage of what exists</li>
+                    <li>Add what's missing</li>
+                </ul>
+                <p>Cons:</p>
+                <ul>
+                    <li>Inherit complexity of existing language</li>
+                    <li>Risk of additions being short-sighted</li>
+                </ul>
+            </section>
+        </section>
+        <section id="technology-selection">
+            <h2>Technology Selection</h2>
+            <p>The final conclusion is to create a custom specification that draws heavily on SMIL 3.0. Given the success of SMIL with EPUB Media Overlays, it makes sense to continue down this path. And given that SMIL has not had a refresh for the modern web platform, we anticipate extending it with some customizations to fill these gaps.</p>
+            <p>Choosing a serialization format (e.g. XML or JSON) was not part of this selection process, as the Synchronized Media for Publications CG felt <a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/2020Jul/0005.html">it is more desireable to define a model first</a> before deciding on one or multiple serializations.</p>
+        </section>
+    </section>
+</body>
+
 </html>
