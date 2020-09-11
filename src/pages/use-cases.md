@@ -1,19 +1,22 @@
 # Use cases
 
+This is a loosely sorted list of brief use case descriptions.
+
 ## Media
 
 * Synchronize audio segments with HTML elements
 * Apply style to HTML element in sync point
 * Background music
-* Include secondary audio, e.g. sound effects, in a sync point
+* Include secondary audio, e.g. sound effects
 * Delay start of timed media render by an offset
 * Apply style to more than one HTML element at once (e.g. nested highlights)
 * Support Audio-only presentations, where structural semantics are applied to audio segments, even if there is no corresponding text document
+* Turn down the sound effects
 * EPUB
   * Synchronize an audio book with an EPUB text equivalent
 * SVG
-  * Synchronize audio with SVG
-  * Zoom into part of an SVG when rendering a sync point
+  * Synchronize audio with an SVG comic
+  * Zoom into a comic panel when rendering a sync point
   * Order of rendering media could matter
     * First, zoom into a panel and then highlight text while maintaining zoom
 * Video
@@ -42,7 +45,6 @@
 
 ## Examples of similar technologies
 
-* 
 * [National Geographic Archives](https://archive.org/details/nationalgeograph21890nati/page/108/mode/2up)
     * TTS
     * image of a page with a moving highlight

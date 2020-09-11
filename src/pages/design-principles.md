@@ -11,10 +11,10 @@ title: Design Principles
 
 * Reference a position in the sync document by
     * ID
-    * Media src + segment
+    * Other selector? 
 * Reference the sync document itself by URL
 
 ## Processing requirements
 
-* Serialization format must work with an off-the-shelf parser
+* Serialization format(s) must work with off-the-shelf parsers
 

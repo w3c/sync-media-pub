@@ -6,7 +6,8 @@ module.exports = function(eleventyConfig) {
         .use(require("markdown-it-anchor"))
         .use(require("markdown-it-attrs"))
         .use(require('markdown-it-header-sections'))
-        .use(require("markdown-it-table-of-contents"), 
+        .use(require("markdown-it-table-of-contents"))
+        .use(require("markdown-it-deflist"), 
             {
                 "includeLevel": [2],
                 "containerHeaderHtml": `<p class="toclabel">Contents:<p>`
@@ -14,7 +15,7 @@ module.exports = function(eleventyConfig) {
     
     eleventyConfig.setLibrary("md", markdownLib);
 
-    eleventyConfig.addPassthroughCopy("pages/css");
+    eleventyConfig.addPassthroughCopy({"css": "css"});
 
     return {
         dir: {
