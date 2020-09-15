@@ -1,5 +1,6 @@
-# Explainer
-
+---
+title: SyncMedia Explainer
+---
 ## Background
 
 The formal historical precedent for the concept of SyncMedia is the [EPUB3 Media Overlays specification](http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html) (digital publications with synchronized text-audio playback).
@@ -34,15 +35,15 @@ The primary considerations when choosing a language to represent the concepts re
 That said, here are the candidates and how each fares regarding the requirements.
 
 ### SMIL
-[SMIL3](https://www.w3.org/TR/SMIL3/)
+[SMIL3](https://www.w3.org/TR/SMIL3/) {.link}
 
 
-Pros:
+#### Pros
 * Successfully used in EPUB3 Media Overlays
 * Declarative syntax
 * Supports nesting
 
-Cons:
+#### Cons
 * Never was broadly adopted
 * WG is no longer active to propose changes to
         
@@ -51,10 +52,12 @@ Cons:
 
 [TTML2](https://www.w3.org/TR/ttml2/)
 
-Pros:
+#### Pros
+
 Capable of complex media synchronization
 
-Cons:
+#### Cons
+
 Text lives in the same file as the timing information -- pointing to an external text document is not supported. 
 
 
@@ -62,10 +65,11 @@ Text lives in the same file as the timing information -- pointing to an external
 
 [WebVTT](https://www.w3.org/TR/webvtt1/)
 
-Pros:
+#### Pros
+
 Browser support
 
-Cons:
+#### Cons
 * No external text referencing
 * No nested structures
 
@@ -73,10 +77,12 @@ Cons:
 ### WebAnimations
 [WebAnimations](https://www.w3.org/TR/web-animations-1/)
 
-Pros:
+#### Pros
+
 Enables timing and playback
 
-Cons:
+#### Cons
+
 No declarative syntax
 
 
@@ -84,34 +90,37 @@ No declarative syntax
 
 [WebAnnotations](https://www.w3.org/annotation/)
 
-Pros:
+#### Pros
+
 Good range of selectors
 
-Cons:
+#### Cons
 * No nesting
 * No processing model for playback
       
 
 ### Custom
 
-Pros:
+#### Pros
+
 Complete control
 
-Cons:
+#### Cons
+
 Risk reinventing the wheel
 
 ### Existing language + custom extensions
 
-Pros:
+#### Pros
 * Take advantage of what exists
 * Add what's missing
 
-Cons:
+#### Cons
 * Inherit complexity of existing language
 * Risk of additions being short-sighted
 
 ## Technology Selection
 
-The final conclusion is to create a custom specification that draws heavily on SMIL 3.0. Given the success of SMIL with EPUB Media Overlays, it makes sense to continue down this path. And given that SMIL has not had a refresh for the modern web platform, we anticipate extending it with some customizations to fill these gaps.
+The final conclusion is to __create a custom specification that draws heavily on SMIL 3.0__. Given the success of SMIL with EPUB Media Overlays, it makes sense to continue down this path. And given that SMIL has not had a refresh for the modern web platform, we anticipate extending it with some customizations to fill these gaps.
 
-Choosing a serialization format (e.g. XML or JSON) was not part of this selection process, as the Synchronized Media for Publications CG felt [it is more desireable to define a model first](https://lists.w3.org/Archives/Public/public-sync-media-pub/2020Jul/0005.html) before deciding on one or multiple serializations.
+Choosing a serialization format (e.g. XML or JSON) was not part of this selection process, as the Synchronized Media for Publications CG felt [it is more desireable to define a model first](https://lists.w3.org/Archives/Public/public-sync-media-pub/2020Jul/0005.html) before deciding on one or multiple serializations.  

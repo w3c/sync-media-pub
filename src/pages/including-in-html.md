@@ -1,5 +1,17 @@
-# Including SyncMedia in an HTML document
+---
+title: Including SyncMedia in an HTML document
+---
+This document is a work in progress {.wip}
 
-## TBD
+## Context
 
-How to refer to a SyncMedia file from an HTML document? How about `<link rel="alternate" type="syncmedia-mimetype-TODO" href="sync.xml">` ? This goes along with using `alternate` for [incorporating SyncMedia into a Publication Manifest](incorporating-into-pubmanifest.html).
+SyncMedia documents can be used to enhance web content, such as by adding audio narration to an HTML document. In this case, the HTML document should have a way to express that it has a SyncMedia presentation for its own content.
+
+A SyncMedia-aware user agent can then load the presentation and invoke playback.
+
+## Link to SyncMedia
+
+One idea is to use the HTML `link` element and express the 
+`<link rel="alternate" type="syncmedia-mimetype-TODO" href="sync.xml">`
+
+This goes along with using `alternate` for [incorporating SyncMedia into a Publication Manifest](incorporating-into-pubmanifest.html).

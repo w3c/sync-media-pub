@@ -1,7 +1,6 @@
 ---
-title: Sync Media Documents
+title: SyncMedia Documents
 ---
-
 * [SyncMedia Spec](sync-media.html)
 * [Explainer](explainer.html)
 * Incorporating SyncMedia

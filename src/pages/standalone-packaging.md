@@ -1,6 +1,10 @@
-# Standalone Packaging of SyncMedia
+---
+title: Standalone Packaging of SyncMedia
+---
 
-Taken from a [Sync Media Explainer](https://gist.githubusercontent.com/larscwallin/30f0ce72e70162079f2d2f84e2c864cb/raw/1720348adcb3daf162210f4924d908534fef714c/sync-media-smil-explainer-text.md)
+This document is a work in progress {.wip}
+
+_This document was taken from [this post](https://gist.githubusercontent.com/larscwallin/30f0ce72e70162079f2d2f84e2c864cb/raw/1720348adcb3daf162210f4924d908534fef714c/sync-media-smil-explainer-text.md)_
 
 ## PACKAGING AND SIDE LOADING
 

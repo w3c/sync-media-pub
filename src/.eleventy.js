@@ -1,3 +1,4 @@
+const moment = require("moment");
 module.exports = function(eleventyConfig) {
     let options = {
         html: true
@@ -17,6 +18,17 @@ module.exports = function(eleventyConfig) {
 
     eleventyConfig.addPassthroughCopy({"css": "css"});
 
+    eleventyConfig.addFilter("readableDate", (dateObj, format) => 
+        format === "calendar" ? moment(dateObj).calendar()
+            .replace("Today", "today")
+            .replace("Yesterday", "yesterday")
+            : moment(dateObj).format(format)
+    );
+
+    eleventyConfig.addFilter('dump', obj => {
+        return util.inspect(obj)
+    });
+    
     return {
         dir: {
             input: "pages",

@@ -1,4 +1,6 @@
-# Incorporating SyncMedia into a Publication Manifest
+---
+title: Incorporating SyncMedia into a Publication Manifest
+---
 
 ## Publication Manifest
 

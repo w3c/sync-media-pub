@@ -1,5 +1,6 @@
 ---
 title: SyncMedia Specification
+layout: spec.njk
 ---
 <section id="abstract">
     <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of different media types orchestrated in a linear timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
@@ -100,6 +101,9 @@ Properties
 :   * `name`: a single string
     * `value`: a space-separated list
 
+<div class="TODO" id="todo-10"><h4>TODO</h4><p>
+List param names
+</p></div>
 
 ### `body`
 Description
@@ -152,10 +156,11 @@ Description
 :   Generic media reference
 
 Properties
-    * `sync:track`: the ID of a track
+:   * `sync:track`: the ID of a track
     * `src`: Location of media file, optionally including a [media fragment selector](https://www.w3.org/TR/selectors-states/#FragmentSelector_def)
     * `clipBegin`: Start of a timed media clip
     * `clipEnd`: End of a timed media clip
+    * `panZoom`: As defined in [SMIL3](https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom)
 
 
 ### `text`
@@ -191,11 +196,13 @@ Content
 ### `video`
 Description
 :   References a clip of video media
+
 Properties
-    * `sync:track`: the ID of a track
+:   * `sync:track`: the ID of a track
     * `src`: Location of media file, optionally including a [media fragment selector](https://www.w3.org/TR/selectors-states/#FragmentSelector_def)
     * `clipBegin`: Start of a timed media clip
     * `clipEnd`: End of a timed media clip
+    * `panZoom`: As defined in [SMIL3](https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom)
     
 
 ### `image`
@@ -203,9 +210,9 @@ Description
 :   References image media
 
 Properties
-    * `sync:track`: the ID of a track
+:   * `sync:track`: the ID of a track
     * `src`: Location of media file, optionally including a [media fragment selector](https://www.w3.org/TR/selectors-states/#FragmentSelector_def)
-    
+    * `panZoom`: As defined in [SMIL3](https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom)
 
 ## Playback rules
 
@@ -218,14 +225,17 @@ Properties
 ### Rendering `par`
 * Render each child in parallel.
 
-### Rendering `text`, `audio`, `video`, and `image`
+### Rendering Media Objects
+_`text`, `audio`, `video`, `image`, and `ref`_
 * Locate the segment of the referenced media and render it
 * Apply `param` values from the `sync:track` (if referenced)
 * Apply `param` values local to the media object instance
 
-## Serialization
+## Encoding and File Formats
 
-It is possible that encodings other than XML, such as JSON, could be used to persist and distribute SyncMedia Documents.
+<div class="TODO"><p>The MIME type of SyncMedia documents is TBD.</p></div>
+
+The examples below are shown as XML; however, it is still an open question which serialization format(s) SyncMedia documents may be expressed as.
 
 # Examples
 

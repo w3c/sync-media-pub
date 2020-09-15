@@ -1,4 +1,6 @@
-# Use cases
+---
+title: Use cases
+---
 
 This is a loosely sorted list of brief use case descriptions.
 

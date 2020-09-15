@@ -1,0 +1,9 @@
+{%- extends 'htmleton.njk' -%}
+{%- block head -%}
+<link rel="stylesheet" href="css/page.css"/>
+{%- endblock -%}
+{%- block body -%}
+<h1>{{title}}</h1>
+{{ page.date | readableDate('MMM D, YYYY') }}
+{{ content | safe }}
+{%- endblock -%}
