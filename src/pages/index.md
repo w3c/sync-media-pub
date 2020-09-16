@@ -1,7 +1,7 @@
 ---
 title: SyncMedia Documents
 ---
-* [SyncMedia Spec](sync-media.html)
+* [SyncMedia 1.0](sync-media.html)
 * [Explainer](explainer.html)
 * Incorporating SyncMedia
     * [Incorporating into a Publication Manifest](incorporating-into-pubmanifest.html)

@@ -1,5 +1,5 @@
 ---
-title: SyncMedia Specification
+title: SyncMedia 1.0
 layout: spec.njk
 ---
 <section id="abstract">
@@ -130,7 +130,7 @@ Content
 At least one `par` or `seq` is required.
 
 Properties
-:   * `sync:role`: semantic role
+:   * `sync:role`: one or more semantic role(s)
 
 <div class="TODO" id="todo-3"><h4>TODO</h4> <p>Should we specify a `role` vocabulary or stay agnostic?</p></div>
 
@@ -148,7 +148,7 @@ Content
     * [`image`](#image) (zero or more)
 
 Properties
-:   * `sync:role`: semantic role
+:   * `sync:role`: one or more semantic role(s)
 
 
 ### `ref`
@@ -179,7 +179,7 @@ Content
 
 ### `audio`
 Description 
-:   References a clip of audio media
+:   Synonym for [`ref`](#ref). References a clip of audio media
 
 Properties
 :   * `sync:track`: the ID of a track
@@ -195,7 +195,7 @@ Content
 
 ### `video`
 Description
-:   References a clip of video media
+:   Synonym for [`ref`](#ref). References a clip of video media
 
 Properties
 :   * `sync:track`: the ID of a track
@@ -207,7 +207,7 @@ Properties
 
 ### `image`
 Description
-:   References image media
+:   Synonym for [`ref`](#ref). References image media
 
 Properties
 :   * `sync:track`: the ID of a track
@@ -233,7 +233,7 @@ _`text`, `audio`, `video`, `image`, and `ref`_
 
 ## Encoding and File Formats
 
-<div class="TODO"><p>The MIME type of SyncMedia documents is TBD.</p></div>
+<div class="TODO"><h4>TODO</h4><p>Determine the MIME type for SyncMedia documents.</p></div>
 
 The examples below are shown as XML; however, it is still an open question which serialization format(s) SyncMedia documents may be expressed as.
 

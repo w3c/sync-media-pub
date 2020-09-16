@@ -1,377 +1,395 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <title>Synchronized Media for Publications CG: SyncMedia Specification</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="utf-8"><link rel="stylesheet" href="css/spec-extra.css"/>    
+
+<head>
+    <title>Synchronized Media for Publications CG: SyncMedia 1.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="css/spec-extra.css" />
     <script src='https://www.w3.org/Tools/respec/respec-w3c-common' class='remove' defer="defer"></script>
     <script class='remove'>
         var respecConfig = {
-        specStatus: "CG-DRAFT",
-        // specStatus: "ED"
-        wg: "Synchronized Media for Publications Community Group",
-        wgURI: "https://www.w3.org/community/sync-media-pub/",
-        wgPublicList: "public-sync-media-pub",
-        editors: [{
-            name: "Marisa DeMeglio",
-            company: "DAISY Consortium",
-            companyURL: "https://www.daisy.org",
-            w3cid: 35713
-        }, {
-            name: "Lars Wallin",
-            company: "Colibrio AB",
-            companyURL: "https://colibrio.com"
-        }],
-        edDraftURI: "https://w3c.github.io/sync-media-pub//sync-media.html",
-        shortName: "sync-media-pub",
-        noRecTrack: true,
-        copyrightStart: "2019",
-        // prevRecURI: "",
-        //postProcess: [create_wp],
-        includePermalinks: true,
-        permalinkEdge: true,
-        permalinkHide: false,
-        diffTool: "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
-        github: {
-            repoURL: "https://github.com/w3c/sync-media-pub",
-            branch: "master"
-        },
-        localBiblio: {},
+            specStatus: "CG-DRAFT",
+            // specStatus: "ED"
+            wg: "Synchronized Media for Publications Community Group",
+            wgURI: "https://www.w3.org/community/sync-media-pub/",
+            wgPublicList: "public-sync-media-pub",
+            editors: [{
+                name: "Marisa DeMeglio",
+                company: "DAISY Consortium",
+                companyURL: "https://www.daisy.org",
+                w3cid: 35713
+            }, {
+                name: "Lars Wallin",
+                company: "Colibrio AB",
+                companyURL: "https://colibrio.com"
+            }],
+            edDraftURI: "https://w3c.github.io/sync-media-pub//sync-media.html",
+            shortName: "sync-media-pub",
+            noRecTrack: true,
+            copyrightStart: "2019",
+            // prevRecURI: "",
+            //postProcess: [create_wp],
+            includePermalinks: true,
+            permalinkEdge: true,
+            permalinkHide: false,
+            diffTool: "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
+            github: {
+                repoURL: "https://github.com/w3c/sync-media-pub",
+                branch: "master"
+            },
+            localBiblio: {},
         };
-    </script></head>
-    <body><section id="abstract">
-    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of different media types orchestrated in a linear timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
-</section>
-<section id="sotd">
-</section>
-<section id="relationship-to-other-specifications">
-<h1>Relationship to Other Specifications</h1>
-<p>SyncMedia is an evolution of <a href="https://www.w3.org/publishing/epub32/epub-mediaoverlays.html">EPUB3 Media Overlays</a> and, like Media Overlays, is built on <a href="https://www.w3.org/TR/SMIL3/">SMIL</a>. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions, prefixed with <code>sync:</code>.</p>
-</section>
-<section id="sync-media">
-<h1>Sync Media</h1>
-<section id="definitions">
-<h2>Definitions</h2>
-<dl>
-<dt><dfn id="dfn-media-object" data-dfn-type="dfn">Media Object</dfn></dt>
-<dd>A media resource in the <a href="#dfn-sync-media-document">Sync Media Document</a>.</dd>
-<dt><dfn id="dfn-media-param" data-dfn-type="dfn">Media Param</dfn></dt>
-<dd>Named parameters to communicate options to the <a href="#dfn-media-object-renderer">Media Object Renderer</a></dd>
-<dt><dfn id="dfn-media-object-renderer" data-dfn-type="dfn">Media Object Renderer</dfn></dt>
-<dd>A component used by the <a href="#dfn-sync-media-player">Sync Media Player</a> to render <a href="#dfn-media-object">Media Objects</a>. Different media types may necessitate different renderers.</dd>
-<dt><dfn id="dfn-parallel-time-container" data-dfn-type="dfn">Parallel Time Container</dfn></dt>
-<dd>A <a href="#dfn-time-container">Time Container</a> in which children are rendered in parallel.</dd>
-<dt><dfn id="dfn-role" data-dfn-type="dfn">Role</dfn></dt>
-<dd>Gives the semantic inflection for the item.</dd>
-<dt><dfn id="dfn-sequential-time-container" data-dfn-type="dfn">Sequential Time Container</dfn></dt>
-<dd>A <a href="#dfn-time-container">Time Container</a> in which children are rendered in sequence.</dd>
-<dt><dfn id="dfn-sync-media-document" data-dfn-type="dfn">Sync Media Document</dfn></dt>
-<dd>The synchronized presentation.</dd>
-<dt><dfn id="dfn-sync-media-player" data-dfn-type="dfn">Sync Media Player</dfn></dt>
-<dd>A user agent that knows how to process and playback <a href="#dfn-sync-media-document">Sync Media Documents</a></dd>
-<dt><dfn id="dfn-timeline" data-dfn-type="dfn">Timeline</dfn></dt>
-<dd>A timeline that lays out <a href="#dfn-time-container">Time Containers</a> in a linear mode.</dd>
-<dt><dfn id="dfn-time-container">Time Container</dfn></dt>
-<dd>Container that dictates the playback mode for its children.</dd>
-<dt><dfn id="dfn-track">Track</dfn></dt>
-<dd>An organizational concept that defines a purposeful virtual rendering space, not tied to a layout, with default <a href="#dfn-media-param">Media Params</a>.</dd>
-</dl>
-</section>
-<section id="model">
-<h2>Model</h2>
-<section id="smil">
-<h3><code>smil</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Root-level container</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#head"><code>head</code></a> (zero or 1)</li>
-<li><a href="#body"><code>body</code></a> (exactly 1)</li>
-</ul>
-</dd>
-</dl>
-</section>
-<section id="head">
-<h3><code>head</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Information not related to temporal behavior</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#metadata"><code>metadata</code></a> (zero or one)</li>
-<li><a href="#sync-track"><code>sync:track</code></a> (zero or more)</li>
-</ul>
-</dd>
-</dl>
-</section>
-<section id="metadata">
-<h3><code>metadata</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Extension point that allows the inclusion of metadata from any metainformation structuring language</dd>
-<dt>Content</dt>
-<dd>Zero or more items</dd>
-</dl>
-</section>
-<section id="sync%3Atrack">
-<h3><code id="sync-track">sync:track</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>A virtual space to which <a href="#dfn-media-object">Media Objects</a> can be assigned. A user agent may offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A <code>sync:track</code> can have <a href="#dfn-media-param">Media Params</a>, which act as defaults for <a href="#dfn-media-object">Media Objects</a> on that track.</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>id</code>: required</li>
-<li><code>type</code>: the role that the track plays in the presentation. Examples could be <code>document</code>, <code>sound-fx</code>, <code>narration</code></li>
-</ul>
-</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#param"><code>param</code></a> (zero or more)</li>
-</ul>
-</dd>
-</dl>
-<div class="TODO" id="todo-1"><h4>TODO</h4> <p>
-    Should we enumerate `type` values or is there a vocabulary we could reference?
-</p></div>
-</section>
-<section id="param">
-<h3><code>param</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Allows a general parameter value to be sent to a media object renderer as a name/value pair.</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>name</code>: a single string</li>
-<li><code>value</code>: a space-separated list</li>
-</ul>
-</dd>
-</dl>
-<div class="TODO" id="todo-10"><h4>TODO</h4><p>
-List param names
-</p></div>
-</section>
-<section id="body">
-<h3><code>body</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Temporal behavior of the presentation</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#seq"><code>seq</code></a> (zero or more)</li>
-<li><a href="#par"><code>par</code></a> (zero or more)</li>
-</ul>
-</dd>
-</dl>
-</section>
-<section id="seq">
-<h3><code>seq</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>A sequence of elements</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#seq"><code>seq</code></a> (zero or more)</li>
-<li><a href="#par"><code>par</code></a> (zero or more)</li>
-<li><a href="#ref"><code>ref</code></a> (zero or more)</li>
-<li><a href="#text"><code>text</code></a> (zero or more)</li>
-<li><a href="#audio"><code>audio</code></a> (zero or more)</li>
-<li><a href="#video"><code>video</code></a> (zero or more)</li>
-<li><a href="#image"><code>image</code></a> (zero or more)</li>
-</ul>
-</dd>
-</dl>
-<p>At least one <code>par</code> or <code>seq</code> is required.</p>
-<dl>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:role</code>: semantic role</li>
-</ul>
-</dd>
-</dl>
-<div class="TODO" id="todo-3"><h4>TODO</h4> <p>Should we specify a `role` vocabulary or stay agnostic?</p></div>
-</section>
-<section id="par">
-<h3><code>par</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Contains media objects which are to be rendered in parallel.</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#seq"><code>seq</code></a> (zero or more)</li>
-<li><a href="#par"><code>par</code></a> (zero or more)</li>
-<li><a href="#ref"><code>ref</code></a> (zero or more)</li>
-<li><a href="#text"><code>text</code></a> (zero or more)</li>
-<li><a href="#audio"><code>audio</code></a> (zero or more)</li>
-<li><a href="#video"><code>video</code></a> (zero or more)</li>
-<li><a href="#image"><code>image</code></a> (zero or more)</li>
-</ul>
-</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:role</code>: semantic role</li>
-</ul>
-</dd>
-</dl>
-</section>
-<section id="ref">
-<h3><code>ref</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Generic media reference</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:track</code>: the ID of a track</li>
-<li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
-<li><code>clipBegin</code>: Start of a timed media clip</li>
-<li><code>clipEnd</code>: End of a timed media clip</li>
-<li><code>panZoom</code>: As defined in <a href="https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom">SMIL3</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-<section id="text">
-<h3><code>text</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>Synonym for <a href="#ref"><code>ref</code></a>. References an element in an HTML document</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:track</code>: the ID of a <a href="#dfn-sync-track">track</a></li>
-<li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">fragment selector</a></li>
-</ul>
-</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#param"><code>param</code></a> (zero or more)</li>
-</ul>
-</dd>
-</dl>
-<div class="TODO" id="todo-4"><h4>TODO</h4> <p>What should the approach be to referencing timed media in an HTML file? E.g. can you have `&lt;text src="file.html#video"/&gt;` where `#video` is an HTML video element?</p></div>
-</section>
-<section id="audio">
-<h3><code>audio</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>References a clip of audio media</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:track</code>: the ID of a track</li>
-<li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
-<li><code>clipBegin</code>: Start of the audio media clip</li>
-<li><code>clipEnd</code>: End of the audio media clip</li>
-</ul>
-</dd>
-<dt>Content</dt>
-<dd>
-<ul>
-<li><a href="#param"><code>param</code></a> (zero or more)</li>
-</ul>
-</dd>
-</dl>
-<div class="TODO" id="todo-2"><h4>TODO</h4> <p>Decide what happens if both media fragment and clipBegin/End are given.</p></div>
-</section>
-<section id="video">
-<h3><code>video</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>References a clip of video media</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:track</code>: the ID of a track</li>
-<li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
-<li><code>clipBegin</code>: Start of a timed media clip</li>
-<li><code>clipEnd</code>: End of a timed media clip</li>
-<li><code>panZoom</code>: As defined in <a href="https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom">SMIL3</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-<section id="image">
-<h3><code>image</code></h3>
-<dl>
-<dt>Description</dt>
-<dd>References image media</dd>
-<dt>Properties</dt>
-<dd>
-<ul>
-<li><code>sync:track</code>: the ID of a track</li>
-<li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
-<li><code>panZoom</code>: As defined in <a href="https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom">SMIL3</a></li>
-</ul>
-</dd>
-</dl>
-</section>
-</section>
-<section id="playback-rules">
-<h2>Playback rules</h2>
-<section id="rendering-body">
-<h3>Rendering <code>body</code></h3>
-<ul>
-<li><code>body</code> behaves like a <code>seq</code></li>
-</ul>
-</section>
-<section id="rendering-seq">
-<h3>Rendering <code>seq</code></h3>
-<ul>
-<li>Render each child in order, each starting after the previous completes.</li>
-</ul>
-</section>
-<section id="rendering-par">
-<h3>Rendering <code>par</code></h3>
-<ul>
-<li>Render each child in parallel.</li>
-</ul>
-</section>
-<section id="rendering-media-objects">
-<h3>Rendering Media Objects</h3>
-<p><em><code>text</code>, <code>audio</code>, <code>video</code>, <code>image</code>, and <code>ref</code></em></p>
-<ul>
-<li>Locate the segment of the referenced media and render it</li>
-<li>Apply <code>param</code> values from the <code>sync:track</code> (if referenced)</li>
-<li>Apply <code>param</code> values local to the media object instance</li>
-</ul>
-</section>
-</section>
-<section id="encoding-and-file-formats">
-<h2>Encoding and File Formats</h2>
-<div class="TODO"><p>The MIME type of SyncMedia documents is TBD.</p></div>
-<p>The examples below are shown as XML; however, it is still an open question which serialization format(s) SyncMedia documents may be expressed as.</p>
-</section>
-</section>
-<section id="examples">
-<h1>Examples</h1>
-<section id="html-document-with-audio-narration">
-<h2>HTML document with audio narration</h2>
-<p>This is a typical example of a structured document with audio narration. It features:</p>
-<ul>
-<li>Text fragments highlighted as the audio plays.</li>
-<li>Semantic information:
-<ul>
-<li>There is a page number (often given in ebooks as print page equivalents), indicated via <code>role</code>. This allows Sync Media Players to offer users an option to skip page number announcements</li>
-<li>The document contains a table, also indicated via <code>role</code>, allowing players to offer users an option to escape and return to the main reading flow.</li>
-</ul>
-</li>
-<li>Nested highlights: When active, the table is outlined with a yellow border, and individual rows are highlighted as they are read.</li>
-</ul>
-<section id="syncmedia-presentation">
-<h3>SyncMedia presentation</h3>
-<pre><code>&lt;smil&gt;
+    </script>
+</head>
+
+<body>
+    <section id="abstract">
+        <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of different media types orchestrated in a linear timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>
+    </section>
+    <section id="sotd">
+    </section>
+    <section id="relationship-to-other-specifications">
+        <h1>Relationship to Other Specifications</h1>
+        <p>SyncMedia is an evolution of <a href="https://www.w3.org/publishing/epub32/epub-mediaoverlays.html">EPUB3 Media Overlays</a> and, like Media Overlays, is built on <a href="https://www.w3.org/TR/SMIL3/">SMIL</a>. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions, prefixed with <code>sync:</code>.</p>
+    </section>
+    <section id="sync-media">
+        <h1>Sync Media</h1>
+        <section id="definitions">
+            <h2>Definitions</h2>
+            <dl>
+                <dt><dfn id="dfn-media-object" data-dfn-type="dfn">Media Object</dfn></dt>
+                <dd>A media resource in the <a href="#dfn-sync-media-document">Sync Media Document</a>.</dd>
+                <dt><dfn id="dfn-media-param" data-dfn-type="dfn">Media Param</dfn></dt>
+                <dd>Named parameters to communicate options to the <a href="#dfn-media-object-renderer">Media Object Renderer</a></dd>
+                <dt><dfn id="dfn-media-object-renderer" data-dfn-type="dfn">Media Object Renderer</dfn></dt>
+                <dd>A component used by the <a href="#dfn-sync-media-player">Sync Media Player</a> to render <a href="#dfn-media-object">Media Objects</a>. Different media types may necessitate different renderers.</dd>
+                <dt><dfn id="dfn-parallel-time-container" data-dfn-type="dfn">Parallel Time Container</dfn></dt>
+                <dd>A <a href="#dfn-time-container">Time Container</a> in which children are rendered in parallel.</dd>
+                <dt><dfn id="dfn-role" data-dfn-type="dfn">Role</dfn></dt>
+                <dd>Gives the semantic inflection for the item.</dd>
+                <dt><dfn id="dfn-sequential-time-container" data-dfn-type="dfn">Sequential Time Container</dfn></dt>
+                <dd>A <a href="#dfn-time-container">Time Container</a> in which children are rendered in sequence.</dd>
+                <dt><dfn id="dfn-sync-media-document" data-dfn-type="dfn">Sync Media Document</dfn></dt>
+                <dd>The synchronized presentation.</dd>
+                <dt><dfn id="dfn-sync-media-player" data-dfn-type="dfn">Sync Media Player</dfn></dt>
+                <dd>A user agent that knows how to process and playback <a href="#dfn-sync-media-document">Sync Media Documents</a></dd>
+                <dt><dfn id="dfn-timeline" data-dfn-type="dfn">Timeline</dfn></dt>
+                <dd>A timeline that lays out <a href="#dfn-time-container">Time Containers</a> in a linear mode.</dd>
+                <dt><dfn id="dfn-time-container">Time Container</dfn></dt>
+                <dd>Container that dictates the playback mode for its children.</dd>
+                <dt><dfn id="dfn-track">Track</dfn></dt>
+                <dd>An organizational concept that defines a purposeful virtual rendering space, not tied to a layout, with default <a href="#dfn-media-param">Media Params</a>.</dd>
+            </dl>
+        </section>
+        <section id="model">
+            <h2>Model</h2>
+            <section id="smil">
+                <h3><code>smil</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Root-level container</dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#head"><code>head</code></a> (zero or 1)</li>
+                            <li><a href="#body"><code>body</code></a> (exactly 1)</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+            <section id="head">
+                <h3><code>head</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Information not related to temporal behavior</dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#metadata"><code>metadata</code></a> (zero or one)</li>
+                            <li><a href="#sync-track"><code>sync:track</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+            <section id="metadata">
+                <h3><code>metadata</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Extension point that allows the inclusion of metadata from any metainformation structuring language</dd>
+                    <dt>Content</dt>
+                    <dd>Zero or more items</dd>
+                </dl>
+            </section>
+            <section id="sync%3Atrack">
+                <h3><code id="sync-track">sync:track</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>A virtual space to which <a href="#dfn-media-object">Media Objects</a> can be assigned. A user agent may offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A <code>sync:track</code> can have <a href="#dfn-media-param">Media Params</a>, which act as defaults for <a href="#dfn-media-object">Media Objects</a> on that track.</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>id</code>: required</li>
+                            <li><code>type</code>: the role that the track plays in the presentation. Examples could be <code>document</code>, <code>sound-fx</code>, <code>narration</code></li>
+                        </ul>
+                    </dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#param"><code>param</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                </dl>
+                <div class="TODO" id="todo-1">
+                    <h4>TODO</h4>
+                    <p> Should we enumerate `type` values or is there a vocabulary we could reference? </p>
+                </div>
+            </section>
+            <section id="param">
+                <h3><code>param</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Allows a general parameter value to be sent to a media object renderer as a name/value pair.</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>name</code>: a single string</li>
+                            <li><code>value</code>: a space-separated list</li>
+                        </ul>
+                    </dd>
+                </dl>
+                <div class="TODO" id="todo-10">
+                    <h4>TODO</h4>
+                    <p> List param names </p>
+                </div>
+            </section>
+            <section id="body">
+                <h3><code>body</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Temporal behavior of the presentation</dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#seq"><code>seq</code></a> (zero or more)</li>
+                            <li><a href="#par"><code>par</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+            <section id="seq">
+                <h3><code>seq</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>A sequence of elements</dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#seq"><code>seq</code></a> (zero or more)</li>
+                            <li><a href="#par"><code>par</code></a> (zero or more)</li>
+                            <li><a href="#ref"><code>ref</code></a> (zero or more)</li>
+                            <li><a href="#text"><code>text</code></a> (zero or more)</li>
+                            <li><a href="#audio"><code>audio</code></a> (zero or more)</li>
+                            <li><a href="#video"><code>video</code></a> (zero or more)</li>
+                            <li><a href="#image"><code>image</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                </dl>
+                <p>At least one <code>par</code> or <code>seq</code> is required.</p>
+                <dl>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:role</code>: one or more semantic role(s)</li>
+                        </ul>
+                    </dd>
+                </dl>
+                <div class="TODO" id="todo-3">
+                    <h4>TODO</h4>
+                    <p>Should we specify a `role` vocabulary or stay agnostic?</p>
+                </div>
+            </section>
+            <section id="par">
+                <h3><code>par</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Contains media objects which are to be rendered in parallel.</dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#seq"><code>seq</code></a> (zero or more)</li>
+                            <li><a href="#par"><code>par</code></a> (zero or more)</li>
+                            <li><a href="#ref"><code>ref</code></a> (zero or more)</li>
+                            <li><a href="#text"><code>text</code></a> (zero or more)</li>
+                            <li><a href="#audio"><code>audio</code></a> (zero or more)</li>
+                            <li><a href="#video"><code>video</code></a> (zero or more)</li>
+                            <li><a href="#image"><code>image</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:role</code>: one or more semantic role(s)</li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+            <section id="ref">
+                <h3><code>ref</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Generic media reference</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:track</code>: the ID of a track</li>
+                            <li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
+                            <li><code>clipBegin</code>: Start of a timed media clip</li>
+                            <li><code>clipEnd</code>: End of a timed media clip</li>
+                            <li><code>panZoom</code>: As defined in <a href="https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom">SMIL3</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+            <section id="text">
+                <h3><code>text</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Synonym for <a href="#ref"><code>ref</code></a>. References an element in an HTML document</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:track</code>: the ID of a <a href="#dfn-sync-track">track</a></li>
+                            <li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">fragment selector</a></li>
+                        </ul>
+                    </dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#param"><code>param</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                </dl>
+                <div class="TODO" id="todo-4">
+                    <h4>TODO</h4>
+                    <p>What should the approach be to referencing timed media in an HTML file? E.g. can you have `&lt;text src="file.html#video"/&gt;` where `#video` is an HTML video element?</p>
+                </div>
+            </section>
+            <section id="audio">
+                <h3><code>audio</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Synonym for <a href="#ref"><code>ref</code></a>. References a clip of audio media</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:track</code>: the ID of a track</li>
+                            <li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
+                            <li><code>clipBegin</code>: Start of the audio media clip</li>
+                            <li><code>clipEnd</code>: End of the audio media clip</li>
+                        </ul>
+                    </dd>
+                    <dt>Content</dt>
+                    <dd>
+                        <ul>
+                            <li><a href="#param"><code>param</code></a> (zero or more)</li>
+                        </ul>
+                    </dd>
+                </dl>
+                <div class="TODO" id="todo-2">
+                    <h4>TODO</h4>
+                    <p>Decide what happens if both media fragment and clipBegin/End are given.</p>
+                </div>
+            </section>
+            <section id="video">
+                <h3><code>video</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Synonym for <a href="#ref"><code>ref</code></a>. References a clip of video media</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:track</code>: the ID of a track</li>
+                            <li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
+                            <li><code>clipBegin</code>: Start of a timed media clip</li>
+                            <li><code>clipEnd</code>: End of a timed media clip</li>
+                            <li><code>panZoom</code>: As defined in <a href="https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom">SMIL3</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+            <section id="image">
+                <h3><code>image</code></h3>
+                <dl>
+                    <dt>Description</dt>
+                    <dd>Synonym for <a href="#ref"><code>ref</code></a>. References image media</dd>
+                    <dt>Properties</dt>
+                    <dd>
+                        <ul>
+                            <li><code>sync:track</code>: the ID of a track</li>
+                            <li><code>src</code>: Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">media fragment selector</a></li>
+                            <li><code>panZoom</code>: As defined in <a href="https://www.w3.org/TR/REC-smil/smil30.html#smil-extended-media-object-adef-panZoom">SMIL3</a></li>
+                        </ul>
+                    </dd>
+                </dl>
+            </section>
+        </section>
+        <section id="playback-rules">
+            <h2>Playback rules</h2>
+            <section id="rendering-body">
+                <h3>Rendering <code>body</code></h3>
+                <ul>
+                    <li><code>body</code> behaves like a <code>seq</code></li>
+                </ul>
+            </section>
+            <section id="rendering-seq">
+                <h3>Rendering <code>seq</code></h3>
+                <ul>
+                    <li>Render each child in order, each starting after the previous completes.</li>
+                </ul>
+            </section>
+            <section id="rendering-par">
+                <h3>Rendering <code>par</code></h3>
+                <ul>
+                    <li>Render each child in parallel.</li>
+                </ul>
+            </section>
+            <section id="rendering-media-objects">
+                <h3>Rendering Media Objects</h3>
+                <p><em><code>text</code>, <code>audio</code>, <code>video</code>, <code>image</code>, and <code>ref</code></em></p>
+                <ul>
+                    <li>Locate the segment of the referenced media and render it</li>
+                    <li>Apply <code>param</code> values from the <code>sync:track</code> (if referenced)</li>
+                    <li>Apply <code>param</code> values local to the media object instance</li>
+                </ul>
+            </section>
+        </section>
+        <section id="encoding-and-file-formats">
+            <h2>Encoding and File Formats</h2>
+            <div class="TODO">
+                <h4>TODO</h4>
+                <p>Determine the MIME type for SyncMedia documents.</p>
+            </div>
+            <p>The examples below are shown as XML; however, it is still an open question which serialization format(s) SyncMedia documents may be expressed as.</p>
+        </section>
+    </section>
+    <section id="examples">
+        <h1>Examples</h1>
+        <section id="html-document-with-audio-narration">
+            <h2>HTML document with audio narration</h2>
+            <p>This is a typical example of a structured document with audio narration. It features:</p>
+            <ul>
+                <li>Text fragments highlighted as the audio plays.</li>
+                <li>Semantic information: <ul>
+                        <li>There is a page number (often given in ebooks as print page equivalents), indicated via <code>role</code>. This allows Sync Media Players to offer users an option to skip page number announcements</li>
+                        <li>The document contains a table, also indicated via <code>role</code>, allowing players to offer users an option to escape and return to the main reading flow.</li>
+                    </ul>
+                </li>
+                <li>Nested highlights: When active, the table is outlined with a yellow border, and individual rows are highlighted as they are read.</li>
+            </ul>
+            <section id="syncmedia-presentation">
+                <h3>SyncMedia presentation</h3>
+                <pre><code>&lt;smil&gt;
     &lt;head&gt;
         &lt;sync:track id=&quot;doc&quot; type=&quot;document&quot;&gt;
             &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
@@ -431,11 +449,11 @@ List param names
 &lt;/smil&gt;
 
 </code></pre>
-</section>
-<section id="html-document">
-<h3>HTML document</h3>
-<p>This is the corresponding HTML document for the above SyncMedia presentation.</p>
-<pre><code>&lt;!DOCTYPE html&gt;
+            </section>
+            <section id="html-document">
+                <h3>HTML document</h3>
+                <p>This is the corresponding HTML document for the above SyncMedia presentation.</p>
+                <pre><code>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
     &lt;head&gt;
         &lt;style&gt;
@@ -508,41 +526,42 @@ List param names
     &lt;/body&gt;
 &lt;/html&gt;
 </code></pre>
-</section>
-</section>
-<section id="audio-only-presentation">
-<h2>Audio-only presentation</h2>
-<ul>
-<li>Nested structures</li>
-<li>Semantics</li>
-</ul>
-</section>
-<section id="presentation-with-secondary-audio">
-<h2>Presentation with secondary audio</h2>
-<ul>
-<li>Sound effects</li>
-<li>Background music</li>
-</ul>
-</section>
-<section id="video-with-text-transcript">
-<h2>Video with text transcript</h2>
-<ul>
-<li>Synchronized highlight for the transcript</li>
-</ul>
-</section>
-<section id="epub-with-separate-audio-overlay">
-<h2>EPUB with separate audio overlay</h2>
-<ul>
-<li>EPUB chunks referenced with CFI</li>
-<li>Overlay side-loaded</li>
-</ul>
-</section>
-<section id="svg-comic-with-audio-narration">
-<h2>SVG comic with audio narration</h2>
-<ul>
-<li>Zoom in on each comic panel</li>
-</ul>
-</section>
-</section>
+            </section>
+        </section>
+        <section id="audio-only-presentation">
+            <h2>Audio-only presentation</h2>
+            <ul>
+                <li>Nested structures</li>
+                <li>Semantics</li>
+            </ul>
+        </section>
+        <section id="presentation-with-secondary-audio">
+            <h2>Presentation with secondary audio</h2>
+            <ul>
+                <li>Sound effects</li>
+                <li>Background music</li>
+            </ul>
+        </section>
+        <section id="video-with-text-transcript">
+            <h2>Video with text transcript</h2>
+            <ul>
+                <li>Synchronized highlight for the transcript</li>
+            </ul>
+        </section>
+        <section id="epub-with-separate-audio-overlay">
+            <h2>EPUB with separate audio overlay</h2>
+            <ul>
+                <li>EPUB chunks referenced with CFI</li>
+                <li>Overlay side-loaded</li>
+            </ul>
+        </section>
+        <section id="svg-comic-with-audio-narration">
+            <h2>SVG comic with audio narration</h2>
+            <ul>
+                <li>Zoom in on each comic panel</li>
+            </ul>
+        </section>
+    </section>
 </body>
+
 </html>
