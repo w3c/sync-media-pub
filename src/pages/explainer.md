@@ -46,7 +46,17 @@ That said, here are the candidates and how each fares regarding the requirements
 #### Cons
 * Never was broadly adopted
 * WG is no longer active to propose changes to
-        
+
+### Timing Object
+[Timing Object](http://webtiming.github.io/timingobject/)
+
+#### Pros
+
+* Capable of complex media synchronization
+
+#### Cons
+* No declarative syntax
+* Spec is incomplete
 
 ### TTML2
 
