@@ -1,10 +1,64 @@
-
-div.TODO {
+.TODO {
     background-color: antiquewhite;
+    
+}
+div.TODO {
     border: darkorange thick solid;
     padding: 1rem;
-
 }
-div.TODO h4 {
-    margin-top: inherit;
+
+table > thead {
+    background-color: rgba(0,0,0,0.7);
+    color: white;
+}
+
+table td {
+    padding: 1rem;
+}
+
+table th {
+    padding: 0.5rem 1rem 0.5rem 1rem;
+}
+
+table th:first-child {
+    width: 10rem;
+}
+
+table td:last-child {
+    width: 30rem;
+}
+
+table td:not(:first-child):not(:last-child) {
+    width: 20rem;
+}
+
+table td {
+    vertical-align: top;
+}
+
+table td ul {
+    margin-top: 0;
+    padding-left: 0;
+}
+table td ul li:first-child{
+    margin-top: 0;
+}
+
+#syncmedia-presentation {
+    width: 100%;
+    display: grid;
+    grid-template-rows: 10% auto;
+    grid-template-columns: 50% 50%;
+    gap: 1rem;
+}
+#syncmedia-presentation > h4 {
+    grid-row: 1;
+    grid-column: 1/3
+}
+#syncmedia-presentation > section:first-child {
+    grid-column: 1;
+}
+
+#syncmedia-presentation > section:last-child {
+    grid-column: 2;
 }

@@ -4,6 +4,6 @@
 {%- endblock -%}
 {%- block body -%}
 <h1>{{title}}</h1>
-{{ page.date | readableDate('MMM D, YYYY') }}
+{{ page.date.toDateString() }}
 {{ content | safe }}
 {%- endblock -%}
