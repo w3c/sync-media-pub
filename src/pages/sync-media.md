@@ -318,15 +318,15 @@ After the SyncMedia document has been processed, it is ready to be rendered.
 | Object | Rendering behavior | 
 |--------|--------------------|
 | `body` | Render like `seq`  |
-| `seq` | Render each child in order, each starting after the previous completes. |
-| `par` | Render each child in parallel. |
-| `text` | Display the HTML document, ensure the document segment is visible, and apply `param`s. |
-| `audio` | Play the audio file or segment and apply `param`s |
-| `video` | Play the video file or segment and apply `param`s |
-| `image` | Load the image file or segment and apply `param`s |
-| `ref` | Infer the media type and, if supported, render the file or segment, and apply `param`s |
+| `seq` | Render each child in order, each starting after the previous completes. Done when the last child is finished.|
+| `par` | Render each child at the same time. Done when all the children are finished.|
+| `text` | Display the HTML document, ensure the document segment is visible, and apply `params`. Not timed, so considered done immediately. |
+| `audio` | Play the audio file or segment and apply `params`. Done when the segment is finished. |
+| `video` | Play the video file or segment and apply `params`. Done when the segment is finished. |
+| `image` | Load the image file or segment and apply `params`. Not timed, so considered done immediately. |
+| `ref` | Infer the media type and, if supported, render the file or segment, and apply `params`. If timed, done when the segment is finished; if untimed, done immediately. |
 
-Note about looping media {.note}
+Note about looping media and when it's considered done {.note}
 
 ### User Interaction
 
@@ -337,7 +337,7 @@ __TODO__: how much to cover here?
 * Moving through the presentation meaningfully, e.g. previous/next sentence or para
 * Warning about looping media getting 'stuck' if there is no other timed media in its container (or child containers)
 * Exposing controls for multitrack presentations
-* Note about media with `ignoreRate`
+* Note about global adjustments and track types (indicated by `role`) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.
 
 ## Encoding and Serialization
 
@@ -576,14 +576,7 @@ If `type` is `body` or `seq`, the array is an in-order sequence of media objects
 {
     "type": "seq",
     "media": [
-        {
-            "type": "audio",
-            "src": "url1#frag"
-        },
-        {
-            "type": "audio",
-            "src": "url2#frag"
-        }
+        ...
     ]
 }
 {% endexample %}
@@ -598,15 +591,23 @@ These properties are in addition to what is already defined in [[[#media-objects
 
 {% example "JSON audio media" %}
 {
-    "type": "audio",
-    "src": "url#frag",
-    ...
+    "type": "seq",
+    "media": [
+        {
+            "type": "audio",
+            "src": "url1#frag"
+        },
+        {
+            "type": "audio",
+            "src": "url2#frag"
+        }
+    ]
 }
 {% endexample %}
 
 #### Shorthand
 
-There is a shorthand for `par` objects where the media objects can exist as named properties, in cases where there is only one media object of its type in the `par`.
+There is a shorthand for `par` objects where child objects can exist as named properties, in cases where there is only one object of its type in the `par`. In this case, it is not required to include `"type": "par"`. 
 
 {% example "JSON shorthand for par" %}
 {
@@ -615,16 +616,42 @@ There is a shorthand for `par` objects where the media objects can exist as name
 }
 {% endexample %}
 
-There is another shortcut that can be applied to this example, which is to consolidate the media object into a single property. This is possible when its only property is the `src`.
+A `seq` with no other properties than media can be shortened to a media array. 
 
-{% example "JSON shorthand for par and media object" %}
+{% example "JSON shorthand for par, with a seq child, also in shorthand" %}
 {
-    "audio": "url#frag",
-    "text": "url#frag"
+    "text": {"src": "url#table"},
+    "seq": [
+        {
+            "audio": {"src": "url#frag"},
+            "text": {"src": "url#table_row_one"}
+        },
+        {
+            "audio": {"src": "url#frag"},
+            "text": {"src": "url#table_row_two"}
+        }
+    ]
 }
 {% endexample %}
 
 
+There is another shortcut that can be applied to this example, which is to consolidate the media object into a single property. This is possible when its only property is the `src`.
+
+{% example "JSON shorthand for par, seq,  and media object" %}
+{
+    "text": "url#table",
+    "seq": [
+        {
+            "audio": "url#frag",
+            "text": "url#table_row_one"
+        },
+        {
+            "audio": "url#frag",
+            "text": "url#table_row_two"
+        }
+    ]
+}
+{% endexample %}
 
 #### Content Model
 
@@ -664,7 +691,7 @@ There is another shortcut that can be applied to this example, which is to conso
             <td>Object</td>
             <td>
                 <ul>
-                    <li>One or more <a href="#name">`name`</a>, e.g. `"param": {"volume": 0.5}"`</li>
+                    <li>One or more <a href="#name">`names`</a></li>
                 </ul>
             </td>
         </tr>
@@ -783,7 +810,7 @@ There is another shortcut that can be applied to this example, which is to conso
                 "role": "contentDocument",
                 "defaultFile": "file.html",
                 "label": "Page",
-                "params": {
+                "param": {
                     "cssClass": "highlight"
                 }
             },
@@ -830,7 +857,7 @@ There is another shortcut that can be applied to this example, which is to conso
                 "role": "contentDocument",
                 "label": "Page",
                 "defaultFile": "file.html",
-                "params": {
+                "param": {
                     "cssClass": "highlight"
                 }
             },
@@ -997,33 +1024,24 @@ This is a typical example of a structured document with audio narration. It feat
             "text": "#h2"
         },
         {
-            "type": "par",
             "role": "table",
-            "media": [
+            "text": "#table",
+            "seq": [
                 {
-                    "type": "text",
-                    "src": "#table"
+                    "audio": "#t=22,25",
+                    "text": "#tr1"
                 },
                 {
-                    "type": "seq",
-                    "media": [
-                        {
-                            "audio": "#t=22,25",
-                            "text": "#tr1"
-                        },
-                        {
-                            "audio": "#t=25,30",
-                            "text": "#tr2"     
-                        },
-                        {
-                            "audio": "#t=30,35",
-                            "text": "#tr3"
-                        },
-                        {
-                            "audio": "#t=35,40",
-                            "text": "#tr4"
-                        }
-                    ]
+                    "audio": "#t=25,30",
+                    "text": "#tr2"     
+                },
+                {
+                    "audio": "#t=30,35",
+                    "text": "#tr3"
+                },
+                {
+                    "audio": "#t=35,40",
+                    "text": "#tr4"
                 }
             ]
         },
