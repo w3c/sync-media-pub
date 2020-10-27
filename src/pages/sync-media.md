@@ -9,6 +9,9 @@ layout: spec.njk
 <section id="sotd">
 </section>
 
+<section id="conformance">
+</section>
+
 ## Relationship to Other Specifications
 
 SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishing/epub32/epub-mediaoverlays.html) and, like Media Overlays, is built on [[SMIL3]]. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions. 
@@ -55,12 +58,14 @@ This section defines SyncMedia's terms and properties, and gives examples. Examp
 
 ### Document Structure
 
-A SyncMedia document contains two parts: a head and a body. The temporal presentation of media objects is laid out in the body. Time containers may be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.
+A SyncMedia document contains two parts: a `head` and a `body`. The temporal presentation of media objects is laid out in the body. Time containers may be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.
+
+A SyncMedia document must have a `body`. It may have a `head`.
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
-| `head`{#head} | Object / element | Information not related to temporal behavior |
-| `body`{#body} | Object / element | Main [=sequential time container=] for the presentation. |
+| `head`{#head} | Node | Information not related to temporal behavior |
+| `body`{#body} | Node | Main [=sequential time container=] for the presentation. |
 
 ### Time Containers
 
@@ -68,8 +73,8 @@ Media objects are arranged in time containers to determine whether they are rend
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
-| `seq`{#seq} | Object / element | A [=sequential time container=] for media and/or time containers. |
-| `par`{#par} | Object / element | A [=parallel time container=] for media and/or time containers. | 
+| `seq`{#seq} | Node | A [=sequential time container=] for media and/or time containers. |
+| `par`{#par} | Node | A [=parallel time container=] for media and/or time containers. | 
 
 
 {% example "Using time containers to associate text references with audio clips, to create a synchronized text and audio presentation"%}
@@ -91,16 +96,15 @@ Media objects are arranged in time containers to determine whether they are rend
 
 #### Semantic Inflection
 
-There are benefits to applying semantic inflection to time containers in SyncMedia. Users can customize their experience, for example by skipping types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
+There are benefits to applying semantic inflection to time containers in SyncMedia. User agents that understand semantic inflection may customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
 
+#### Properties
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
-| `role`{#role} | One or more `string`s | Semantic role(s) | 
+| `role`{#role} | One or more `strings` | Semantic role(s) | 
 
-::: .TODO
-__TODO__: There is an [open issue](https://github.com/w3c/sync-media-pub/issues/12) about referencing a role vocabulary.
-:::
+Values for the `role` property on time containers must come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles) or [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/). 
 
 {% example "Using role to mark a page number" %}
 <body>
@@ -127,15 +131,16 @@ The table below describes the media objects in SyncMedia. `Ref` can be used to r
 
 | Term | Data type | Description |
 | -----| --------- | ----------- | 
-| `ref`{#ref} | Object / element | Generic media reference | 
-| `audio`{#audio} | Object / element | Synonym for [`ref`](#ref) that specifically references audio media.| 
-| `image`{#image} | Object / element | Synonym for [`ref`](#ref) that specifically references image media.|
-| `text`{#text} | Object / element | Synonym for [`ref`](#ref) that specifically references an element in an HTML document.|
-| `video`{#video} | Object / element | Synonym for [`ref`](#ref) that specifically references video media.|
+| `audio`{#audio} | Node | References audio media.| 
+| `htmlVideo`{#htmlVideo} | Node | References an {%raw%}{{HTMLVideoElement}}{%endraw%} |
+| `htmlAudio`{#htmlAudio} | Node | References an {%raw%}{{HTMLAudioElement}}{%endraw%} |
+| `htmlImage`{#htmlImage} | Node | References an {%raw%}{{HTMLImageElement}}{%endraw%}|
+| `image`{#image} | Node | References image media.|
+| `ref`{#ref} | Node | Generic media reference | 
+| `text`{#text} | Node | References text content in an HTML document.|
+| `video`{#video} | Node | References video media.|
 
-::: .TODO
-__TODO__:  What should the approach be to referencing timed media in an HTML file? E.g. can you have `<text src="file.html#video"/>` where `#video` is the ID of an HTML video element?
-:::
+Note that there are different versions of media objects for referring to media embedded in HTML. For example, you could refer directly to a video file with `<video src="file.mp4"/>` but if you want to refer to a video element in an HTML document, use `<htmlVideo src="file.html#videoElementId"/>` instead. {.note}
 
 #### Properties
 
@@ -143,8 +148,13 @@ Properties on media objects are used to express the location of the media source
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
+| `clipBegin`{#clipBegin}| <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | Start of a timed media clip | 
+| `clipEnd`{#clipEnd} | <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | End of a timed media clip |
+| `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
+| `repeatCount`{#repeatCount} | Number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> | For timed media. Specifies the number of iterations. |
 | `src`{#src} | URL | Location of media file, optionally including a [fragment selector](https://www.w3.org/TR/selectors-states/#FragmentSelector_def) | 
 | `track`{#trackref} | ID | Specifies the ID of a track.|
+ 
 
 ::: .TODO
 __TODO__: 
@@ -152,20 +162,13 @@ Decide on whether to include media fragments in srcs; if so, `clipBegin`, `clipE
 :::
 
 
-| Term | Data type | Description |
-| -----| --------- | ----------- | 
-| `clipBegin`{#clipBegin}| See <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> | Start of a timed media clip | 
-| `clipEnd`{#clipEnd} | See <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> | End of a timed media clip | 
-| `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
-
-
 #### Parameters
 
-Media objects can be rendered in many different ways, and to specify rendering details, SyncMedia uses SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-edef-param">param</a> to send parameters to media object renderers.
+SyncMedia uses SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-edef-param">param</a> to send parameters to [=media object renderer=]s.
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
-| `param`{#param} | Object / element | Name/value pair sent to a media object renderer. |
+| `param`{#param} | Node | Name/value pair sent to a media object renderer. |
 
 The properties of `param` are:
 
@@ -179,13 +182,16 @@ The following parameter `name`s are defined:
 | Name | Allowed value(s) | For media type | Description | 
 |------| ------|------------|-------------|
 | `cssClass` | One or more strings | Media that can be styled with CSS | Indicates class name(s) to apply |
-| `clipPath` | TODO | Visual media | TODO |
-| `volume` | Between 0 and 1 | Audible media | Indicates the volume |
+| `clipPath` | As defined by the [SVG path data attribute](https://www.w3.org/TR/SVG11/paths.html#DAttribute) | Visual media | The shape that will be used to apply a clip mask to the media |
 | `pan` | Between -1 (full left) and 1 (full right) | Audible media | Indicates the volume pan |
 | `playbackRate` | 1.0 (normal rate), less, or more | Timed media | Indicates the playback rate. Values should align with HTML's {%raw%}{{HTMLMediaElement/playbackRate}}{%endraw%}. |
-| `loop` | Empty string | Timed media | Repeat the media segment until the parent time container has completed | 
-| `panZoom` | Empty string | Visual media | Transition with pan and zoom to the clipped region |
+| `volume` | Between 0 and 1 | Audible media | Indicates the volume |
 
+::: .TODO
+__TODO__:
+Say more about using `clipPath` with `panZoom`
+
+:::
 
 {% example "Using param to add synchronized highlighting to HTML element" %}
 <body>
@@ -213,31 +219,37 @@ The following parameter `name`s are defined:
 
 ### Tracks
 
-SyncMedia presentations can organize media objects of the same types into virtual spaces called "tracks". Tracks live in the document `head`. Tracks have several useful features:
+SyncMedia presentations organize media objects of the same types into virtual spaces called "tracks". Tracks must be placed in the SyncMedia document `head`. Tracks have several useful features:
 
-1. A track can provide default [params](#param) that then get applied to any media object on that track. 
-2. A track can be set as the default for a given media object type (e.g. all the `audio` media objects can be automatically assigned to a track).
-3. A track can have a default source file for all its media objects to use, in combination with any fragment specifier on the media object itself.
+1. A track may provide default [params](#param) that then get applied to any media object on that track. 
+2. A track may be set as the default for a given media object type (e.g. all the `audio` media objects can be automatically assigned to a track).
+3. A track may have a default source for all its media objects to use, in combination with any fragment specifier on the media object itself.
 
-All of these features help reduce verbosity as otherwise these properties would have to be explicitly stated for each media object. 
+All of these features reduce verbosity as otherwise these properties would have to be explicitly stated on each media object. 
 
 | Term | Description |
 | -----| ----------- |
-| `track`{#track} | A virtual space to which [=Media Objects=] can be assigned. A user agent may offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` can have [=Media Params=], which act as defaults for [=Media Objects=] on that track.  |
+| `track`{#track} | A virtual space to which [=Media Objects=] are assigned. A user agent may offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` may have [=Media Params=], which act as defaults for [=Media Objects=] on that track.  |
 
 #### Properties
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
 | `label`{#label} | `string` | The track's label |
-| `defaultFile`{#defaultFile} | `URL` | Source of the default file that media objects on this track will use.|
-| `defaultFor`{#defaultFor} | One of: `audio`, `image`, `video`, `text`, `ref` | Media objects of the type specified will automatically be assigned to this track. |
+| `defaultSrc`{#defaultSrc} | `URL` | Source of the default file that media objects on this track will use.|
+| `defaultFor`{#defaultFor} | One of: `audio`, `image`, `video`, `text`, `ref` | Media objects of the type specified are automatically assigned to this track. |
 | `role`{#trackRole} | One of: `backgroundAudio`, `audioNarration`, `signLanguageVideo`, `contentDocument` | The role this track plays in the presentation. |
+
+::: .TODO
+__TODO__:
+Finish the list of `role` values
+:::
+
 
 {% example "A track for an HTML document with default values and a cssClass param" %}
 <head>
     <sync:track sync:label="Page" sync:defaultFor="text" 
-        sync:defaultFile="chapter01.html" sync:role="contentDocument">
+        sync:defaultSrc="chapter01.html" sync:role="contentDocument">
         <param name="cssClass" value="highlight"/>
     </sync:track>
 </head>
@@ -269,9 +281,7 @@ All of these features help reduce verbosity as otherwise these properties would 
 </head>
 <body>
     <par>
-        <audio sync:track="background-music" src="bkmusic.mp3">
-            <param name="loop" value=""/>
-        </audio>
+        <audio sync:track="background-music" src="bkmusic.mp3" repeat="indefinite"/>
         <seq>
             <par>
                 <audio src="chapter01.mp3#t=30,40"/>
@@ -290,16 +300,15 @@ All of these features help reduce verbosity as otherwise these properties would 
 </body>
 {% endexample %}
 
-The reason for including a narration `track`, even though it supplies no default values, is because it would enable a user agent to have separate controls for narration audio vs background music audio. 
+The reason for including a narration `track`, even though it supplies no default values, is because it would enable a user agent to have separate controls for narration audio vs background music audio. {.note}
 
 
 ### Metadata
-SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata lives in the document `head`.
+SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata must go in the SyncMedia document `head`.
 
 | Term | Description |
 | -----| ----------- |
 | `metadata`{#metadata} | Extension point that allows the inclusion of metadata from any metainformation structuring language |
-
 
 
 ## Playback
@@ -308,6 +317,7 @@ SyncMedia has a generic mechanism for incorporating metadata but does not requir
 
 Applying track defaults to media objects.. 
 ::: .TODO
+__TODO__:
 Finish this section
 :::
 
@@ -320,13 +330,20 @@ After the SyncMedia document has been processed, it is ready to be rendered.
 | `body` | Render like `seq`  |
 | `seq` | Render each child in order, each starting after the previous completes. Done when the last child is finished.|
 | `par` | Render each child at the same time. Done when all the children are finished.|
-| `text` | Display the HTML document, ensure the document segment is visible, and apply `params`. Not timed, so considered done immediately. |
-| `audio` | Play the audio file or segment and apply `params`. Done when the segment is finished. |
-| `video` | Play the video file or segment and apply `params`. Done when the segment is finished. |
+| `audio` | Play the referenced portion of audio media and apply `params`. Done when the referenced portion has finished. |
+| `htmlAudio` | Dereference the `src` to get the `audio` element from its HTML document, play the referenced portion, and apply `params`. Done when the referenced portion has finished.|
+| `htmlImage` | Display the HTML document, ensure the referenced element is visible, and apply `params`. Not timed, so considered done immediately.|
+| `htmlVideo` | Display the HTML document, ensure the referenced element is visible, play the referenced portion of video media, and apply `params`. Done when the referenced portion has finished.|
 | `image` | Load the image file or segment and apply `params`. Not timed, so considered done immediately. |
 | `ref` | Infer the media type and, if supported, render the file or segment, and apply `params`. If timed, done when the segment is finished; if untimed, done immediately. |
+| `text` | Display the HTML document, ensure the referenced element is visible, and apply `params`. Not timed, so considered done immediately. |
+| `video` | Play the video file or segment and apply `params`. Done when the segment is finished. |
 
-Note about looping media and when it's considered done {.note}
+
+Note about media with `repeatCount` and when it's considered done {.note}
+
+Note about what if `text` points to one HTML document and `htmlVideo` points to another {.note}
+
 
 ### User Interaction
 
@@ -335,11 +352,15 @@ __TODO__: how much to cover here?
 :::
 
 * Moving through the presentation meaningfully, e.g. previous/next sentence or para
-* Warning about looping media getting 'stuck' if there is no other timed media in its container (or child containers)
 * Exposing controls for multitrack presentations
 * Note about global adjustments and track types (indicated by `role`) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.
 
 ## Encoding and Serialization
+
+::: .TODO
+__TODO__:
+Which serialization format(s) to define is TBD
+:::
 
 ::: .TODO
 __TODO__: 
@@ -391,7 +412,7 @@ Note about custom extensions in the `sync` namespace {.note}
             <td>
                 <ul>
                     <li><a href="#label">`sync:label`</a></li>
-                    <li><a href="#defaultFile">`sync:defaultFile`</a></li>
+                    <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
                     <li><a href="#trackRole">`sync:role`</a></li>
                 </ul>
@@ -422,11 +443,14 @@ Note about custom extensions in the `sync` namespace {.note}
             <td>
                 In any order:
                 <ul>
-                    <li><a href="#par">`par`</a> (0 or more)</li>
-                    <li><a href="#seq">`seq`</a> (0 or more)</li>
                     <li><a href="#audio">`audio`</a> (0 or more)</li>
+                    <li><a href="#htmlAudio">`htmlAudio`</a> (0 or more)</li>
+                    <li><a href="#htmlImage">`htmlImage`</a> (0 or more)</li>
+                    <li><a href="#htmlVideo">`htmlVideo`</a> (0 or more)</li>
                     <li><a href="#image">`image`</a> (0 or more)</li>
+                    <li><a href="#par">`par`</a> (0 or more)</li>
                     <li><a href="#ref">`ref`</a> (0 or more)</li>
+                    <li><a href="#seq">`seq`</a> (0 or more)</li>
                     <li><a href="#text">`text`</a> (0 or more)</li>
                     <li><a href="#video">`video`</a> (0 or more)</li>
                 </ul>
@@ -442,11 +466,14 @@ Note about custom extensions in the `sync` namespace {.note}
             <td>
                 In any order:
                 <ul>
-                    <li><a href="#par">`par`</a> (0 or more)</li>
-                    <li><a href="#seq">`seq`</a> (0 or more)</li>
                     <li><a href="#audio">`audio`</a> (0 or more)</li>
+                    <li><a href="#htmlAudio">`htmlAudio`</a> (0 or more)</li>
+                    <li><a href="#htmlImage">`htmlImage`</a> (0 or more)</li>
+                    <li><a href="#htmlVideo">`htmlVideo`</a> (0 or more)</li>
                     <li><a href="#image">`image`</a> (0 or more)</li>
+                    <li><a href="#par">`par`</a> (0 or more)</li>
                     <li><a href="#ref">`ref`</a> (0 or more)</li>
+                    <li><a href="#seq">`seq`</a> (0 or more)</li>
                     <li><a href="#text">`text`</a> (0 or more)</li>
                     <li><a href="#video">`video`</a> (0 or more)</li>
                 </ul>
@@ -462,25 +489,28 @@ Note about custom extensions in the `sync` namespace {.note}
             <td>
                 In any order:
                 <ul>
-                    <li><a href="#par">`par`</a> (0 or more)</li>
-                    <li><a href="#seq">`seq`</a> (0 or more)</li>
                     <li><a href="#audio">`audio`</a> (0 or more)</li>
+                    <li><a href="#htmlAudio">`htmlAudio`</a> (0 or more)</li>
+                    <li><a href="#htmlImage">`htmlImage`</a> (0 or more)</li>
+                    <li><a href="#htmlVideo">`htmlVideo`</a> (0 or more)</li>
                     <li><a href="#image">`image`</a> (0 or more)</li>
+                    <li><a href="#par">`par`</a> (0 or more)</li>
                     <li><a href="#ref">`ref`</a> (0 or more)</li>
+                    <li><a href="#seq">`seq`</a> (0 or more)</li>
                     <li><a href="#text">`text`</a> (0 or more)</li>
                     <li><a href="#video">`video`</a> (0 or more)</li>
                 </ul>
             </td>
         </tr>
         <tr>
-            <td><a href="#ref">`ref`</a></td>
+            <td><a href="#audio">`audio`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
             <td>
@@ -490,13 +520,47 @@ Note about custom extensions in the `sync` namespace {.note}
             </td>
         </tr>
         <tr>
-            <td><a href="#audio">`audio`</a></td>
+            <td><a href="#audio">`htmlAudio`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlImage`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlVideo`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
             <td>
@@ -512,6 +576,24 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#ref">`ref`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
             <td>
@@ -538,11 +620,12 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#video">`video`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
             <td>
@@ -616,6 +699,22 @@ There is a shorthand for `par` objects where child objects can exist as named pr
 }
 {% endexample %}
 
+{% example "Expanded version of above example" %}
+{
+    "type": "par",
+    "media": [
+        {
+            "type": "audio",
+            "src": "url#frag"
+        },
+        {
+            "type": "text",
+            "src": "url#frag"
+        }
+    ]
+}
+{% endexample %}
+
 A `seq` with no other properties than media can be shortened to a media array. 
 
 {% example "JSON shorthand for par, with a seq child, also in shorthand" %}
@@ -634,10 +733,52 @@ A `seq` with no other properties than media can be shortened to a media array.
 }
 {% endexample %}
 
+{% example "JSON expanded version of the above example" %}
+{
+    "type": "par",
+    "media": [
+        {
+            "type": "text",
+            "src": "url#table"
+        },
+        {
+            "type": "seq",
+            "media": [
+                {
+                    "type": "par",
+                    "media": [
+                        {
+                            "type": "audio",
+                            "src": "url#frag"
+                        },
+                        {
+                            "type": "text",
+                            "src": "url#table_row_one"
+                        }
+                    ]
+                },
+                {
+                    "type": "par",
+                    "media": [
+                        {
+                            "type": "audio",
+                            "src": "url#frag"
+                        },
+                        {
+                            "type": "text",
+                            "src": "url#table_row_two"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+{% endexample %}
 
 There is another shortcut that can be applied to this example, which is to consolidate the media object into a single property. This is possible when its only property is the `src`.
 
-{% example "JSON shorthand for par, seq,  and media object" %}
+{% example "JSON shorthand for par, seq, and media object, equivalent to the above example" %}
 {
     "text": "url#table",
     "seq": [
@@ -679,7 +820,7 @@ There is another shortcut that can be applied to this example, which is to conso
             <td>
                 <ul>
                     <li><a href="#label">`label`</a></li>
-                    <li><a href="#defaultFile">`defaultFile`</a></li>
+                    <li><a href="#defaultSrc">`defaultSrc`</a></li>
                     <li><a href="#defaultFor">`defaultFor`</a></li>
                     <li><a href="#trackRole">`role`</a></li>
                     <li><a href="#param">`param`</a></li>
@@ -700,7 +841,7 @@ There is another shortcut that can be applied to this example, which is to conso
             <td><a href="#time-container-object">Time Container Object</a></td>
             <td>
                 <ul>
-                    <li><a href="#type-time-container">`type`</a>: `"body"`</li>
+                    <li><a href="#type-time-container">`type`</a>: `"seq"`</li>
                     <li><a href="#media">`media`</a></li>
                     <li><a href="#role">`role`</a></li>
                 </ul>
@@ -729,31 +870,58 @@ There is another shortcut that can be applied to this example, which is to conso
             </td>
         </tr>
         <tr>
-            <td><a href="#ref">`ref`</a></td>
-            <td><a href="#media-object">Media Object</a></td>
-            <td>
-                <ul>
-                    <li><a href="#type-media-object">`type`</a>: `"ref"`</li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`track`</a></li>
-                    <li><a href="#clipBegin">`clipBegin`</a></li>
-                    <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#panZoom">`panZoom`</a></li>
-                    <li><a href="#json-param">`param`</a></li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
             <td><a href="#audio">`audio`</a></td>
             <td><a href="#media-object">Media Object</a></td>
             <td>
                 <ul>
-                    <li><a href="#type-media-object">`type`</a>: `"audio"`</li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`track`</a></li>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"audio"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlAudio`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"htmlAudio"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlImage`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"htmlImage"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlVideo`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"htmlVideo"`</li>
                 </ul>
             </td>
         </tr>
@@ -762,11 +930,26 @@ There is another shortcut that can be applied to this example, which is to conso
             <td><a href="#media-object">Media Object</a></td>
             <td>
                 <ul>
-                    <li><a href="#type-media-object">`type`</a>: `"image"`</li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"image"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#ref">`ref`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"ref"`</li>
                 </ul>
             </td>
         </tr>
@@ -775,10 +958,10 @@ There is another shortcut that can be applied to this example, which is to conso
             <td><a href="#media-object">Media Object</a></td>
             <td>
                 <ul>
-                    <li><a href="#type-media-object">`type`</a>: `"text"`</li>
+                    <li><a href="#json-param">`param`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`track`</a></li>
-                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"text"`</li>
                 </ul>
             </td>
         </tr>
@@ -787,13 +970,13 @@ There is another shortcut that can be applied to this example, which is to conso
             <td><a href="#media-object">Media Object</a></td>
             <td>
                 <ul>
-                    <li><a href="#type-media-object">`type`</a>: `"video"`</li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`track`</a></li>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"video"`</li>
                 </ul>
             </td>
         </tr>
@@ -808,7 +991,7 @@ There is another shortcut that can be applied to this example, which is to conso
             {
                 "defaultFor": "text",
                 "role": "contentDocument",
-                "defaultFile": "file.html",
+                "defaultSrc": "file.html",
                 "label": "Page",
                 "param": {
                     "cssClass": "highlight"
@@ -817,7 +1000,7 @@ There is another shortcut that can be applied to this example, which is to conso
             {
                 "defaultFor": "audio",
                 "label": "Narration",
-                "defaultFile": "audio.mp3",
+                "defaultSrc": "audio.mp3",
                 "role": "audioNarration"
             }
         ]
@@ -856,7 +1039,7 @@ There is another shortcut that can be applied to this example, which is to conso
                 "defaultFor": "text",
                 "role": "contentDocument",
                 "label": "Page",
-                "defaultFile": "file.html",
+                "defaultSrc": "file.html",
                 "param": {
                     "cssClass": "highlight"
                 }
@@ -865,7 +1048,7 @@ There is another shortcut that can be applied to this example, which is to conso
                 "defaultFor": "audio",
                 "role": "audioNarration",
                 "label": "Narration",
-                "defaultFile": "audio.mp3"
+                "defaultSrc": "audio.mp3"
             }
         ]
     },
@@ -889,6 +1072,7 @@ There is another shortcut that can be applied to this example, which is to conso
 #### Processing algorithm
 
 ::: .TODO
+__TODO__:
 Finish this section
 :::
 
@@ -914,12 +1098,12 @@ This is a typical example of a structured document with audio narration. It feat
 ```
 <smil>
     <head>
-        <sync:track sync:role="contentDocument" sync:defaultFile="file.html" 
+        <sync:track sync:role="contentDocument" sync:defaultSrc="file.html" 
             sync:defaultFor="text" sync:label="Page">
             <param name="cssClass" value="highlight"/>
         </sync:track>
         <sync:track sync:role="audioNarration" sync:label="Narration" 
-            sync:defaultFile="audio.mp3" sync:defaultFor="audio" />
+            sync:defaultSrc="audio.mp3" sync:defaultFor="audio" />
     </head>
     <body>
         <par>
@@ -982,7 +1166,7 @@ This is a typical example of a structured document with audio narration. It feat
         "tracks": [
             {
                 "role": "contentDocument",
-                "defaultFile": "file.html",
+                "defaultSrc": "file.html",
                 "defaultFor": "text",
                 "label": "Page",
                 "params": {
@@ -992,7 +1176,7 @@ This is a typical example of a structured document with audio narration. It feat
             {
                 "role": "audioNarration",
                 "label": "Narration",
-                "defaultFile": "audio.mp3",
+                "defaultSrc": "audio.mp3",
                 "defaultFor": "audio"
             }
         ]
