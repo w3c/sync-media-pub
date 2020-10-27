@@ -18,7 +18,7 @@ SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishin
 
 ## SyncMedia
 
-This section defines SyncMedia's terms and properties, and gives examples. Examples in this section are written in SMIL XML with the `sync` namespace used for custom extensions. Choosing a serialization formation remains an open issue.
+This section defines SyncMedia's terms and properties, and gives examples. Examples in this section are written in SMIL XML with the `sync` namespace used for custom extensions. Choosing serialization format(s) remains an open issue. 
 
 ### Definitions  
 
@@ -640,6 +640,444 @@ Note about custom extensions in the `sync` namespace {.note}
 
 
 
+### JSON
+
+Much of the JSON representation of SyncMedia is a direct translation of the model described in this document. In the case of time containers and media objects, some additional properties are required
+
+#### Time Container Object
+
+These properties are in addition to what is already defined in [[[#time-containers]]].
+
+| Property | Values |
+|------|------------|
+| `type`{#type-time-container} | One of `body`, `seq`, `par` |
+| `media`{#media} | Array of <a href="#media-object">media objects</a> |
+
+If `type` is `body` or `seq`, the array is an in-order sequence of media objects. If `type` is `par`, the order of media objects in the array does not matter.
+
+{% example "JSON seq" %}
+{
+    "type": "seq",
+    "media": [
+        ...
+    ]
+}
+{% endexample %}
+
+#### Media Object
+
+These properties are in addition to what is already defined in [[[#media-objects]]].
+
+| Property | Values |
+|----------|--------|
+| `type`{#type-media-object} | One of `audio`, `image`, `ref`, `text`, `video` |
+
+{% example "JSON audio media" %}
+{
+    "type": "seq",
+    "media": [
+        {
+            "type": "audio",
+            "src": "url1#frag"
+        },
+        {
+            "type": "audio",
+            "src": "url2#frag"
+        }
+    ]
+}
+{% endexample %}
+
+#### Shorthand
+
+There is a shorthand for `par` objects where child objects can exist as named properties, in cases where there is only one object of its type in the `par`. In this case, it is not required to include `"type": "par"`. 
+
+{% example "JSON shorthand for par" %}
+{
+    "audio": {"src": "url#frag"},
+    "text": {"src": "url#frag"}
+}
+{% endexample %}
+
+{% example "Expanded version of above example" %}
+{
+    "type": "par",
+    "media": [
+        {
+            "type": "audio",
+            "src": "url#frag"
+        },
+        {
+            "type": "text",
+            "src": "url#frag"
+        }
+    ]
+}
+{% endexample %}
+
+A `seq` with no other properties than media can be shortened to a media array. 
+
+{% example "JSON shorthand for par, with a seq child, also in shorthand" %}
+{
+    "text": {"src": "url#table"},
+    "seq": [
+        {
+            "audio": {"src": "url#frag"},
+            "text": {"src": "url#table_row_one"}
+        },
+        {
+            "audio": {"src": "url#frag"},
+            "text": {"src": "url#table_row_two"}
+        }
+    ]
+}
+{% endexample %}
+
+{% example "JSON expanded version of the above example" %}
+{
+    "type": "par",
+    "media": [
+        {
+            "type": "text",
+            "src": "url#table"
+        },
+        {
+            "type": "seq",
+            "media": [
+                {
+                    "type": "par",
+                    "media": [
+                        {
+                            "type": "audio",
+                            "src": "url#frag"
+                        },
+                        {
+                            "type": "text",
+                            "src": "url#table_row_one"
+                        }
+                    ]
+                },
+                {
+                    "type": "par",
+                    "media": [
+                        {
+                            "type": "audio",
+                            "src": "url#frag"
+                        },
+                        {
+                            "type": "text",
+                            "src": "url#table_row_two"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
+{% endexample %}
+
+There is another shortcut that can be applied to this example, which is to consolidate the media object into a single property. This is possible when its only property is the `src`.
+
+{% example "JSON shorthand for par, seq, and media object, equivalent to the above example" %}
+{
+    "text": "url#table",
+    "seq": [
+        {
+            "audio": "url#frag",
+            "text": "url#table_row_one"
+        },
+        {
+            "audio": "url#frag",
+            "text": "url#table_row_two"
+        }
+    ]
+}
+{% endexample %}
+
+#### Content Model
+
+<table summary="JSON content model for SyncMedia">
+    <thead><tr><th>Term</th><th>Required Value</th><th>Properties</th></tr></thead>
+    <tbody>
+        <tr>
+            <td><a href="#head">`head`</a></td>
+            <td>Object</td>
+            <td>
+                <ul>
+                    <li><a href="#metadata">`metadata`</a></li>
+                    <li><a href="#track">`tracks`</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#metadata">`metadata`</a></td>
+            <td>Object</td>
+            <td>Anything allowed</td>
+        </tr>
+        <tr>
+            <td>`tracks`</td>
+            <td>One or more objects with the given properties</td>
+            <td>
+                <ul>
+                    <li><a href="#label">`label`</a></li>
+                    <li><a href="#defaultSrc">`defaultSrc`</a></li>
+                    <li><a href="#defaultFor">`defaultFor`</a></li>
+                    <li><a href="#trackRole">`role`</a></li>
+                    <li><a href="#param">`param`</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td id="json-param"><a href="#param">`param`</a></td>
+            <td>Object</td>
+            <td>
+                <ul>
+                    <li>One or more <a href="#name">`names`</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#body">`body`</a></td>
+            <td><a href="#time-container-object">Time Container Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#type-time-container">`type`</a>: `"seq"`</li>
+                    <li><a href="#media">`media`</a></li>
+                    <li><a href="#role">`role`</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#seq">`seq`</a></td>
+            <td><a href="#time-container-object">Time Container Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#type-time-container">`type`</a>: `"seq"`</li>
+                    <li><a href="#media">`media`</a></li>
+                    <li><a href="#role">`role`</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#par">`par`</a></td>
+            <td><a href="#time-container-object">Time Container Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#type-time-container">`type`</a>: `"par"`</li>
+                    <li><a href="#media">`media`</a></li>
+                    <li><a href="#role">`role`</a></li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`audio`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"audio"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlAudio`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"htmlAudio"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlImage`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"htmlImage"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`htmlVideo`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"htmlVideo"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#image">`image`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"image"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#ref">`ref`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"ref"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#text">`text`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"text"`</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#video">`video`</a></td>
+            <td><a href="#media-object">Media Object</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#json-param">`param`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`track`</a></li>
+                    <li><a href="#type-media-object">`type`</a>: `"video"`</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+
+
+{% example "Everything spelled out" %}
+{
+    "head": {
+        "tracks": [
+            {
+                "defaultFor": "text",
+                "role": "contentDocument",
+                "defaultSrc": "file.html",
+                "label": "Page",
+                "param": {
+                    "cssClass": "highlight"
+                }
+            },
+            {
+                "defaultFor": "audio",
+                "label": "Narration",
+                "defaultSrc": "audio.mp3",
+                "role": "audioNarration"
+            }
+        ]
+    }, 
+    "body": [
+        {
+            "type": "par",
+            "media": [
+                {"type": "audio", "src": "#t=0,5"},
+                {"type": "text", "src": "#h1"}
+            ]
+        },
+        {
+            "type": "par",
+            "media": [
+                {"type": "audio",  "src": "#t=5,10"},
+                {"type": "text", "src": "#p1"}
+            ]
+        },
+        {
+            "type": "par",
+            "media": [
+                {"type": "audio",  "src": "#t=10,15"},
+                {"type": "text", "src": "#p2"}
+            ]
+        }
+    ]
+}
+{% endexample %}
+
+{% example "Shorthand; equivalent to the above example." %}
+{
+    "head": {
+        "tracks": [
+            {
+                "defaultFor": "text",
+                "role": "contentDocument",
+                "label": "Page",
+                "defaultSrc": "file.html",
+                "param": {
+                    "cssClass": "highlight"
+                }
+            },
+            {
+                "defaultFor": "audio",
+                "role": "audioNarration",
+                "label": "Narration",
+                "defaultSrc": "audio.mp3"
+            }
+        ]
+    },
+    "body": [
+        {
+            "audio": "#t=0,5",
+            "text": "#h1"
+        },
+        {
+            "audio": "#t=5,10",
+            "text": "#p1"
+        },
+        {
+            "audio": "#t=10,15",
+            "text": "#p2"
+        }
+    ]
+}
+
+{% endexample %}
+#### Processing algorithm
+
+::: .TODO
+__TODO__:
+Finish this section
+:::
+
+* In cases where values can be an object or an array, normalize as an array
+* Expand shorthand notation
 
 ## Additional Examples
 
@@ -656,6 +1094,7 @@ This is a typical example of a structured document with audio narration. It feat
 
 #### SyncMedia presentation
 
+##### XML version
 ```
 <smil>
     <head>
@@ -719,6 +1158,83 @@ This is a typical example of a structured document with audio narration. It feat
     </body>
 </smil>
 
+```
+##### JSON version
+```
+{
+    "head": {
+        "tracks": [
+            {
+                "role": "contentDocument",
+                "defaultSrc": "file.html",
+                "defaultFor": "text",
+                "label": "Page",
+                "params": {
+                    "cssClass": "highlight"
+                }
+            },
+            {
+                "role": "audioNarration",
+                "label": "Narration",
+                "defaultSrc": "audio.mp3",
+                "defaultFor": "audio"
+            }
+        ]
+    },
+    "body": [
+        {
+            "audio": "#t=0,5",
+            "text": "#h1"
+        },
+        {
+            "audio": "#t=5,10",
+            "text": "#p1"
+        },
+        {
+            "audio": "#t=10,15",
+            "text": "#p2"
+        },
+        {
+            "role": "doc-pagebreak",
+            "audio": "#t=15,17",
+            "text": "#pg"
+        },
+        {
+            "audio": "#t=17,20",
+            "text": "#p3"
+        },
+        {    
+            "audio": "#t=20,22",
+            "text": "#h2"
+        },
+        {
+            "role": "table",
+            "text": "#table",
+            "seq": [
+                {
+                    "audio": "#t=22,25",
+                    "text": "#tr1"
+                },
+                {
+                    "audio": "#t=25,30",
+                    "text": "#tr2"     
+                },
+                {
+                    "audio": "#t=30,35",
+                    "text": "#tr3"
+                },
+                {
+                    "audio": "#t=35,40",
+                    "text": "#tr4"
+                }
+            ]
+        },
+        {
+            "audio": "#t=40,45",
+            "text": "#p4"
+        }
+    }
+}
 ```
 
 #### HTML document
