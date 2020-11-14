@@ -35,7 +35,7 @@ This section defines SyncMedia's terms and properties, and gives examples. Examp
 :   A [=Time Container=] in which children are rendered in parallel
 
 <dfn id="dfn-role" data-dfn-type="dfn">Role</dfn>
-:   Gives the semantic inflection for the item
+:   Gives the semantic(s) for the item
 
 <dfn id="dfn-sequential-time-container" data-dfn-type="dfn">Sequential Time Container</dfn>
 :   A [=Time Container=] in which children are rendered in sequence
@@ -94,9 +94,9 @@ Media objects are arranged in time containers to determine whether they are rend
 </body>
 {% endexample %}
 
-#### Semantic Inflection
+#### Structural Semantics
 
-There are benefits to applying semantic inflection to time containers in SyncMedia. User agents that understand semantic inflection may customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
+There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values may customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
 
 #### Properties
 
