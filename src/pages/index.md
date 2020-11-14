@@ -9,3 +9,4 @@ title: SyncMedia Documents
     * [Including in an HTML doc](including-in-html.html)
 * [Use cases](use-cases.html)
 * [Design principles](design-principles.html)
+* [Examples](examples.html)

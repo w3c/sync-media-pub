@@ -132,15 +132,10 @@ The table below describes the media objects in SyncMedia. `Ref` can be used to r
 | Term | Data type | Description |
 | -----| --------- | ----------- | 
 | `audio`{#audio} | Node | References audio media.| 
-| `htmlVideo`{#htmlVideo} | Node | References an {%raw%}{{HTMLVideoElement}}{%endraw%} |
-| `htmlAudio`{#htmlAudio} | Node | References an {%raw%}{{HTMLAudioElement}}{%endraw%} |
-| `htmlImage`{#htmlImage} | Node | References an {%raw%}{{HTMLImageElement}}{%endraw%}|
 | `image`{#image} | Node | References image media.|
 | `ref`{#ref} | Node | Generic media reference | 
 | `text`{#text} | Node | References text content in an HTML document.|
 | `video`{#video} | Node | References video media.|
-
-Note that there are different versions of media objects for referring to media embedded in HTML. For example, you could refer directly to a video file with `<video src="file.mp4"/>` but if you want to refer to a video element in an HTML document, use `<htmlVideo src="file.html#videoElementId"/>` instead. {.note}
 
 #### Properties
 
@@ -150,15 +145,25 @@ Properties on media objects are used to express the location of the media source
 | -----| --------- | ------------|
 | `clipBegin`{#clipBegin}| <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | Start of a timed media clip | 
 | `clipEnd`{#clipEnd} | <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | End of a timed media clip |
+| `containerType`{#containerType} | Media type | Media type of the embedding document |
 | `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
 | `repeatCount`{#repeatCount} | Number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> | For timed media. Specifies the number of iterations. |
 | `src`{#src} | URL | Location of media file, optionally including a [fragment selector](https://www.w3.org/TR/selectors-states/#FragmentSelector_def) | 
 | `track`{#trackref} | ID | Specifies the ID of a track.|
  
+`containerType` should be specified when the media is being referenced in the context of an embedding document. It does not apply to `text` elements referencing HTML text.
+
+{% example "Using containerType to describe the context of video media" %}
+<par>
+    <text src="doc.html#para1"/>
+    <video src="doc.html#video1" sync:containerType="text/html" clipBegin="0" clipEnd="10"/>
+</par>
+{% endexample %}
+
 
 ::: .TODO
 __TODO__: 
-Decide on whether to include media fragments in srcs; if so, `clipBegin`, `clipEnd`, and `panZoom` are not required. See <a href="https://github.com/w3c/sync-media-pub/issues/30">this issue</a>.
+<a href="https://github.com/w3c/sync-media-pub/issues/30">Issue #30</a>.
 :::
 
 
@@ -187,10 +192,8 @@ The following parameter `name`s are defined:
 | `playbackRate` | 1.0 (normal rate), less, or more | Timed media | Indicates the playback rate. Values should align with HTML's {%raw%}{{HTMLMediaElement/playbackRate}}{%endraw%}. |
 | `volume` | Between 0 and 1 | Audible media | Indicates the volume |
 
-::: .TODO
-__TODO__:
-Say more about using `clipPath` with `panZoom`
-
+::: {.note}
+`clipPath` allows you to specify a clipping path using a SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with `panZoom` the `clipPath` is applied inside the rect defined by the `panZoom` attribute.
 :::
 
 {% example "Using param to add synchronized highlighting to HTML element" %}
@@ -331,9 +334,6 @@ After the SyncMedia document has been processed, it is ready to be rendered.
 | `seq` | Render each child in order, each starting after the previous completes. Done when the last child is finished.|
 | `par` | Render each child at the same time. Done when all the children are finished.|
 | `audio` | Play the referenced portion of audio media and apply `params`. Done when the referenced portion has finished. |
-| `htmlAudio` | Dereference the `src` to get the `audio` element from its HTML document, play the referenced portion, and apply `params`. Done when the referenced portion has finished.|
-| `htmlImage` | Display the HTML document, ensure the referenced element is visible, and apply `params`. Not timed, so considered done immediately.|
-| `htmlVideo` | Display the HTML document, ensure the referenced element is visible, play the referenced portion of video media, and apply `params`. Done when the referenced portion has finished.|
 | `image` | Load the image file or segment and apply `params`. Not timed, so considered done immediately. |
 | `ref` | Infer the media type and, if supported, render the file or segment, and apply `params`. If timed, done when the segment is finished; if untimed, done immediately. |
 | `text` | Display the HTML document, ensure the referenced element is visible, and apply `params`. Not timed, so considered done immediately. |
@@ -341,8 +341,6 @@ After the SyncMedia document has been processed, it is ready to be rendered.
 
 
 Note about media with `repeatCount` and when it's considered done {.note}
-
-Note about what if `text` points to one HTML document and `htmlVideo` points to another {.note}
 
 
 ### User Interaction
@@ -356,11 +354,6 @@ __TODO__: how much to cover here?
 * Note about global adjustments and track types (indicated by `role`) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.
 
 ## Encoding and Serialization
-
-::: .TODO
-__TODO__:
-Which serialization format(s) to define is TBD
-:::
 
 ::: .TODO
 __TODO__: 
@@ -444,9 +437,6 @@ Note about custom extensions in the `sync` namespace {.note}
                 In any order:
                 <ul>
                     <li><a href="#audio">`audio`</a> (0 or more)</li>
-                    <li><a href="#htmlAudio">`sync:htmlAudio`</a> (0 or more)</li>
-                    <li><a href="#htmlImage">`sync:htmlImage`</a> (0 or more)</li>
-                    <li><a href="#htmlVideo">`sync:htmlVideo`</a> (0 or more)</li>
                     <li><a href="#image">`image`</a> (0 or more)</li>
                     <li><a href="#par">`par`</a> (0 or more)</li>
                     <li><a href="#ref">`ref`</a> (0 or more)</li>
@@ -467,9 +457,6 @@ Note about custom extensions in the `sync` namespace {.note}
                 In any order:
                 <ul>
                     <li><a href="#audio">`audio`</a> (0 or more)</li>
-                    <li><a href="#htmlAudio">`sync:htmlAudio`</a> (0 or more)</li>
-                    <li><a href="#htmlImage">`sync:htmlImage`</a> (0 or more)</li>
-                    <li><a href="#htmlVideo">`sync:htmlVideo`</a> (0 or more)</li>
                     <li><a href="#image">`image`</a> (0 or more)</li>
                     <li><a href="#par">`par`</a> (0 or more)</li>
                     <li><a href="#ref">`ref`</a> (0 or more)</li>
@@ -490,9 +477,6 @@ Note about custom extensions in the `sync` namespace {.note}
                 In any order:
                 <ul>
                     <li><a href="#audio">`audio`</a> (0 or more)</li>
-                    <li><a href="#htmlAudio">`sync:htmlAudio`</a> (0 or more)</li>
-                    <li><a href="#htmlImage">`sync:htmlImage`</a> (0 or more)</li>
-                    <li><a href="#htmlVideo">`sync:htmlVideo`</a> (0 or more)</li>
                     <li><a href="#image">`image`</a> (0 or more)</li>
                     <li><a href="#par">`par`</a> (0 or more)</li>
                     <li><a href="#ref">`ref`</a> (0 or more)</li>
@@ -508,56 +492,7 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`sync:track`</a></li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><a href="#param">`param`</a> (0 or more)</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><a href="#audio">`sync:htmlAudio`</a></td>
-            <td>
-                <ul>
-                    <li><a href="#clipBegin">`clipBegin`</a></li>
-                    <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`sync:track`</a></li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><a href="#param">`param`</a> (0 or more)</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><a href="#audio">`sync:htmlImage`</a></td>
-            <td>
-                <ul>
-                    <li><a href="#panZoom">`panZoom`</a></li>
-                    <li><a href="#src">`src`</a></li>
-                    <li><a href="#track">`sync:track`</a></li>
-                </ul>
-            </td>
-            <td>
-                <ul>
-                    <li><a href="#param">`param`</a> (0 or more)</li>
-                </ul>
-            </td>
-        </tr>
-        <tr>
-            <td><a href="#audio">`sync:htmlVideo`</a></td>
-            <td>
-                <ul>
-                    <li><a href="#clipBegin">`clipBegin`</a></li>
-                    <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
@@ -573,6 +508,7 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#image">`image`</a></td>
             <td>
                 <ul>
+                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
@@ -590,6 +526,7 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a></li>
@@ -606,6 +543,7 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#text">`text`</a></td>
             <td>
                 <ul>
+                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
@@ -622,6 +560,7 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a></li>
@@ -638,187 +577,12 @@ Note about custom extensions in the `sync` namespace {.note}
 </table>
 
 
+### JSON
+
+::: .TODO
+__TODO__:
+Lossless roundtrip from XML to JSON
+:::
 
 
 
-## Additional Examples
-
-### HTML document with audio narration
-
-This is a typical example of a structured document with audio narration. It features:
-
-* Text fragments highlighted as the audio plays.
-* Semantic information:
-    * There is a page number (often given in ebooks as print page equivalents), indicated via `role`. This allows Sync Media Players to offer users an option to skip page number announcements
-    * The document contains a table, also indicated via `role`, allowing players to offer users an option to escape and return to the main reading flow.
-* Nested highlights: When active, the table is outlined with a yellow border, and individual rows are highlighted as they are read.
-
-
-#### SyncMedia presentation
-
-```
-<smil>
-    <head>
-        <sync:track sync:role="contentDocument" sync:defaultSrc="file.html" 
-            sync:defaultFor="text" sync:label="Page">
-            <param name="cssClass" value="highlight"/>
-        </sync:track>
-        <sync:track sync:role="audioNarration" sync:label="Narration" 
-            sync:defaultSrc="audio.mp3" sync:defaultFor="audio" />
-    </head>
-    <body>
-        <par>
-            <audio src="#t=0,5"/>
-            <text src="#h1"/>
-        </par>
-        <par>
-            <audio src="#t=5,10"/>
-            <text src="#p1"/>
-        </par>
-        <par>
-            <audio src="#t=10,15"/>
-            <text src="#p2"/>
-        </par>
-        <par sync:role="doc-pagebreak">
-            <audio src="#t=15,17"/>
-            <text src="#pg"/>
-        </par>
-        <par>
-            <audio src="#t=17,20"/>
-            <text src="#p3"/>
-        </par>
-        <par>
-            <audio src="#t=20,22"/>
-            <text src="#h2"/>
-        </par>
-        <par sync:role="table">
-            <text src="#table"/>
-            <seq>
-                <par>
-                    <audio src="#t=22,25"/>
-                    <text src="#tr1">
-                </par>
-                <par>
-                    <audio src="#t=25,30"/>
-                    <text src="#tr2">
-                </par>
-                <par>
-                    <audio src="#t=30,35"/>
-                    <text src="#tr3">
-                </par>
-                <par>
-                    <audio src="#t=35,40"/>
-                    <text src="#tr4">
-                </par>
-            </seq>
-        </par>
-        <par>                  
-            <audio src="#t=40,45"/>
-            <text src="#p4">
-        </par>
-    </body>
-</smil>
-
-```
-
-#### HTML document
-
-This is the corresponding HTML document for the above SyncMedia presentation.
-
-```
-<!DOCTYPE html>
-<html>
-    <head>
-        <style>
-            body {
-                background-color: #FFE1E6;
-                line-height: 2;
-            }
-            table {
-                border-collapse: collapse;
-                background-color: azure;
-            }
-            thead {
-                background-color: navy;
-                color: white;
-            }
-            td {
-                border: thin black solid;
-                padding: 0.5rem;
-            }
-            .highlight {
-                background-color: lightyellow;
-            }
-            #table.highlight {
-                border: thick solid yellow;
-                background-color: azure;
-            }
-            #tr1.highlight {
-                color: yellow;
-                background-color: navy;
-            }
-
-        </style>
-    </head>
-    <body>
-        <main>
-            <h1 id="h1">Los Angeles, California</h1>
-            <p id="p1">Anim anim ex deserunt laboris voluptate non exercitation ad consequat tempor et.</p>
-            <p id="p2">Officia cillum commodo qui amet exercitation veniam.</p>
-            <span id="pg4">4</span>
-            <p id="p3">Aliqua mollit officia commodo nulla sunt excepteur in ex nostrud dolore dolor do in.</p>
-            <h2 id="h2">Average Summer Temperatures in Los Angeles</h2>
-            <table class="highlight" id="table" summary="average summer temperatures in los angeles">
-                <thead>
-                    <tr id="tr1" >
-                        <td>Month</td>
-                        <td>High</td>
-                        <td>Low</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr id="tr2" class="highlight">
-                        <td>June</td>
-                        <td>79</td>
-                        <td>62</td>
-                    </tr>
-                    <tr id="tr3">
-                        <td>July</td>
-                        <td>83</td>
-                        <td>65</td>
-                    </tr>
-                    <tr id="tr4">
-                        <td>August</td>
-                        <td>85</td>
-                        <td>66</td>
-                    </tr>
-                </tbody>
-            </table>
-            <p id="p4">Proident est veniam eu ea est culpa amet.</p>
-        </main>
-    </body>
-</html>
-```
-
-### Audio-only presentation 
-
-* Nested structures
-* Semantics
-
-### Presentation with secondary audio
-
-* Sound effects
-* Background music
-
-### Video with text transcript
-
-* Synchronized highlight for the transcript
-
-### EPUB with separate audio overlay
-
-* EPUB chunks referenced with CFI
-* Overlay side-loaded
-
-### SVG comic with audio narration
-
-* Zoom in on each comic panel
