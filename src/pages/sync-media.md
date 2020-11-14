@@ -139,7 +139,10 @@ The table below describes the media objects in SyncMedia. `Ref` can be used to r
 
 #### Properties
 
-Properties on media objects are used to express the location of the media source file as well as the applicable segment. There is also a property to assign a media object to a [=track=].
+Properties on media objects are used to 
+* express the location of the media source, including segment
+* assign a media object to a [=track=]
+* indicate that a media object should repeat
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
@@ -241,18 +244,18 @@ All of these features reduce verbosity as otherwise these properties would have 
 | `label`{#label} | `string` | The track's label |
 | `defaultSrc`{#defaultSrc} | `URL` | Source of the default file that media objects on this track will use.|
 | `defaultFor`{#defaultFor} | One of: `audio`, `image`, `video`, `text`, `ref` | Media objects of the type specified are automatically assigned to this track. |
-| `role`{#trackRole} | One of: `backgroundAudio`, `audioNarration`, `signLanguageVideo`, `contentDocument` | The role this track plays in the presentation. |
+| `trackType`{#trackType} | One of: `backgroundAudio`, `audioNarration`, `signLanguageVideo`, `contentDocument` | Presentation feature embodied by this track. |
 
 ::: .TODO
 __TODO__:
-Finish the list of `role` values
+Finish the list of `trackType` values
 :::
 
 
 {% example "A track for an HTML document with default values and a cssClass param" %}
 <head>
     <sync:track sync:label="Page" sync:defaultFor="text" 
-        sync:defaultSrc="chapter01.html" sync:role="contentDocument">
+        sync:defaultSrc="chapter01.html" sync:trackType="contentDocument">
         <param name="cssClass" value="highlight"/>
     </sync:track>
 </head>
@@ -274,11 +277,11 @@ Finish the list of `role` values
 
 {% example "Two audio tracks: one for narration (the default track for audio media objects), and one for background music."%}
 <head>
-    <sync:track id="background-music" sync:role="backgroundAudio">
+    <sync:track id="background-music" sync:trackType="backgroundAudio">
         <param name="volume" value="0.5"/>
     </sync:track>
-    <sync:track sync:label="Narration" sync:defaultFor="audio" sync:role="audioNarration"/>
-    <sync:track sync:label="Page" sync:defaultFor="text" sync:role="contentDocument">
+    <sync:track sync:label="Narration" sync:defaultFor="audio" sync:trackType="audioNarration"/>
+    <sync:track sync:label="Page" sync:defaultFor="text" sync:trackType="contentDocument">
         <param name="cssClass" value="highlight"/>
     </sync:track>
 </head>
@@ -351,7 +354,7 @@ __TODO__: how much to cover here?
 
 * Moving through the presentation meaningfully, e.g. previous/next sentence or para
 * Exposing controls for multitrack presentations
-* Note about global adjustments and track types (indicated by `role`) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.
+* Note about global adjustments and track types (indicated by `trackType`) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.
 
 ## Encoding and Serialization
 
@@ -407,7 +410,7 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#label">`sync:label`</a></li>
                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
-                    <li><a href="#trackRole">`sync:role`</a></li>
+                    <li><a href="#trackType">`sync:trackType`</a></li>
                 </ul>
             </td>
             <td>

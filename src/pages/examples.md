@@ -18,11 +18,11 @@ This is a typical example of a structured document with audio narration. It feat
 ```
 <smil>
     <head>
-        <sync:track sync:role="contentDocument" sync:defaultSrc="file.html" 
+        <sync:track sync:trackType="contentDocument" sync:defaultSrc="file.html" 
             sync:defaultFor="text" sync:label="Page">
             <param name="cssClass" value="highlight"/>
         </sync:track>
-        <sync:track sync:role="audioNarration" sync:label="Narration" 
+        <sync:track sync:trackType="audioNarration" sync:label="Narration" 
             sync:defaultSrc="audio.mp3" sync:defaultFor="audio" />
     </head>
     <body>

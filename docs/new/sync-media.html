@@ -230,7 +230,12 @@
             </table>
             <section id="properties-2">
                 <h4>Properties</h4>
-                <p>Properties on media objects are used to express the location of the media source file as well as the applicable segment. There is also a property to assign a media object to a [=track=].</p>
+                <p>Properties on media objects are used to</p>
+                <ul>
+                    <li>express the location of the media source, including segment</li>
+                    <li>assign a media object to a [=track=]</li>
+                    <li>indicate that a media object should repeat</li>
+                </ul>
                 <table>
                     <thead>
                         <tr>
@@ -449,19 +454,19 @@
                             <td>Media objects of the type specified are automatically assigned to this track.</td>
                         </tr>
                         <tr>
-                            <td><code id="trackRole">role</code></td>
+                            <td><code id="trackType">trackType</code></td>
                             <td>One of: <code>backgroundAudio</code>, <code>audioNarration</code>, <code>signLanguageVideo</code>, <code>contentDocument</code></td>
-                            <td>The role this track plays in the presentation.</td>
+                            <td>Presentation feature embodied by this track.</td>
                         </tr>
                     </tbody>
                 </table>
                 <div class="TODO">
-                    <p><strong>TODO</strong>: Finish the list of <code>role</code> values</p>
+                    <p><strong>TODO</strong>: Finish the list of <code>trackType</code> values</p>
                 </div>
                 <pre class="example" title="A track for an HTML document with default values and a cssClass param">
 &lt;head&gt;
     &lt;sync:track sync:label=&quot;Page&quot; sync:defaultFor=&quot;text&quot; 
-        sync:defaultSrc=&quot;chapter01.html&quot; sync:role=&quot;contentDocument&quot;&gt;
+        sync:defaultSrc=&quot;chapter01.html&quot; sync:trackType=&quot;contentDocument&quot;&gt;
         &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
     &lt;/sync:track&gt;
 &lt;/head&gt;
@@ -482,11 +487,11 @@
 </pre>
                 <pre class="example" title="Two audio tracks: one for narration (the default track for audio media objects), and one for background music.">
 &lt;head&gt;
-    &lt;sync:track id=&quot;background-music&quot; sync:role=&quot;backgroundAudio&quot;&gt;
+    &lt;sync:track id=&quot;background-music&quot; sync:trackType=&quot;backgroundAudio&quot;&gt;
         &lt;param name=&quot;volume&quot; value=&quot;0.5&quot;/&gt;
     &lt;/sync:track&gt;
-    &lt;sync:track sync:label=&quot;Narration&quot; sync:defaultFor=&quot;audio&quot; sync:role=&quot;audioNarration&quot;/&gt;
-    &lt;sync:track sync:label=&quot;Page&quot; sync:defaultFor=&quot;text&quot; sync:role=&quot;contentDocument&quot;&gt;
+    &lt;sync:track sync:label=&quot;Narration&quot; sync:defaultFor=&quot;audio&quot; sync:trackType=&quot;audioNarration&quot;/&gt;
+    &lt;sync:track sync:label=&quot;Page&quot; sync:defaultFor=&quot;text&quot; sync:trackType=&quot;contentDocument&quot;&gt;
         &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
     &lt;/sync:track&gt;
 &lt;/head&gt;
@@ -596,7 +601,7 @@
             <ul>
                 <li>Moving through the presentation meaningfully, e.g. previous/next sentence or para</li>
                 <li>Exposing controls for multitrack presentations</li>
-                <li>Note about global adjustments and track types (indicated by <code>role</code>) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.</li>
+                <li>Note about global adjustments and track types (indicated by <code>trackType</code>) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.</li>
             </ul>
         </section>
     </section>
@@ -651,7 +656,7 @@
                                     <li><a href="#label">`sync:label`</a></li>
                                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
-                                    <li><a href="#trackRole">`sync:role`</a></li>
+                                    <li><a href="#trackType">`sync:trackType`</a></li>
                                 </ul>
                             </td>
                             <td>
