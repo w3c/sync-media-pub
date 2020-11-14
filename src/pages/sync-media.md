@@ -104,7 +104,7 @@ There are benefits to applying structural semantics to time containers in SyncMe
 | -----| --------- | ------------|
 | `role`{#role} | One or more `strings` | Semantic role(s) | 
 
-Values for the `role` property on time containers must come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles) or [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/). 
+Values for the `role` property on time containers must come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles), [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/), or the [EPUB Structural Semantics Vocabulary](https://idpf.github.io/epub-vocabs/structure/). 
 
 {% example "Using role to mark a page number" %}
 <body>
