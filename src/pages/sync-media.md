@@ -58,9 +58,9 @@ This section defines SyncMedia's terms and properties, and gives examples. Examp
 
 ### Document Structure
 
-A SyncMedia document contains two parts: a `head` and a `body`. The temporal presentation of media objects is laid out in the body. Time containers may be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.
+A SyncMedia document contains two parts: a `head` and a `body`. The temporal presentation of media objects is laid out in the body. Time containers can be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.
 
-A SyncMedia document must have a `body`. It may have a `head`.
+A SyncMedia document MUST have a `body`. It MAY have a `head`.
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
@@ -69,7 +69,7 @@ A SyncMedia document must have a `body`. It may have a `head`.
 
 ### Time Containers
 
-Media objects are arranged in time containers to determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers can be nested in other time containers (but not in media objects).
+Media objects are arranged in time containers, which determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers MAY be nested in other time containers (but MUST NOT be nested  in media objects).
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
@@ -96,7 +96,7 @@ Media objects are arranged in time containers to determine whether they are rend
 
 #### Structural Semantics
 
-There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values may customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
+There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values MAY customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
 
 #### Properties
 
@@ -105,6 +105,11 @@ There are benefits to applying structural semantics to time containers in SyncMe
 | `role`{#role} | One or more `strings` | Semantic role(s) | 
 
 Values for the `role` property on time containers must come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles) or [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/). 
+
+::: .TODO
+__TODO__
+[Issue 12](https://github.com/w3c/sync-media-pub/issues/12)
+:::
 
 {% example "Using role to mark a page number" %}
 <body>
@@ -142,7 +147,7 @@ The table below describes the media objects in SyncMedia. `Ref` can be used to r
 Properties on media objects are used to 
 * express the location of the media source, including segment
 * assign a media object to a [=track=]
-* indicate that a media object should repeat
+* indicate that a media object repeats
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
@@ -154,13 +159,13 @@ Properties on media objects are used to
 | `src`{#src} | URL | Location of media file, optionally including a media fragment [[media-frags]] | 
 | `track`{#trackref} | ID | Specifies the ID of a track.|
 
-If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are present, it is recommended to apply clipping to the resource with respect to the media fragment offset(s), as defined in [All Media Fragment Clients](https://www.w3.org/TR/media-frags/#media-fragment-clients). 
+If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are present, it is RECOMMENDED to apply clipping to the resource with respect to the media fragment offset(s), as defined in [All Media Fragment Clients](https://www.w3.org/TR/media-frags/#media-fragment-clients). 
 
 ::: {.note}
-It is recommended to use a media fragment on `src` to refer to a large chunk of media; and to use `clipBegin` and `clipEnd` for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.
+It is RECOMMENDED to use a media fragment on `src` to refer to a large chunk of media; and to use `clipBegin` and `clipEnd` for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.
 :::
 
-`containerType` should be specified when the media is being referenced in the context of an embedding document. It does not apply to `text` elements referencing HTML text.
+`containerType` SHOULD be specified when the media is being referenced in the context of an embedding document. It SHOULD NOT be used for `text` elements referencing HTML text, as this relationship is implied.
 
 {% example "Using containerType to describe the context of video media" %}
 <par>
@@ -195,7 +200,7 @@ The following parameter `name`s are defined:
 | `volume` | Between 0 and 1 | Audible media | Indicates the volume |
 
 ::: {.note}
-`clipPath` allows you to specify a clipping path using a SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with `panZoom` the `clipPath` is applied inside the rect defined by the `panZoom` attribute.
+`clipPath` specifies a clipping path using an SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with `panZoom` the `clipPath` SHOULD be applied inside the rect defined by the `panZoom` attribute.
 :::
 
 {% example "Using param to add synchronized highlighting to HTML element" %}
@@ -224,17 +229,17 @@ The following parameter `name`s are defined:
 
 ### Tracks
 
-SyncMedia presentations organize media objects of the same types into virtual spaces called "tracks". Tracks must be placed in the SyncMedia document `head`. Tracks have several useful features:
+SyncMedia presentations organize media objects of the same types into virtual spaces called "tracks". Tracks MUST be placed in the SyncMedia document `head`. Tracks have several useful features:
 
-1. A track may provide default [params](#param) that then get applied to any media object on that track. 
-2. A track may be set as the default for a given media object type (e.g. all the `audio` media objects can be automatically assigned to a track).
-3. A track may have a default source for all its media objects to use, in combination with any fragment specifier on the media object itself.
+1. A track MAY provide default [params](#param) that then get applied to any media object on that track. 
+2. A track MAY be set as the default for a given media object type (e.g. all the `audio` media objects can be automatically assigned to a track).
+3. A track MAY have a default source for all its media objects to use, in combination with any fragment specifier on the media object itself.
 
 All of these features reduce verbosity as otherwise these properties would have to be explicitly stated on each media object. 
 
 | Term | Description |
 | -----| ----------- |
-| `track`{#track} | A virtual space to which [=Media Objects=] are assigned. A user agent may offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` may have [=Media Params=], which act as defaults for [=Media Objects=] on that track.  |
+| `track`{#track} | A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` MAY have [=Media Params=], which act as defaults for [=Media Objects=] on that track.  |
 
 #### Properties
 
@@ -247,7 +252,7 @@ All of these features reduce verbosity as otherwise these properties would have 
 
 ::: .TODO
 __TODO__:
-Finish the list of `trackType` values
+[Issue 31](https://github.com/w3c/sync-media-pub/issues/31)
 :::
 
 
@@ -309,7 +314,7 @@ The reason for including a narration `track`, even though it supplies no default
 
 
 ### Metadata
-SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata must go in the SyncMedia document `head`.
+SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata MUST go in the SyncMedia document `head`.
 
 | Term | Description |
 | -----| ----------- |
@@ -359,7 +364,7 @@ __TODO__: how much to cover here?
 
 ::: .TODO
 __TODO__: 
-Determine the MIME type(s) for SyncMedia documents. See [this issue](https://github.com/w3c/sync-media-pub/issues/10)</a>
+[Issue 10](https://github.com/w3c/sync-media-pub/issues/10)
 :::
 
 ### XML

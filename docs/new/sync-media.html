@@ -83,8 +83,8 @@
         </section>
         <section id="document-structure">
             <h3>Document Structure</h3>
-            <p>A SyncMedia document contains two parts: a <code>head</code> and a <code>body</code>. The temporal presentation of media objects is laid out in the body. Time containers may be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.</p>
-            <p>A SyncMedia document must have a <code>body</code>. It may have a <code>head</code>.</p>
+            <p>A SyncMedia document contains two parts: a <code>head</code> and a <code>body</code>. The temporal presentation of media objects is laid out in the body. Time containers can be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.</p>
+            <p>A SyncMedia document MUST have a <code>body</code>. It MAY have a <code>head</code>.</p>
             <table>
                 <thead>
                     <tr>
@@ -109,7 +109,7 @@
         </section>
         <section id="time-containers">
             <h3>Time Containers</h3>
-            <p>Media objects are arranged in time containers to determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers can be nested in other time containers (but not in media objects).</p>
+            <p>Media objects are arranged in time containers, which determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers MAY be nested in other time containers (but MUST NOT be nested in media objects).</p>
             <table>
                 <thead>
                     <tr>
@@ -149,7 +149,7 @@
 </pre>
             <section id="structural-semantics">
                 <h4>Structural Semantics</h4>
-                <p>There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values may customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.</p>
+                <p>There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values MAY customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.</p>
             </section>
             <section id="properties">
                 <h4>Properties</h4>
@@ -170,6 +170,10 @@
                     </tbody>
                 </table>
                 <p>Values for the <code>role</code> property on time containers must come from <a href="https://www.w3.org/TR/wai-aria/#document_structure_roles">WAI-ARIA Document Structure</a> or <a href="https://www.w3.org/TR/dpub-aria-1.0/">DPUB-ARIA</a>.</p>
+                <div class="TODO">
+                    <p><strong>TODO</strong>
+                        <a href="https://github.com/w3c/sync-media-pub/issues/12">Issue 12</a></p>
+                </div>
                 <pre class="example" title="Using role to mark a page number">
 &lt;body&gt;
     &lt;par&gt;
@@ -234,7 +238,7 @@
                 <ul>
                     <li>express the location of the media source, including segment</li>
                     <li>assign a media object to a [=track=]</li>
-                    <li>indicate that a media object should repeat</li>
+                    <li>indicate that a media object repeats</li>
                 </ul>
                 <table>
                     <thead>
@@ -282,11 +286,11 @@
                         </tr>
                     </tbody>
                 </table>
-                <p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, it is recommended to apply clipping to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
+                <p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, it is RECOMMENDED to apply clipping to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
                 <div class="note ">
-                    <p>It is recommended to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
+                    <p>It is RECOMMENDED to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
                 </div>
-                <p><code>containerType</code> should be specified when the media is being referenced in the context of an embedding document. It does not apply to <code>text</code> elements referencing HTML text.</p>
+                <p><code>containerType</code> SHOULD be specified when the media is being referenced in the context of an embedding document. It SHOULD NOT be used for <code>text</code> elements referencing HTML text, as this relationship is implied.</p>
                 <pre class="example" title="Using containerType to describe the context of video media">
 &lt;par&gt;
     &lt;text src=&quot;doc.html#para1&quot;/&gt;
@@ -379,7 +383,7 @@
                     </tbody>
                 </table>
                 <div class="note ">
-                    <p><code>clipPath</code> allows you to specify a clipping path using a SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with <code>panZoom</code> the <code>clipPath</code> is applied inside the rect defined by the <code>panZoom</code> attribute.</p>
+                    <p><code>clipPath</code> specifies a clipping path using an SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with <code>panZoom</code> the <code>clipPath</code> SHOULD be applied inside the rect defined by the <code>panZoom</code> attribute.</p>
                 </div>
                 <pre class="example" title="Using param to add synchronized highlighting to HTML element">
 &lt;body&gt;
@@ -407,11 +411,11 @@
         </section>
         <section id="tracks">
             <h3>Tracks</h3>
-            <p>SyncMedia presentations organize media objects of the same types into virtual spaces called &quot;tracks&quot;. Tracks must be placed in the SyncMedia document <code>head</code>. Tracks have several useful features:</p>
+            <p>SyncMedia presentations organize media objects of the same types into virtual spaces called &quot;tracks&quot;. Tracks MUST be placed in the SyncMedia document <code>head</code>. Tracks have several useful features:</p>
             <ol>
-                <li>A track may provide default <a href="#param">params</a> that then get applied to any media object on that track.</li>
-                <li>A track may be set as the default for a given media object type (e.g. all the <code>audio</code> media objects can be automatically assigned to a track).</li>
-                <li>A track may have a default source for all its media objects to use, in combination with any fragment specifier on the media object itself.</li>
+                <li>A track MAY provide default <a href="#param">params</a> that then get applied to any media object on that track.</li>
+                <li>A track MAY be set as the default for a given media object type (e.g. all the <code>audio</code> media objects can be automatically assigned to a track).</li>
+                <li>A track MAY have a default source for all its media objects to use, in combination with any fragment specifier on the media object itself.</li>
             </ol>
             <p>All of these features reduce verbosity as otherwise these properties would have to be explicitly stated on each media object.</p>
             <table>
@@ -424,7 +428,7 @@
                 <tbody>
                     <tr>
                         <td><code id="track">track</code></td>
-                        <td>A virtual space to which [=Media Objects=] are assigned. A user agent may offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A <code>sync:track</code> may have [=Media Params=], which act as defaults for [=Media Objects=] on that track.</td>
+                        <td>A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A <code>sync:track</code> MAY have [=Media Params=], which act as defaults for [=Media Objects=] on that track.</td>
                     </tr>
                 </tbody>
             </table>
@@ -462,7 +466,7 @@
                     </tbody>
                 </table>
                 <div class="TODO">
-                    <p><strong>TODO</strong>: Finish the list of <code>trackType</code> values</p>
+                    <p><strong>TODO</strong>: <a href="https://github.com/w3c/sync-media-pub/issues/31">Issue 31</a></p>
                 </div>
                 <pre class="example" title="A track for an HTML document with default values and a cssClass param">
 &lt;head&gt;
@@ -521,7 +525,7 @@
         </section>
         <section id="metadata">
             <h3>Metadata</h3>
-            <p>SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata must go in the SyncMedia document <code>head</code>.</p>
+            <p>SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata MUST go in the SyncMedia document <code>head</code>.</p>
             <table>
                 <thead>
                     <tr>
@@ -609,7 +613,7 @@
     <section id="encoding-and-serialization">
         <h2>Encoding and Serialization</h2>
         <div class="TODO">
-            <p><strong>TODO</strong>: Determine the MIME type(s) for SyncMedia documents. See <a href="https://github.com/w3c/sync-media-pub/issues/10">this issue</a></a></p>
+            <p><strong>TODO</strong>: <a href="https://github.com/w3c/sync-media-pub/issues/10">Issue 10</a></p>
         </div>
         <section id="xml">
             <h3>XML</h3>
