@@ -273,7 +273,7 @@
                         <tr>
                             <td><code id="src">src</code></td>
                             <td>URL</td>
-                            <td>Location of media file, optionally including a <a href="https://www.w3.org/TR/selectors-states/#FragmentSelector_def">fragment selector</a></td>
+                            <td>Location of media file, optionally including a media fragment [[media-frags]]</td>
                         </tr>
                         <tr>
                             <td><code id="trackref">track</code></td>
@@ -282,6 +282,10 @@
                         </tr>
                     </tbody>
                 </table>
+                <p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, it is recommended to apply clipping to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
+                <div class="note ">
+                    <p>It is recommended to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
+                </div>
                 <p><code>containerType</code> should be specified when the media is being referenced in the context of an embedding document. It does not apply to <code>text</code> elements referencing HTML text.</p>
                 <pre class="example" title="Using containerType to describe the context of video media">
 &lt;par&gt;
