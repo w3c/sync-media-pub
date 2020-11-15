@@ -169,13 +169,6 @@ It is recommended to use a media fragment on `src` to refer to a large chunk of 
 </par>
 {% endexample %}
 
-
-::: .TODO
-__TODO__: 
-<a href="https://github.com/w3c/sync-media-pub/issues/30">Issue #30</a>.
-:::
-
-
 #### Parameters
 
 SyncMedia uses SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-edef-param">param</a> to send parameters to [=media object renderer=]s.
@@ -592,3 +585,4 @@ Note about custom extensions in the `sync` namespace {.note}
 __TODO__:
 Lossless roundtrip from XML to JSON
 :::
+
