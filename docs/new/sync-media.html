@@ -134,15 +134,15 @@
             <pre class="example" title="Using time containers to associate text references with audio clips, to create a synchronized text and audio presentation">
 &lt;body&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=30,40&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
         &lt;text src=&quot;chapter01.html#heading_01&quot;/&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=40,50&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
         &lt;text src=&quot;chapter01.html#para_01&quot;/&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=50,60&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
         &lt;text src=&quot;chapter01.html#para_02&quot;/&gt;
     &lt;/par&gt;
 &lt;/body&gt;
@@ -177,15 +177,15 @@
                 <pre class="example" title="Using role to mark a page number">
 &lt;body&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=50,60&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
         &lt;text src=&quot;chapter01.html#para_02&quot;/&gt;
     &lt;/par&gt;
     &lt;par sync:role=&quot;doc-pagebreak&quot;&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=60,62&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;60&quot; clipEnd=&quot;62&quot;/&gt;
         &lt;text src=&quot;chapter01.html#pg_04&quot;/&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=62,70&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;62&quot; clipEnd=&quot;70&quot;/&gt;
         &lt;text src=&quot;chapter01.html#para_03&quot;/&gt;
     &lt;/par&gt;
 &lt;/body&gt;
@@ -262,7 +262,7 @@
                         <tr>
                             <td><code id="containerType">containerType</code></td>
                             <td>Media type</td>
-                            <td>Media type of the embedding document</td>
+                            <td>If <code>src</code> references media embedded in a document, <code>containerType</code> gives the media type of the embedding document</td>
                         </tr>
                         <tr>
                             <td><code id="panZoom">panZoom</code></td>
@@ -388,19 +388,19 @@
                 <pre class="example" title="Using param to add synchronized highlighting to HTML element">
 &lt;body&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=30,40&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
         &lt;text src=&quot;chapter01.html#heading_01&quot;&gt;
             &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
         &lt;/text&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=40,50&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
         &lt;text src=&quot;chapter01.html#para_01&quot;&gt;
             &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
         &lt;/text&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=50,60&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
         &lt;text src=&quot;chapter01.html#para_02&quot;&gt;
             &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
         &lt;/text&gt;
@@ -463,6 +463,11 @@
                             <td>One of: <code>backgroundAudio</code>, <code>audioNarration</code>, <code>signLanguageVideo</code>, <code>contentDocument</code></td>
                             <td>Presentation feature embodied by this track.</td>
                         </tr>
+                        <tr>
+                            <td><code>containerType</code></td>
+                            <td>Media type</td>
+                            <td>If <code>defaultSrc</code> refers to media embedded in a document, <code>containerType</code> gives the media type of that document. See <a href="#containerType">containerType</a>.</td>
+                        </tr>
                     </tbody>
                 </table>
                 <div class="TODO">
@@ -477,15 +482,15 @@
 &lt;/head&gt;
 &lt;body&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=30,40&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
         &lt;text src=&quot;#heading_01&quot;/&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=40,50&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
         &lt;text src=&quot;#para_01&quot;/&gt;
     &lt;/par&gt;
     &lt;par&gt;
-        &lt;audio src=&quot;chapter01.mp3#t=50,60&quot;/&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipEnd=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
         &lt;text src=&quot;#para_02&quot;/&gt;
     &lt;/par&gt;
 &lt;/body&gt;
@@ -505,15 +510,15 @@
         &lt;audio sync:track=&quot;background-music&quot; src=&quot;bkmusic.mp3&quot; repeat=&quot;indefinite&quot;/&gt;
         &lt;seq&gt;
             &lt;par&gt;
-                &lt;audio src=&quot;chapter01.mp3#t=30,40&quot;/&gt;
+                &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
                 &lt;text src=&quot;chapter01.html#heading_01&quot;/&gt;
             &lt;/par&gt;
             &lt;par&gt;
-                &lt;audio src=&quot;chapter01.mp3#t=40,50&quot;/&gt;
+                &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
                 &lt;text src=&quot;chapter01.html#para_01&quot;/&gt;
             &lt;/par&gt;
             &lt;par&gt;
-                &lt;audio src=&quot;chapter01.mp3#t=50,60&quot;/&gt;
+                &lt;audio src=&quot;chapter01.mp3&quot; clipEnd=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
                 &lt;text src=&quot;chapter01.html#para_02&quot;/&gt;
             &lt;/par&gt;
         &lt;/seq&gt;
@@ -546,7 +551,28 @@
         <h2>Playback</h2>
         <section id="processing">
             <h3>Processing</h3>
-            <p>Applying track defaults to media objects..</p>
+        </section>
+        <section id="applying-track-values-to-media-objects">
+            <h3>Applying track values to media objects</h3>
+            <p>[=Tracks=] MAY provide defaults for [=media objects=]. This section gives the rules for how to apply these values.</p>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Track attribute</th>
+                        <th>Impact on media object</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>defaultSrc</td>
+                        <td>Provides the <code>src</code> for the media object. If the media object has an <code>src</code> which is only a selector, then the selector is appended to the track's <code>defaultSrc</code>. Any other value for a media object <code>src</code> overrides the track's <code>defaultSrc</code>.</td>
+                    </tr>
+                    <tr>
+                        <td>containerType</td>
+                        <td>If the track's <code>defaultSrc</code> is referencing embedded media, this gives the type of the containing document.</td>
+                    </tr>
+                </tbody>
+            </table>
             <div class="TODO">
                 <p><strong>TODO</strong>: Finish this section</p>
             </div>
@@ -662,6 +688,7 @@
                                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
                                     <li><a href="#trackType">`sync:trackType`</a></li>
+                                    <li><a href="#containerType">`sync:containerType`</a></li>
                                 </ul>
                             </td>
                             <td>

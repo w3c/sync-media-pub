@@ -80,15 +80,15 @@ Media objects are arranged in time containers, which determine whether they are 
 {% example "Using time containers to associate text references with audio clips, to create a synchronized text and audio presentation"%}
 <body>
     <par>
-        <audio src="chapter01.mp3#t=30,40"/>
+        <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
         <text src="chapter01.html#heading_01"/>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=40,50"/>
+        <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
         <text src="chapter01.html#para_01"/>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=50,60"/>
+        <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
         <text src="chapter01.html#para_02"/>
     </par>
 </body>
@@ -114,15 +114,15 @@ __TODO__
 {% example "Using role to mark a page number" %}
 <body>
     <par>
-        <audio src="chapter01.mp3#t=50,60"/>
+        <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
         <text src="chapter01.html#para_02"/>
     </par>
     <par sync:role="doc-pagebreak">
-        <audio src="chapter01.mp3#t=60,62"/>
+        <audio src="chapter01.mp3" clipBegin="60" clipEnd="62"/>
         <text src="chapter01.html#pg_04"/>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=62,70"/>
+        <audio src="chapter01.mp3" clipBegin="62" clipEnd="70"/>
         <text src="chapter01.html#para_03"/>
     </par>
 </body>
@@ -153,7 +153,7 @@ Properties on media objects are used to
 | -----| --------- | ------------|
 | `clipBegin`{#clipBegin}| <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | Start of a timed media clip | 
 | `clipEnd`{#clipEnd} | <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | End of a timed media clip |
-| `containerType`{#containerType} | Media type | Media type of the embedding document |
+| `containerType`{#containerType} | Media type | If `src` references media embedded in a document, `containerType` gives the media type of the embedding document |
 | `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
 | `repeatCount`{#repeatCount} | Number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> | For timed media. Specifies the number of iterations. |
 | `src`{#src} | URL | Location of media file, optionally including a media fragment [[media-frags]] | 
@@ -206,19 +206,19 @@ The following parameter `name`s are defined:
 {% example "Using param to add synchronized highlighting to HTML element" %}
 <body>
     <par>
-        <audio src="chapter01.mp3#t=30,40"/>
+        <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
         <text src="chapter01.html#heading_01">
             <param name="cssClass" value="highlight"/>
         </text>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=40,50"/>
+        <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
         <text src="chapter01.html#para_01">
             <param name="cssClass" value="highlight"/>
         </text>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=50,60"/>
+        <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
         <text src="chapter01.html#para_02">
             <param name="cssClass" value="highlight"/>
         </text>
@@ -249,6 +249,7 @@ All of these features reduce verbosity as otherwise these properties would have 
 | `defaultSrc`{#defaultSrc} | `URL` | Source of the default file that media objects on this track will use.|
 | `defaultFor`{#defaultFor} | One of: `audio`, `image`, `video`, `text`, `ref` | Media objects of the type specified are automatically assigned to this track. |
 | `trackType`{#trackType} | One of: `backgroundAudio`, `audioNarration`, `signLanguageVideo`, `contentDocument` | Presentation feature embodied by this track. |
+| `containerType` | Media type | If `defaultSrc` refers to media embedded in a document, `containerType` gives the media type of that document. See [containerType](#containerType). |
 
 ::: .TODO
 __TODO__:
@@ -265,15 +266,15 @@ __TODO__:
 </head>
 <body>
     <par>
-        <audio src="chapter01.mp3#t=30,40"/>
+        <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
         <text src="#heading_01"/>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=40,50"/>
+        <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
         <text src="#para_01"/>
     </par>
     <par>
-        <audio src="chapter01.mp3#t=50,60"/>
+        <audio src="chapter01.mp3" clipEnd="50" clipEnd="60"/>
         <text src="#para_02"/>
     </par>
 </body>
@@ -294,15 +295,15 @@ __TODO__:
         <audio sync:track="background-music" src="bkmusic.mp3" repeat="indefinite"/>
         <seq>
             <par>
-                <audio src="chapter01.mp3#t=30,40"/>
+                <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
                 <text src="chapter01.html#heading_01"/>
             </par>
             <par>
-                <audio src="chapter01.mp3#t=40,50"/>
+                <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
                 <text src="chapter01.html#para_01"/>
             </par>
             <par>
-                <audio src="chapter01.mp3#t=50,60"/>
+                <audio src="chapter01.mp3" clipEnd="50" clipEnd="60"/>
                 <text src="chapter01.html#para_02"/>
             </par>
         </seq>
@@ -325,7 +326,16 @@ SyncMedia has a generic mechanism for incorporating metadata but does not requir
 
 ### Processing
 
-Applying track defaults to media objects.. 
+### Applying track values to media objects
+
+[=Tracks=] MAY provide defaults for [=media objects=]. This section gives the rules for how to apply these values.
+
+| Track attribute | Impact on media object |
+|-----------------|------------------------|
+| defaultSrc      | Provides the `src` for the media object. If the media object has an `src` which is only a selector, then the selector is appended to the track's `defaultSrc`. Any other value for a media object `src` overrides the track's `defaultSrc`. |
+| containerType   | If the track's `defaultSrc` is referencing embedded media, this gives the type of the containing document. |
+
+
 ::: .TODO
 __TODO__:
 Finish this section
@@ -415,6 +425,7 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
                     <li><a href="#trackType">`sync:trackType`</a></li>
+                    <li><a href="#containerType">`sync:containerType`</a></li>
                 </ul>
             </td>
             <td>
