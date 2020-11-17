@@ -3,7 +3,7 @@ title: SyncMedia 1.0
 layout: spec.njk
 ---
 <section id="abstract">
-    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of media, potentially of different types, orchestrated in a linear timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
+    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of media, potentially of different types, orchestrated in a [=timeline=]. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
 </section>
 
 <section id="sotd">
@@ -25,7 +25,7 @@ This section defines SyncMedia's terms and properties, and gives examples. Examp
 <dfn id="dfn-media-object" data-dfn-type="dfn">Media Object</dfn>
 : A media resource in the [=Sync Media Document=]
 
-<dfn id="dfn-media-param" data-dfn-type="dfn">Media Param</dfn>
+<dfn id="dfn-media-parameters" data-dfn-type="dfn">Media Parameters</dfn>
 :   Named parameters to communicate options to the [=Media Object Renderer=]
 
 <dfn id="dfn-media-object-renderer" data-dfn-type="dfn">Media Object Renderer</dfn>
@@ -239,7 +239,7 @@ All of these features reduce verbosity as otherwise these properties would have 
 
 | Term | Description |
 | -----| ----------- |
-| `track`{#track} | A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` MAY have [=Media Params=], which act as defaults for [=Media Objects=] on that track.  |
+| `track`{#track} | A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` MAY have [=media parameters=], which act as defaults for [=Media Objects=] on that track.  |
 
 #### Properties
 
@@ -326,7 +326,7 @@ SyncMedia has a generic mechanism for incorporating metadata but does not define
 
 ### Processing
 
-### Applying track values to media objects
+#### Applying track values to media objects
 
 [=Tracks=] MAY provide defaults for [=media objects=]. This section gives the rules for how to apply these values.
 
@@ -335,11 +335,7 @@ SyncMedia has a generic mechanism for incorporating metadata but does not define
 | defaultSrc      | Provides the `src` for the media object. If the media object has an `src` which is only a selector, then the selector is appended to the track's `defaultSrc`. Any other value for a media object `src` overrides the track's `defaultSrc`. |
 | containerType   | If the track's `defaultSrc` is referencing embedded media, this gives the type of the containing document. |
 
-
-::: .TODO
-__TODO__:
-Finish this section
-:::
+In addition, any [=media parameters=] defined for a track are inherited by any media objects on that track. The exception is when the media objects themselves provide a parameter of the same `name`, in which case, the media object's parameter `value` overrides the track's parameter `value`.
 
 ### Rendering
 
