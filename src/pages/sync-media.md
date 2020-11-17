@@ -104,7 +104,7 @@ There are benefits to applying structural semantics to time containers in SyncMe
 | -----| --------- | ------------|
 | `role`{#role} | One or more `strings` | Semantic role(s) | 
 
-Values for the `role` property on time containers must come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles) or [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/). 
+Values for the `role` property on time containers MUST come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles) or [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/). 
 
 ::: .TODO
 __TODO__
@@ -196,7 +196,7 @@ The following parameter `name`s are defined:
 | `cssClass` | One or more strings | Media that can be styled with CSS | Indicates class name(s) to apply |
 | `clipPath` | As defined by the [SVG path data attribute](https://www.w3.org/TR/SVG11/paths.html#DAttribute) | Visual media | The shape that will be used to apply a clip mask to the media |
 | `pan` | Between -1 (full left) and 1 (full right) | Audible media | Indicates the volume pan |
-| `playbackRate` | 1.0 (normal rate), less, or more | Timed media | Indicates the playback rate. Values should align with HTML's {%raw%}{{HTMLMediaElement/playbackRate}}{%endraw%}. |
+| `playbackRate` | 1.0 (normal rate), less, or more | Timed media | Indicates the playback rate. Values SHOULD align with HTML's {%raw%}{{HTMLMediaElement/playbackRate}}{%endraw%}. |
 | `volume` | Between 0 and 1 | Audible media | Indicates the volume |
 
 ::: {.note}
@@ -315,7 +315,7 @@ The reason for including a narration `track`, even though it supplies no default
 
 
 ### Metadata
-SyncMedia has a generic mechanism for incorporating metadata but does not require or define any specific metadata. Metadata MUST go in the SyncMedia document `head`.
+SyncMedia has a generic mechanism for incorporating metadata but does not define any specific metadata. Metadata MUST go in the SyncMedia document `head`.
 
 | Term | Description |
 | -----| ----------- |
