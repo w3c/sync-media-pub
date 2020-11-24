@@ -1,0 +1,22 @@
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:sync="https://w3c.github.io/sync-media-pub/" version="3.0">
+    <body>
+        <par sync:role="dinner-roll">
+            <audio src="chapter01.mp3" clipBegin="0" clipEnd="10"/>
+            <text src="chapter01.html#heading_1">
+                <param name="cssClass" value="highlight"/>
+            </text>
+        </par>
+        <par sync:role="bread-roll brioche">
+            <audio src="chapter01.mp3" clipBegin="10" clipEnd="20"/>
+            <text src="chapter01.html#para_01">
+                <param name="cssClass" value="highlight"/>
+            </text>
+        </par>
+        <par sync:role="sandwich-roll brioche">
+            <audio src="chapter01.mp3" clipBegin="20" clipEnd="30"/>
+            <text src="chapter01.html#para_02">
+                <param name="cssClass" value="highlight"/>
+            </text>
+        </par>
+    </body>
+</smil>
