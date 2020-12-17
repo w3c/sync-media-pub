@@ -153,7 +153,6 @@ Properties on media objects are used to
 | -----| --------- | ------------|
 | `clipBegin`{#clipBegin}| <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | Start of a timed media clip | 
 | `clipEnd`{#clipEnd} | <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a> | End of a timed media clip |
-| `containerType`{#containerType} | Media type | If `src` references media embedded in a document, `containerType` gives the media type of the embedding document |
 | `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
 | `repeatCount`{#repeatCount} | Number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> | For timed media. Specifies the number of iterations. |
 | `src`{#src} | URL | Location of media file, optionally including a media fragment [[media-frags]] | 
@@ -165,12 +164,12 @@ If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are 
 It is RECOMMENDED to use a media fragment on `src` to refer to a large chunk of media; and to use `clipBegin` and `clipEnd` for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.
 :::
 
-`containerType` SHOULD be specified when the media is being referenced in the context of an embedding document. It SHOULD NOT be used for `text` elements referencing HTML text, as this relationship is implied.
+When media is in an embedding document, and referred to via that document, the selector may have to first be dereferenced.
 
-{% example "Using containerType to describe the context of video media" %}
+{% example "Referring to video media contained within an HTML document" %}
 <par>
     <text src="doc.html#para1"/>
-    <video src="doc.html#video1" sync:containerType="text/html" clipBegin="0" clipEnd="10"/>
+    <video src="doc.html#video1" clipBegin="0" clipEnd="10"/>
 </par>
 {% endexample %}
 
@@ -249,7 +248,6 @@ All of these features reduce verbosity as otherwise these properties would have 
 | `defaultSrc`{#defaultSrc} | `URL` | Source of the default file that media objects on this track will use.|
 | `defaultFor`{#defaultFor} | One of: `audio`, `image`, `video`, `text`, `ref` | Media objects of the type specified are automatically assigned to this track. |
 | `trackType`{#trackType} | One of: `backgroundAudio`, `audioNarration`, `signLanguageVideo`, `contentDocument` | Presentation feature embodied by this track. |
-| `containerType` | Media type | If `defaultSrc` refers to media embedded in a document, `containerType` gives the media type of that document. See [containerType](#containerType). |
 
 ::: .TODO
 __TODO__:
@@ -333,7 +331,6 @@ SyncMedia has a generic mechanism for incorporating metadata but does not define
 | Track attribute | Impact on media object |
 |-----------------|------------------------|
 | defaultSrc      | Provides the `src` for the media object. If the media object has an `src` which is only a selector, then the selector is appended to the track's `defaultSrc`. Any other value for a media object `src` overrides the track's `defaultSrc`. |
-| containerType   | If the track's `defaultSrc` is referencing embedded media, this gives the type of the containing document. |
 
 In addition, any [=media parameters=] defined for a track are inherited by any media objects on that track. The exception is when the media objects themselves provide a parameter of the same `name`, in which case, the media object's parameter `value` overrides the track's parameter `value`.
 
@@ -421,7 +418,6 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
                     <li><a href="#trackType">`sync:trackType`</a></li>
-                    <li><a href="#containerType">`sync:containerType`</a></li>
                 </ul>
             </td>
             <td>
@@ -506,7 +502,6 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
@@ -522,7 +517,6 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#image">`image`</a></td>
             <td>
                 <ul>
-                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
@@ -540,7 +534,6 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a></li>
@@ -557,7 +550,6 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#text">`text`</a></td>
             <td>
                 <ul>
-                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#src">`src`</a></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
@@ -574,7 +566,6 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
-                    <li><a href="#containerType">`sync:containerType`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a></li>
