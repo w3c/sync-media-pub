@@ -286,7 +286,7 @@
                         </tr>
                     </tbody>
                 </table>
-                <p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, it is RECOMMENDED to apply clipping to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
+                <p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, clipping MUST be applied to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
                 <div class="note ">
                     <p>It is RECOMMENDED to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
                 </div>

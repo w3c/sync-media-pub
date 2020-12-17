@@ -159,7 +159,7 @@ Properties on media objects are used to
 | `src`{#src} | URL | Location of media file, optionally including a media fragment [[media-frags]] | 
 | `track`{#trackref} | ID | Specifies the ID of a track.|
 
-If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are present, it is RECOMMENDED to apply clipping to the resource with respect to the media fragment offset(s), as defined in [All Media Fragment Clients](https://www.w3.org/TR/media-frags/#media-fragment-clients). 
+If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are present, clipping MUST be applied to the resource with respect to the media fragment offset(s), as defined in [All Media Fragment Clients](https://www.w3.org/TR/media-frags/#media-fragment-clients). 
 
 ::: {.note}
 It is RECOMMENDED to use a media fragment on `src` to refer to a large chunk of media; and to use `clipBegin` and `clipEnd` for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.
