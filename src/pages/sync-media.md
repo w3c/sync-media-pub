@@ -18,7 +18,7 @@ SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishin
 
 ## SyncMedia
 
-This section defines SyncMedia's terms and properties, and gives examples. A SyncMedia document is expressed as SMIL XML with the `sync` namespace used for custom extensions. 
+This section defines SyncMedia's terms and properties, and gives examples. The examples in this document are expressed as SMIL XML with the `sync` namespace used for custom extensions. 
 
 ### Definitions  
 
