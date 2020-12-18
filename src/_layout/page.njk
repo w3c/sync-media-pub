@@ -4,6 +4,6 @@
 {%- endblock -%}
 {%- block body -%}
 <h1>{{title}}</h1>
-{{ page.date.toDateString() }}
+Last updated {{ page.date.toDateString() }}
 {{ content | safe }}
 {%- endblock -%}

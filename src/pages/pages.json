@@ -1,4 +1,5 @@
 {
     "layout": "page.njk",
-    "permalink": "{{ page.filePathStem }}.html"
+    "permalink": "{{ page.filePathStem }}.html",
+    "date": "Last Modified"
 }
