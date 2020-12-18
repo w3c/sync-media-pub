@@ -3,7 +3,7 @@ title: SyncMedia 1.0
 layout: spec.njk
 ---
 <section id="abstract">
-    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of media, potentially of different types, orchestrated in a [=timeline=]. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
+    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of different types of media, orchestrated in a timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
 </section>
 
 <section id="sotd">
@@ -18,7 +18,7 @@ SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishin
 
 ## SyncMedia
 
-This section defines SyncMedia's terms and properties, and gives examples. Examples in this section are written in SMIL XML with the `sync` namespace used for custom extensions. Choosing a serialization formation remains an open issue.
+This section defines SyncMedia's terms and properties, and gives examples. A SyncMedia document is expressed as SMIL XML with the `sync` namespace used for custom extensions. 
 
 ### Definitions  
 
@@ -35,19 +35,16 @@ This section defines SyncMedia's terms and properties, and gives examples. Examp
 :   A [=Time Container=] in which children are rendered in parallel
 
 <dfn id="dfn-role" data-dfn-type="dfn">Role</dfn>
-:   Gives the semantic(s) for the item
+:   Gives the structural semantics for the item
 
 <dfn id="dfn-sequential-time-container" data-dfn-type="dfn">Sequential Time Container</dfn>
 :   A [=Time Container=] in which children are rendered in sequence
 
 <dfn id="dfn-sync-media-document" data-dfn-type="dfn">Sync Media Document</dfn>
-:   The synchronized presentation.
+:   The document containing the SyncMedia presentation.
 
 <dfn id="dfn-sync-media-player" data-dfn-type="dfn">Sync Media Player</dfn>
 :   A user agent that knows how to process and playback [=Sync Media Documents=]
-
-<dfn id="dfn-timeline" data-dfn-type="dfn">Timeline</dfn>
-:   Linear arrangement of [=Time Containers=]
 
 <dfn id="dfn-time-container">Time Container</dfn>
 :   The container that dictates the playback order for its children
@@ -58,7 +55,7 @@ This section defines SyncMedia's terms and properties, and gives examples. Examp
 
 ### Document Structure
 
-A SyncMedia document contains two parts: a `head` and a `body`. The temporal presentation of media objects is laid out in the body. Time containers can be used to render media in parallel or to arrange sub-sequences. The head contains metainformation and track information.
+A SyncMedia document contains two parts: a `head` and a `body`. The head contains metainformation and track information. The temporal presentation of media objects is laid out in the body. Time containers can be used to render media in parallel or to arrange sequences. 
 
 A SyncMedia document MUST have a `body`. It MAY have a `head`.
 
@@ -94,9 +91,17 @@ Media objects are arranged in time containers, which determine whether they are 
 </body>
 {% endexample %}
 
-#### Structural Semantics
 
-There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values MAY customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
+<section id="structural-semantics">
+<h4>Structural semantics</h4>
+<p>Structural semantics MAY be added to time containers via the <a href="#role"><code>role</code></a> property. Values MUST come from <a href="https://www.w3.org/TR/wai-aria/#document_structure_roles">WAI-ARIA Document Structure</a> or <a href="https://www.w3.org/TR/dpub-aria-1.0/">DPUB-ARIA</a>.</p>
+
+<section class="informative">
+<h5>Benefits of structural semantics</h5>
+<p>There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values MAY customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
+</p>
+</section>
+</section>
 
 #### Properties
 
@@ -104,7 +109,7 @@ There are benefits to applying structural semantics to time containers in SyncMe
 | -----| --------- | ------------|
 | `role`{#role} | One or more `strings` | Semantic role(s) | 
 
-Values for the `role` property on time containers MUST come from [WAI-ARIA Document Structure](https://www.w3.org/TR/wai-aria/#document_structure_roles) or [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/). 
+ 
 
 ::: .TODO
 __TODO__
@@ -164,7 +169,9 @@ If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are 
 It is RECOMMENDED to use a media fragment on `src` to refer to a large chunk of media; and to use `clipBegin` and `clipEnd` for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.
 :::
 
-When media is in an embedding document, and referred to via that document, the selector may have to first be dereferenced.
+#### Embedded media
+
+Embedded media, such as a video in an HTML document, MAY be referenced by the URL of its embedding document plus a selector.
 
 {% example "Referring to video media contained within an HTML document" %}
 <par>
@@ -199,7 +206,7 @@ The following parameter `name`s are defined:
 | `volume` | Between 0 and 1 | Audible media | Indicates the volume |
 
 ::: {.note}
-`clipPath` specifies a clipping path using an SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with `panZoom` the `clipPath` SHOULD be applied inside the rect defined by the `panZoom` attribute.
+`clipPath` specifies a clipping path using an SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with `panZoom`, the `clipPath` SHOULD be applied inside the rect defined by the `panZoom` attribute.
 :::
 
 {% example "Using param to add synchronized highlighting to HTML element" %}

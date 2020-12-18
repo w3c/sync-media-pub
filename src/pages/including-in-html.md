@@ -14,4 +14,6 @@ A SyncMedia-aware user agent can then load the presentation and invoke playback.
 One idea is to use the HTML `link` element and express the relationship via the `alternate` term.
 `<link rel="alternate" type="syncmedia-mimetype-TODO" href="sync.xml">`
 
+Additionally, the URI of the HTML document should now act as the base for the SyncMedia document.
+
 This goes along with using `alternate` for [incorporating SyncMedia into a Publication Manifest](incorporating-into-pubmanifest.html).

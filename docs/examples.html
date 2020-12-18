@@ -6,6 +6,7 @@
         <meta charset="utf-8"><link rel="stylesheet" href="css/page.css"/></head>
     <body><h1>SyncMedia Examples</h1>
 Fri Nov 13 2020
+<p class="wip">This document is a work in progress</p>
 <section id="html-document-with-audio-narration">
 <h2>HTML document with audio narration</h2>
 <p>This is a typical example of a structured document with audio narration. It features:</p>
@@ -23,11 +24,11 @@ Fri Nov 13 2020
 <h3>SyncMedia presentation</h3>
 <pre><code>&lt;smil&gt;
     &lt;head&gt;
-        &lt;sync:track sync:role=&quot;contentDocument&quot; sync:defaultSrc=&quot;file.html&quot; 
+        &lt;sync:track sync:trackType=&quot;contentDocument&quot; sync:defaultSrc=&quot;file.html&quot; 
             sync:defaultFor=&quot;text&quot; sync:label=&quot;Page&quot;&gt;
             &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
         &lt;/sync:track&gt;
-        &lt;sync:track sync:role=&quot;audioNarration&quot; sync:label=&quot;Narration&quot; 
+        &lt;sync:track sync:trackType=&quot;audioNarration&quot; sync:label=&quot;Narration&quot; 
             sync:defaultSrc=&quot;audio.mp3&quot; sync:defaultFor=&quot;audio&quot; /&gt;
     &lt;/head&gt;
     &lt;body&gt;

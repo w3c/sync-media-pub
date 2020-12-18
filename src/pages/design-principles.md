@@ -1,6 +1,8 @@
 ---
 title: Design Principles
 ---
+This document is a work in progress {.wip}
+
 ## Storing and retrieving sync documents
 
 * Package sync documents independently of the publication they correspond to (for side-loading)

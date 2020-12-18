@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Synchronized Media for Publications CG: </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8"><link rel="stylesheet" href="css/page.css"/></head>
+    <body><h1></h1>
+Thu Dec 17 2020
+<section id="syncmedia-technology-candidates">
+<h1>SyncMedia Technology Candidates</h1>
+<p>The primary considerations when choosing a language to represent the concepts required for the <a href="use-cases.html">use cases</a> were:</p>
+<ul>
+<li><strong>Has declarative syntax</strong>: As opposed to a purely scripted custom solution, a declarative syntax provides a more rigid framework for content that will be played on a variety of systems, and will persist in publisher and library collections for years to come.</li>
+<li><strong>Supports nested structures</strong>: Required for putting complex content (e.g. tables) in a subtree, out of the way of the main presentation, and offering users options for <em>escaping</em>.</li>
+<li><strong>External media references</strong>: The media objects in a SyncMedia presentation exist on their own and do not need to be duplicated in the presentation format. They just need to be referenced.</li>
+</ul>
+<p>That said, here are the candidates and how each fares regarding the requirements.</p>
+<section id="smil">
+<h2>SMIL</h2>
+<p class="link"><a href="https://www.w3.org/TR/SMIL3/">SMIL3</a></p>
+<section id="pros">
+<h3>Pros</h3>
+<ul>
+<li>Successfully used in EPUB3 Media Overlays</li>
+<li>Declarative syntax</li>
+<li>Supports nesting</li>
+</ul>
+</section>
+<section id="cons">
+<h3>Cons</h3>
+<ul>
+<li>Never was broadly adopted</li>
+<li>WG is no longer active to propose changes to</li>
+</ul>
+</section>
+</section>
+<section id="timing-object">
+<h2>Timing Object</h2>
+<p><a href="http://webtiming.github.io/timingobject/">Timing Object</a></p>
+<section id="pros-2">
+<h3>Pros</h3>
+<ul>
+<li>Capable of complex media synchronization</li>
+</ul>
+</section>
+<section id="cons-2">
+<h3>Cons</h3>
+<ul>
+<li>No declarative syntax</li>
+<li>Spec is incomplete</li>
+</ul>
+</section>
+</section>
+<section id="ttml2">
+<h2>TTML2</h2>
+<p><a href="https://www.w3.org/TR/ttml2/">TTML2</a></p>
+<section id="pros-3">
+<h3>Pros</h3>
+<p>Capable of complex media synchronization</p>
+</section>
+<section id="cons-3">
+<h3>Cons</h3>
+<p>Text lives in the same file as the timing information -- pointing to an external text document is not supported.</p>
+</section>
+</section>
+<section id="webvtt">
+<h2>WebVTT</h2>
+<p><a href="https://www.w3.org/TR/webvtt1/">WebVTT</a></p>
+<section id="pros-4">
+<h3>Pros</h3>
+<p>Browser support</p>
+</section>
+<section id="cons-4">
+<h3>Cons</h3>
+<ul>
+<li>No external text referencing</li>
+<li>No nested structures</li>
+</ul>
+</section>
+</section>
+<section id="webanimations">
+<h2>WebAnimations</h2>
+<p><a href="https://www.w3.org/TR/web-animations-1/">WebAnimations</a></p>
+<section id="pros-5">
+<h3>Pros</h3>
+<p>Enables timing and playback</p>
+</section>
+<section id="cons-5">
+<h3>Cons</h3>
+<p>No declarative syntax</p>
+</section>
+</section>
+<section id="webannotations">
+<h2>WebAnnotations</h2>
+<p><a href="https://www.w3.org/annotation/">WebAnnotations</a></p>
+<section id="pros-6">
+<h3>Pros</h3>
+<p>Good range of selectors</p>
+</section>
+<section id="cons-6">
+<h3>Cons</h3>
+<ul>
+<li>No nesting</li>
+<li>No processing model for playback</li>
+</ul>
+</section>
+</section>
+<section id="custom">
+<h2>Custom</h2>
+<section id="pros-7">
+<h3>Pros</h3>
+<p>Complete control</p>
+</section>
+<section id="cons-7">
+<h3>Cons</h3>
+<p>Risk reinventing the wheel</p>
+</section>
+</section>
+<section id="existing-language-%2B-custom-extensions">
+<h2>Existing language + custom extensions</h2>
+<section id="pros-8">
+<h3>Pros</h3>
+<ul>
+<li>Take advantage of what exists</li>
+<li>Add what's missing</li>
+</ul>
+</section>
+<section id="cons-8">
+<h3>Cons</h3>
+<ul>
+<li>Inherit complexity of existing language</li>
+<li>Risk of additions being short-sighted</li>
+</ul>
+</section>
+</section>
+</section>
+</body>
+</html>

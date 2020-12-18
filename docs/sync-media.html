@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Synchronized Media for Publications CG: SyncMedia 1.0</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8"><link rel="stylesheet" href="css/spec-extra.css"/>    
+    <script src='https://www.w3.org/Tools/respec/respec-w3c' class='remove' defer="defer"></script>
+    <script class='remove'>
+        var respecConfig = {
+            specStatus: "CG-DRAFT",
+            group: "sync-media-pub",
+            editors: [{
+                name: "Marisa DeMeglio",
+                company: "DAISY Consortium",
+                companyURL: "https://www.daisy.org",
+                w3cid: 35713
+            }, {
+                name: "Lars Wallin",
+                company: "Colibrio AB",
+                companyURL: "https://colibrio.com"
+            }],
+            edDraftURI: "https://w3c.github.io/sync-media-pub/sync-media.html",
+            shortName: "sync-media-pub",
+            noRecTrack: true,
+            copyrightStart: "2019",
+            includePermalinks: true,
+            permalinkEdge: true,
+            permalinkHide: false,
+            diffTool: "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
+            github: {
+                repoURL: "https://github.com/w3c/sync-media-pub",
+                branch: "master"
+            },
+            localBiblio: {},
+            xref: "web-platform"
+        };
+    </script></head>
+    <body><section id="abstract">
+    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of different types of media, orchestrated in a timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
+</section>
+<section id="sotd">
+</section>
+<section id="conformance">
+</section>
+<section id="relationship-to-other-specifications">
+<h2>Relationship to Other Specifications</h2>
+<p>SyncMedia is an evolution of <a href="https://www.w3.org/publishing/epub32/epub-mediaoverlays.html">EPUB3 Media Overlays</a> and, like Media Overlays, is built on [[SMIL3]]. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions.</p>
+</section>
+<section id="syncmedia">
+<h2>SyncMedia</h2>
+<p>This section defines SyncMedia's terms and properties, and gives examples. A SyncMedia document is expressed as SMIL XML with the <code>sync</code> namespace used for custom extensions.</p>
+<section id="definitions">
+<h3>Definitions</h3>
+<dl>
+<dt><dfn id="dfn-media-object" data-dfn-type="dfn">Media Object</dfn></dt>
+<dd>A media resource in the [=Sync Media Document=]</dd>
+<dt><dfn id="dfn-media-parameters" data-dfn-type="dfn">Media Parameters</dfn></dt>
+<dd>Named parameters to communicate options to the [=Media Object Renderer=]</dd>
+<dt><dfn id="dfn-media-object-renderer" data-dfn-type="dfn">Media Object Renderer</dfn></dt>
+<dd>A component used by the [=Sync Media Player=] to render [=Media Objects=]. Different media types may necessitate different renderers.</dd>
+<dt><dfn id="dfn-parallel-time-container" data-dfn-type="dfn">Parallel Time Container</dfn></dt>
+<dd>A [=Time Container=] in which children are rendered in parallel</dd>
+<dt><dfn id="dfn-role" data-dfn-type="dfn">Role</dfn></dt>
+<dd>Gives the structural semantics for the item</dd>
+<dt><dfn id="dfn-sequential-time-container" data-dfn-type="dfn">Sequential Time Container</dfn></dt>
+<dd>A [=Time Container=] in which children are rendered in sequence</dd>
+<dt><dfn id="dfn-sync-media-document" data-dfn-type="dfn">Sync Media Document</dfn></dt>
+<dd>The document containing the SyncMedia presentation.</dd>
+<dt><dfn id="dfn-sync-media-player" data-dfn-type="dfn">Sync Media Player</dfn></dt>
+<dd>A user agent that knows how to process and playback [=Sync Media Documents=]</dd>
+<dt><dfn id="dfn-time-container">Time Container</dfn></dt>
+<dd>The container that dictates the playback order for its children</dd>
+<dt><dfn id="dfn-track">Track</dfn></dt>
+<dd>An organizational concept that defines a purposeful virtual rendering space for media objects, not tied to a visual layout, with default properties</dd>
+</dl>
+</section>
+<section id="document-structure">
+<h3>Document Structure</h3>
+<p>A SyncMedia document contains two parts: a <code>head</code> and a <code>body</code>. The head contains metainformation and track information. The temporal presentation of media objects is laid out in the body. Time containers can be used to render media in parallel or to arrange sequences.</p>
+<p>A SyncMedia document MUST have a <code>body</code>. It MAY have a <code>head</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="head">head</code></td>
+<td>Node</td>
+<td>Information not related to temporal behavior</td>
+</tr>
+<tr>
+<td><code id="body">body</code></td>
+<td>Node</td>
+<td>Main [=sequential time container=] for the presentation.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="time-containers">
+<h3>Time Containers</h3>
+<p>Media objects are arranged in time containers, which determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers MAY be nested in other time containers (but MUST NOT be nested  in media objects).</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="seq">seq</code></td>
+<td>Node</td>
+<td>A [=sequential time container=] for media and/or time containers.</td>
+</tr>
+<tr>
+<td><code id="par">par</code></td>
+<td>Node</td>
+<td>A [=parallel time container=] for media and/or time containers.</td>
+</tr>
+</tbody>
+</table>
+<pre class="example" title="Using time containers to associate text references with audio clips, to create a synchronized text and audio presentation">
+&lt;body&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#heading_01&quot;/&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#para_01&quot;/&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#para_02&quot;/&gt;
+    &lt;/par&gt;
+&lt;/body&gt;
+</pre>
+<section id="structural-semantics">
+<h4>Structural semantics</h4>
+<p>Structural semantics MAY be added to time containers via the <a href="#role"><code>role</code></a> property. Values MUST come from <a href="https://www.w3.org/TR/wai-aria/#document_structure_roles">WAI-ARIA Document Structure</a> or <a href="https://www.w3.org/TR/dpub-aria-1.0/">DPUB-ARIA</a>.</p>
+<section class="informative">
+<h5>Benefits of structural semantics</h5>
+<p>There are benefits to applying structural semantics to time containers in SyncMedia. User agents that understand semantic role values MAY customize the user experience, for example by enabling the skipping of types of secondary content that interferes with the flow of narration (such as page number announcements, often included to provide a point of reference between print and digital editions); or escaping complex structures, such as tables or charts.
+</p>
+</section>
+</section>
+<section id="properties">
+<h4>Properties</h4>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="role">role</code></td>
+<td>One or more <code>strings</code></td>
+<td>Semantic role(s)</td>
+</tr>
+</tbody>
+</table>
+<div class="TODO">
+<p><strong>TODO</strong>
+<a href="https://github.com/w3c/sync-media-pub/issues/12">Issue 12</a></p>
+</div>
+<pre class="example" title="Using role to mark a page number">
+&lt;body&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#para_02&quot;/&gt;
+    &lt;/par&gt;
+    &lt;par sync:role=&quot;doc-pagebreak&quot;&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;60&quot; clipEnd=&quot;62&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#pg_04&quot;/&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;62&quot; clipEnd=&quot;70&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#para_03&quot;/&gt;
+    &lt;/par&gt;
+&lt;/body&gt;
+</pre>
+</section>
+</section>
+<section id="media-objects">
+<h3>Media Objects</h3>
+<p>Media resources are included in SyncMedia via media objects. The actual media resource is an external file, or quite commonly, a segment of a file, such as an audio or video clip, or part of an HTML document.</p>
+<p>The table below describes the media objects in SyncMedia. <code>Ref</code> can be used to represent any media, but authors often prefer to use media type-specific synonyms.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="audio">audio</code></td>
+<td>Node</td>
+<td>References audio media.</td>
+</tr>
+<tr>
+<td><code id="image">image</code></td>
+<td>Node</td>
+<td>References image media.</td>
+</tr>
+<tr>
+<td><code id="ref">ref</code></td>
+<td>Node</td>
+<td>Generic media reference</td>
+</tr>
+<tr>
+<td><code id="text">text</code></td>
+<td>Node</td>
+<td>References text content in an HTML document.</td>
+</tr>
+<tr>
+<td><code id="video">video</code></td>
+<td>Node</td>
+<td>References video media.</td>
+</tr>
+</tbody>
+</table>
+<section id="properties-2">
+<h4>Properties</h4>
+<p>Properties on media objects are used to</p>
+<ul>
+<li>express the location of the media source, including segment</li>
+<li>assign a media object to a [=track=]</li>
+<li>indicate that a media object repeats</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="clipBegin">clipBegin</code></td>
+<td><a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a></td>
+<td>Start of a timed media clip</td>
+</tr>
+<tr>
+<td><code id="clipEnd">clipEnd</code></td>
+<td><a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a></td>
+<td>End of a timed media clip</td>
+</tr>
+<tr>
+<td><code id="panZoom">panZoom</code></td>
+<td>Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a></td>
+<td>Rectangular portion of media object</td>
+</tr>
+<tr>
+<td><code id="repeatCount">repeatCount</code></td>
+<td>Number, or &quot;indefinite&quot;, as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a></td>
+<td>For timed media. Specifies the number of iterations.</td>
+</tr>
+<tr>
+<td><code id="src">src</code></td>
+<td>URL</td>
+<td>Location of media file, optionally including a media fragment [[media-frags]]</td>
+</tr>
+<tr>
+<td><code id="trackref">track</code></td>
+<td>ID</td>
+<td>Specifies the ID of a track.</td>
+</tr>
+</tbody>
+</table>
+<p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, clipping MUST be applied to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
+<div class="note ">
+<p>It is RECOMMENDED to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
+</div>
+</section>
+<section id="embedded-media">
+<h4>Embedded media</h4>
+<p>Embedded media, such as a video in an HTML document, MAY be referenced by the URL of its embedding document plus a selector.</p>
+<pre class="example" title="Referring to video media contained within an HTML document">
+&lt;par&gt;
+    &lt;text src=&quot;doc.html#para1&quot;/&gt;
+    &lt;video src=&quot;doc.html#video1&quot; clipBegin=&quot;0&quot; clipEnd=&quot;10&quot;/&gt;
+&lt;/par&gt;
+</pre>
+</section>
+<section id="parameters">
+<h4>Parameters</h4>
+<p>SyncMedia uses SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-edef-param">param</a> to send parameters to [=media object renderer=]s.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="param">param</code></td>
+<td>Node</td>
+<td>Name/value pair sent to a media object renderer.</td>
+</tr>
+</tbody>
+</table>
+<p>The properties of <code>param</code> are:</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="name">name</code></td>
+<td><code>string</code></td>
+<td>Parameter name</td>
+</tr>
+<tr>
+<td><code id="value">value</code></td>
+<td><code>string</code></td>
+<td>Parameter value</td>
+</tr>
+</tbody>
+</table>
+<p>The following parameter <code>name</code>s are defined:</p>
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Allowed value(s)</th>
+<th>For media type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cssClass</code></td>
+<td>One or more strings</td>
+<td>Media that can be styled with CSS</td>
+<td>Indicates class name(s) to apply</td>
+</tr>
+<tr>
+<td><code>clipPath</code></td>
+<td>As defined by the <a href="https://www.w3.org/TR/SVG11/paths.html#DAttribute">SVG path data attribute</a></td>
+<td>Visual media</td>
+<td>The shape that will be used to apply a clip mask to the media</td>
+</tr>
+<tr>
+<td><code>pan</code></td>
+<td>Between -1 (full left) and 1 (full right)</td>
+<td>Audible media</td>
+<td>Indicates the volume pan</td>
+</tr>
+<tr>
+<td><code>playbackRate</code></td>
+<td>1.0 (normal rate), less, or more</td>
+<td>Timed media</td>
+<td>Indicates the playback rate. Values SHOULD align with HTML's {{HTMLMediaElement/playbackRate}}.</td>
+</tr>
+<tr>
+<td><code>volume</code></td>
+<td>Between 0 and 1</td>
+<td>Audible media</td>
+<td>Indicates the volume</td>
+</tr>
+</tbody>
+</table>
+<div class="note ">
+<p><code>clipPath</code> specifies a clipping path using an SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with <code>panZoom</code>, the <code>clipPath</code> SHOULD be applied inside the rect defined by the <code>panZoom</code> attribute.</p>
+</div>
+<pre class="example" title="Using param to add synchronized highlighting to HTML element">
+&lt;body&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#heading_01&quot;&gt;
+            &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+        &lt;/text&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#para_01&quot;&gt;
+            &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+        &lt;/text&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
+        &lt;text src=&quot;chapter01.html#para_02&quot;&gt;
+            &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+        &lt;/text&gt;
+    &lt;/par&gt;
+&lt;/body&gt;
+</pre>
+</section>
+</section>
+<section id="tracks">
+<h3>Tracks</h3>
+<p>SyncMedia presentations organize media objects of the same types into virtual spaces called &quot;tracks&quot;. Tracks MUST be placed in the SyncMedia document <code>head</code>. Tracks have several useful features:</p>
+<ol>
+<li>A track MAY provide default <a href="#param">params</a> that then get applied to any media object on that track.</li>
+<li>A track MAY be set as the default for a given media object type (e.g. all the <code>audio</code> media objects can be automatically assigned to a track).</li>
+<li>A track MAY have a default source for all its media objects to use, in combination with any fragment specifier on the media object itself.</li>
+</ol>
+<p>All of these features reduce verbosity as otherwise these properties would have to be explicitly stated on each media object.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="track">track</code></td>
+<td>A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A <code>sync:track</code> MAY have [=media parameters=], which act as defaults for [=Media Objects=] on that track.</td>
+</tr>
+</tbody>
+</table>
+<section id="properties-3">
+<h4>Properties</h4>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Data type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="label">label</code></td>
+<td><code>string</code></td>
+<td>The track's label</td>
+</tr>
+<tr>
+<td><code id="defaultSrc">defaultSrc</code></td>
+<td><code>URL</code></td>
+<td>Source of the default file that media objects on this track will use.</td>
+</tr>
+<tr>
+<td><code id="defaultFor">defaultFor</code></td>
+<td>One of: <code>audio</code>, <code>image</code>, <code>video</code>, <code>text</code>, <code>ref</code></td>
+<td>Media objects of the type specified are automatically assigned to this track.</td>
+</tr>
+<tr>
+<td><code id="trackType">trackType</code></td>
+<td>One of: <code>backgroundAudio</code>, <code>audioNarration</code>, <code>signLanguageVideo</code>, <code>contentDocument</code></td>
+<td>Presentation feature embodied by this track.</td>
+</tr>
+</tbody>
+</table>
+<div class="TODO">
+<p><strong>TODO</strong>:
+<a href="https://github.com/w3c/sync-media-pub/issues/31">Issue 31</a></p>
+</div>
+<pre class="example" title="A track for an HTML document with default values and a cssClass param">
+&lt;head&gt;
+    &lt;sync:track sync:label=&quot;Page&quot; sync:defaultFor=&quot;text&quot; 
+        sync:defaultSrc=&quot;chapter01.html&quot; sync:trackType=&quot;contentDocument&quot;&gt;
+        &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+    &lt;/sync:track&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
+        &lt;text src=&quot;#heading_01&quot;/&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
+        &lt;text src=&quot;#para_01&quot;/&gt;
+    &lt;/par&gt;
+    &lt;par&gt;
+        &lt;audio src=&quot;chapter01.mp3&quot; clipEnd=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
+        &lt;text src=&quot;#para_02&quot;/&gt;
+    &lt;/par&gt;
+&lt;/body&gt;
+</pre>
+<pre class="example" title="Two audio tracks: one for narration (the default track for audio media objects), and one for background music.">
+&lt;head&gt;
+    &lt;sync:track id=&quot;background-music&quot; sync:trackType=&quot;backgroundAudio&quot;&gt;
+        &lt;param name=&quot;volume&quot; value=&quot;0.5&quot;/&gt;
+    &lt;/sync:track&gt;
+    &lt;sync:track sync:label=&quot;Narration&quot; sync:defaultFor=&quot;audio&quot; sync:trackType=&quot;audioNarration&quot;/&gt;
+    &lt;sync:track sync:label=&quot;Page&quot; sync:defaultFor=&quot;text&quot; sync:trackType=&quot;contentDocument&quot;&gt;
+        &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+    &lt;/sync:track&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;par&gt;
+        &lt;audio sync:track=&quot;background-music&quot; src=&quot;bkmusic.mp3&quot; repeat=&quot;indefinite&quot;/&gt;
+        &lt;seq&gt;
+            &lt;par&gt;
+                &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;30&quot; clipEnd=&quot;40&quot;/&gt;
+                &lt;text src=&quot;chapter01.html#heading_01&quot;/&gt;
+            &lt;/par&gt;
+            &lt;par&gt;
+                &lt;audio src=&quot;chapter01.mp3&quot; clipBegin=&quot;40&quot; clipEnd=&quot;50&quot;/&gt;
+                &lt;text src=&quot;chapter01.html#para_01&quot;/&gt;
+            &lt;/par&gt;
+            &lt;par&gt;
+                &lt;audio src=&quot;chapter01.mp3&quot; clipEnd=&quot;50&quot; clipEnd=&quot;60&quot;/&gt;
+                &lt;text src=&quot;chapter01.html#para_02&quot;/&gt;
+            &lt;/par&gt;
+        &lt;/seq&gt;
+    &lt;/par&gt;
+&lt;/body&gt;
+</pre>
+<p class="note">The reason for including a narration <code>track</code>, even though it supplies no default values, is because it would enable a user agent to have separate controls for narration audio vs background music audio.</p>
+</section>
+</section>
+<section id="metadata">
+<h3>Metadata</h3>
+<p>SyncMedia has a generic mechanism for incorporating metadata but does not define any specific metadata. Metadata MUST go in the SyncMedia document <code>head</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code id="metadata">metadata</code></td>
+<td>Extension point that allows the inclusion of metadata from any metainformation structuring language</td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+<section id="playback">
+<h2>Playback</h2>
+<section id="processing">
+<h3>Processing</h3>
+<section id="applying-track-values-to-media-objects">
+<h4>Applying track values to media objects</h4>
+<p>[=Tracks=] MAY provide defaults for [=media objects=]. This section gives the rules for how to apply these values.</p>
+<table>
+<thead>
+<tr>
+<th>Track attribute</th>
+<th>Impact on media object</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>defaultSrc</td>
+<td>Provides the <code>src</code> for the media object. If the media object has an <code>src</code> which is only a selector, then the selector is appended to the track's <code>defaultSrc</code>. Any other value for a media object <code>src</code> overrides the track's <code>defaultSrc</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>In addition, any [=media parameters=] defined for a track are inherited by any media objects on that track. The exception is when the media objects themselves provide a parameter of the same <code>name</code>, in which case, the media object's parameter <code>value</code> overrides the track's parameter <code>value</code>.</p>
+</section>
+</section>
+<section id="rendering">
+<h3>Rendering</h3>
+<p>After the SyncMedia document has been processed, it is ready to be rendered.</p>
+<table>
+<thead>
+<tr>
+<th>Object</th>
+<th>Rendering behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>body</code></td>
+<td>Render like <code>seq</code></td>
+</tr>
+<tr>
+<td><code>seq</code></td>
+<td>Render each child in order, each starting after the previous completes. Done when the last child is finished.</td>
+</tr>
+<tr>
+<td><code>par</code></td>
+<td>Render each child at the same time. Done when all the children are finished.</td>
+</tr>
+<tr>
+<td><code>audio</code></td>
+<td>Play the referenced portion of audio media and apply <code>params</code>. Done when the referenced portion has finished.</td>
+</tr>
+<tr>
+<td><code>image</code></td>
+<td>Load the image file or segment and apply <code>params</code>. Not timed, so considered done immediately.</td>
+</tr>
+<tr>
+<td><code>ref</code></td>
+<td>Infer the media type and, if supported, render the file or segment, and apply <code>params</code>. If timed, done when the segment is finished; if untimed, done immediately.</td>
+</tr>
+<tr>
+<td><code>text</code></td>
+<td>Display the HTML document, ensure the referenced element is visible, and apply <code>params</code>. Not timed, so considered done immediately.</td>
+</tr>
+<tr>
+<td><code>video</code></td>
+<td>Play the video file or segment and apply <code>params</code>. Done when the segment is finished.</td>
+</tr>
+</tbody>
+</table>
+<p class="note">Note about media with <code>repeatCount</code> and when it's considered done</p>
+</section>
+<section id="user-interaction">
+<h3>User Interaction</h3>
+<div class="TODO">
+<p><strong>TODO</strong>: how much to cover here?</p>
+</div>
+<ul>
+<li>Moving through the presentation meaningfully, e.g. previous/next sentence or para</li>
+<li>Exposing controls for multitrack presentations</li>
+<li>Note about global adjustments and track types (indicated by <code>trackType</code>) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.</li>
+</ul>
+</section>
+</section>
+<section id="encoding-and-serialization">
+<h2>Encoding and Serialization</h2>
+<div class="TODO">
+<p><strong>TODO</strong>:
+<a href="https://github.com/w3c/sync-media-pub/issues/10">Issue 10</a></p>
+</div>
+<section id="xml">
+<h3>XML</h3>
+<p class="note">Note about global XML attributes applying everywhere, e.g. <code>id</code></p>
+<p class="note">Note about the root element <code>smil</code>, which hasn't been mentioned yet</p>
+<p class="note">Note about custom extensions in the <code>sync</code> namespace</p>
+<section id="content-model">
+<h4>Content model</h4>
+<table summary="XML content model for SyncMedia">
+    <thead><tr><th>Element</th><th>Attributes</th><th>Content</th></tr></thead>
+    <tbody>
+        <tr>
+            <td>`smil`</td>
+            <td>None</td>
+            <td>
+                In this order:
+                <ul>
+                    <li><a href="#head">`head`</a> (0 or 1)</li>
+                    <li><a href="#body">`body`</a> (exactly 1)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#head">`head`</a></td>
+            <td>None</td>
+            <td>
+                In any order:
+                <ul>
+                    <li><a href="#metadata">`metadata`</a> (0 or more)</li>
+                    <li><a href="#track">`sync:track`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#metadata">`metadata`</a></td>
+            <td>None</td>
+            <td>0 or more elements from any namespace</td>
+        </tr>
+        <tr>
+            <td><a href="#track">`sync:track`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#label">`sync:label`</a></li>
+                    <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
+                    <li><a href="#defaultFor">`sync:defaultFor`</a></li>
+                    <li><a href="#trackType">`sync:trackType`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more) </li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#param">`param`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#name">`name`</a></li>
+                    <li><a href="#value">`value`</a></li>
+                </ul>
+            </td>
+            <td>Empty</td>
+        </tr>
+        <tr>
+            <td><a href="#body">`body`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#role">`sync:role`</a></li>
+                </ul>
+            </td>
+            <td>
+                In any order:
+                <ul>
+                    <li><a href="#audio">`audio`</a> (0 or more)</li>
+                    <li><a href="#image">`image`</a> (0 or more)</li>
+                    <li><a href="#par">`par`</a> (0 or more)</li>
+                    <li><a href="#ref">`ref`</a> (0 or more)</li>
+                    <li><a href="#seq">`seq`</a> (0 or more)</li>
+                    <li><a href="#text">`text`</a> (0 or more)</li>
+                    <li><a href="#video">`video`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#seq">`seq`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#role">`sync:role`</a></li>
+                </ul>
+            </td>
+            <td>
+                In any order:
+                <ul>
+                    <li><a href="#audio">`audio`</a> (0 or more)</li>
+                    <li><a href="#image">`image`</a> (0 or more)</li>
+                    <li><a href="#par">`par`</a> (0 or more)</li>
+                    <li><a href="#ref">`ref`</a> (0 or more)</li>
+                    <li><a href="#seq">`seq`</a> (0 or more)</li>
+                    <li><a href="#text">`text`</a> (0 or more)</li>
+                    <li><a href="#video">`video`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#par">`par`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#role">`sync:role`</a></li>
+                </ul>
+            </td>
+            <td>
+                In any order:
+                <ul>
+                    <li><a href="#audio">`audio`</a> (0 or more)</li>
+                    <li><a href="#image">`image`</a> (0 or more)</li>
+                    <li><a href="#par">`par`</a> (0 or more)</li>
+                    <li><a href="#ref">`ref`</a> (0 or more)</li>
+                    <li><a href="#seq">`seq`</a> (0 or more)</li>
+                    <li><a href="#text">`text`</a> (0 or more)</li>
+                    <li><a href="#video">`video`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#audio">`audio`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#image">`image`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#ref">`ref`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#text">`text`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+        <tr>
+            <td><a href="#video">`video`</a></td>
+            <td>
+                <ul>
+                    <li><a href="#clipBegin">`clipBegin`</a></li>
+                    <li><a href="#clipEnd">`clipEnd`</a></li>
+                    <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#repeatCount">`repeatCount`</a></li>
+                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#track">`sync:track`</a></li>
+                </ul>
+            </td>
+            <td>
+                <ul>
+                    <li><a href="#param">`param`</a> (0 or more)</li>
+                </ul>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</section>
+</section>
+<section id="json">
+<h3>JSON</h3>
+<div class="TODO">
+<p><strong>TODO</strong>:
+Lossless roundtrip from XML to JSON</p>
+</div>
+</section>
+</section>
+<section class="appendix" id="acknowledgements">
+<h2 class="appendix">Acknowledgements</h2>
+<p>At the time of publication, the members of the <a href="https://www.w3.org/community/sync-media-pub/">Synchronized Multimedia for Publications Community Group</a> were:</p>
+<p>Avneesh Singh (DAISY Consortium), Ben Dugas (Rakuten, Inc.), Chris Needham (British Broadcasting Corporation), Daniel Weck (DAISY Consortium), Didier Gehrer, Farrah Little (BC Libraries Cooperative), George Kerscher (DAISY Consortium), Ivan Herman (W3C), James Donaldson, Lars Wallin (Colibrio), Livio Mondini, Lynn McCormack (CAST, Inc), Marisa DeMeglio (DAISY Consortium, chair), Markku Hakkinen (Educational Testing Service), Matt Garrish (DAISY Consortium), Michiel Westerbeek (Tella), Nigel Megitt (British Broadcasting Corporation), Romain Deltour (DAISY Consortium), Wendy Reid (Rakuten, Inc.), Zheng Xu (Rakuten, Inc.)</p>
+</section>
+</body>
+</html>

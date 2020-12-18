@@ -1,6 +1,7 @@
 ---
 title: Incorporating SyncMedia into a Publication Manifest
 ---
+This document is a work in progress {.wip}
 
 ## Publication Manifest
 

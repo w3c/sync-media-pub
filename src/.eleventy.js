@@ -33,7 +33,7 @@ module.exports = function(eleventyConfig) {
     return {
         dir: {
             input: "pages",
-            output: "../docs/new",
+            output: "../docs",
             includes: "../_layout"
         }
     };

@@ -1,6 +1,8 @@
 ---
 title: SyncMedia Examples
 ---
+This document is a work in progress {.wip}
+
 
 ## HTML document with audio narration
 
