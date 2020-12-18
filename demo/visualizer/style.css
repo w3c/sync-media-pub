@@ -1,0 +1,75 @@
+body {
+    display: grid;
+    grid-template-rows: 30% auto;
+    grid-gap: 2rem;
+}
+input {
+    width: 20rem;
+}
+label {
+    display: block;
+}
+label:after { 
+    content: ":";
+}
+code em {
+    font-weight: bold;
+}
+summary h2 {
+    display: inline;
+}
+.sidebyside {
+    display: flex;
+    gap: 10vw;
+}
+em.big {
+    display: block;
+    font-size: x-large;
+    margin-top: 3rem;
+    margin-bottom: 3rem;
+    font-weight: bold;
+}
+#baseUrl {
+    margin-bottom: 2rem;
+}
+button {
+    display: block;
+    font-size: larger;
+    border-radius: 10px;
+    border: 2px solid green;
+    margin-top: 1rem;
+}
+.errors {
+    border: thin solid red;
+}
+
+@media (max-width: 768px) {
+    .sidebyside {
+        flex-direction: column;
+    }
+    textarea {
+        width: 95%;
+    }
+}
+
+details {
+    max-width: 60rem;
+}
+#data, #status {
+    max-height: 30rem;
+    width: 90%;
+    white-space: break-spaces;
+}
+
+#output p {
+    display: flex;
+    justify-content: space-between;
+}
+#output p button {
+    border: thin darkgray solid;
+    border-radius: 0;
+    font-size: revert;
+}
+#output pre {
+    overflow: scroll;
+}

@@ -1,0 +1,22 @@
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:sync="https://w3c.github.io/sync-media-pub/" version="3.0">
+    <head>
+        <sync:track sync:defaultSrc="chapter01.html" sync:defaultFor="text" sync:label="Page" sync:trackType="contentDocument">
+            <param name="cssClass" value="highlight"/>
+        </sync:track>
+        <sync:track sync:defaultSrc="chapter01.mp3" sync:defaultFor="audio" sync:label="Narration" sync:trackType="audioNarration"/>
+    </head>
+    <body>
+        <par>
+            <seq>
+                <par>
+                </par>
+                <par>
+                </par>
+            </seq>
+        </par>
+        <par>
+        </par>
+        <par>
+        </par>
+    </body>
+</smil>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Media Overlays Visualizer</title>
+        <script src="https://cdn.jsdelivr.net/npm/vega@5.13.0"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-lite@4.14.1"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vega-embed@6.10.0"></script>
+        <script type="module">
+            import { SyncMedia } from '../synclib/index.js';
+            import * as Util from '../synclib/utils.js';
+
+            document.addEventListener("DOMContentLoaded", async () => {
+                // add "load" button
+                let lis = Array.from(document.querySelectorAll("nav li"));
+                lis.map(li => {
+                    let url = li.querySelector("a[href]");
+                    url = new URL(url, document.location.href).href;
+                    let load = document.createElement("button");
+                    load.textContent = "Load";
+                    li.appendChild(load);
+                    load.addEventListener("click", async e => {
+                        await open(url);
+                    });
+                });
+
+                let urlSearchParams = new URLSearchParams(document.location.search);
+                if (urlSearchParams.has("q")) {
+                    open(urlSearchParams.get("q"));
+                }
+            });
+
+            async function open(url) {
+                let sync = new SyncMedia();
+                await sync.loadUrl(url);
+                if (sync.errors.length > 0) {
+                    console.log("Loading error(s)");
+                    return;
+                }
+                else {
+                    visualize(sync.graph);
+                }
+            }
+
+            // visualize the timegraph
+            function visualize(timegraph) {
+
+                // convert the timegraph into a dataset
+                let tasks = timegraph.map(entry => {
+                    return entry.events.filter(event => event.eventType == "start" && Util.isMedia(event.node.type)).map(event => {
+                        let task = {
+                            start: entry.timestamp, 
+                            end: entry.timestamp + event.node.dur, 
+                            asset: filename(event.node.src)
+                        };
+                        return task;
+                    });
+                })
+                .reduce((curr, acc) => acc.concat(curr), []); ;
+
+                var vegaspec = {
+                    description: "A simple bar chart with ranged data (aka Gantt Chart).",
+                    data: {
+                        "values": tasks
+                    },
+                    mark: "bar",
+                    encoding: {
+                        y: { field: "asset", type: "ordinal" },
+                        x: { field: "start", type: "quantitative" },
+                        x2: { field: "end" }
+                    },
+                    width: 500,
+                    height: 300
+                };
+                
+                vegaEmbed('#vis', vegaspec);
+            }
+
+            // string utils
+
+            // reverse a string
+            let rev = str => str.split("").reverse().join('');
+            // get just the filename
+            let filename = path => {
+                let idx = rev(path.href).indexOf("/");
+                let file = rev(path.href).slice(0, idx);
+                file = rev(file);
+                return file;
+            };
+            // get the extension
+            let extension = path => {
+                let idx = rev(path.href).indexOf(".");
+                let ext = rev(path.href).slice(0, idx);
+                ext = rev(ext);
+                return ext;
+            };
+
+
+        </script>
+        <style>
+            body {
+                display: flex;
+            }
+            nav {
+                margin-right: 3rem;
+            }
+            nav ul li {
+                display: grid;
+                grid-template-columns: 30% auto;
+            }
+            nav ul li button {
+                justify-self: right;
+                height: min-content;
+            }
+        </style>
+    </head>
+    <body>
+        <nav>
+            <h2>Sample files</h2>
+            
+            <ul>
+                <!-- <li><a href="./content/text-audio.xml">Text/Audio</a></li>
+                <li><a href="./content/nested-highlights.xml">Nested highlights</a></li>
+                <li><a href="./content/table.xml">Table (escape)</a></li>
+                <li><a href="./content/video-transcript.xml">Video</a></li>
+                <li><a href="./content/svg-comic.xml">Comics</a></li>
+                <li><a href="./content/complex.xml">Complex timing</a></li>
+             -->
+                <li><a href="../synclib/tests/files/standalone/simple-plus-tracks.xml">simple</a></li>
+                <li><a href="../synclib/tests/files/standalone/test-complex.xml">complex</a></li>
+            </ul>
+        </nav>
+        
+        <main>
+            <div id="vis"></div>
+        </main>
+        
+    </body>
+    
+</html>

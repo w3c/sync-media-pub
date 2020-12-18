@@ -1,0 +1,19 @@
+body {
+    font-family: sans-serif;
+    width: 80%;
+    margin: auto;
+}
+h1 {
+    font-size: xx-large;
+}
+ul {
+    line-height: 2;
+}
+
+
+.wip {
+    background-color: antiquewhite;
+    border: darkorange thick solid;
+    padding: 1rem;
+}
+

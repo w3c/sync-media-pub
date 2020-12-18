@@ -1,0 +1,77 @@
+Sync API
+---
+
+DESCRIPTION
+
+Input: Media Overlays vNext XML file
+Output: Timegraph
+Methods: Moving around the timegraph
+
+
+USAGE
+
+import {SyncMedia} from './synclib/index.js''
+
+let sync = new SyncMedia();
+await sync.loadUrl(url);
+
+
+PROPERTIES
+
+graph: An array of timegraph entries
+[
+    {
+        timestamp: Point in the overall timeline where this entry occurs,
+        events: [
+            {   
+                node: {
+                    type: element name
+                    src: full path to the media resource,
+                    selector: fragment selector,
+                    clipBegin,
+                    clipEnd,
+                    id: XML ID,
+                    _id: internal ID,
+                    params:{
+                        name: value,
+                        ...
+                    },
+                    roles: [],
+                    track: object,
+                    dur: duration in seconds
+                },
+                type: start | end | mid,
+                elapsed: presentation time that's elapsed since start of node
+            },
+            ...
+        ]
+    },
+    ...
+]
+
+model: tree model
+
+errors: empty at the moment
+
+skips: list of roles being skipped
+
+roles: all presentation roles
+
+
+METHODS
+
+All the following return a timegraph entry. 
+
+first()
+next()
+previous()
+last()
+gotoSrc(src)
+gotoTimestamp(seconds)
+escapeCurrent(role='')
+
+TODO
+
+Accommodate multiple roles on a node.
+Implement skippability
+Implement escapability

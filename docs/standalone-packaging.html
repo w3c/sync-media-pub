@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Synchronized Media for Publications CG: Standalone Packaging of SyncMedia</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8"><link rel="stylesheet" href="css/page.css"/></head>
+    <body><h1>Standalone Packaging of SyncMedia</h1>
+Wed Sep 09 2020
+<p class="wip">This document is a work in progress</p>
+<p><em>This document was taken from <a href="https://gist.githubusercontent.com/larscwallin/30f0ce72e70162079f2d2f84e2c864cb/raw/1720348adcb3daf162210f4924d908534fef714c/sync-media-smil-explainer-text.md">this post</a></em></p>
+<section id="packaging-and-side-loading">
+<h2>PACKAGING AND SIDE LOADING</h2>
+<p>A Sync Media file can be &quot;containarized&quot; to allow the embedding of some or all of the resources that are referenced by its <em>Sync Media Document</em>. The container format used in these cases is the OCF Zip Container (https://www.w3.org/publishing/epub3/epub-ocf.html#sec-container-zip minus EPUB specific semantics).
+The OCF format has all of the features, such as encryption; signing etc,  needed for the current version as well as foreseeable future versions of Sync Media.</p>
+<section id="side-loaded-sync-media">
+<h3>Side-loaded Sync Media</h3>
+<p>One of the objectives of the Sync Media specification is to let a <em>Sync Media Player</em> add synchronized media, such as Media Overlays, to an existing resource without the need to alter the resouce. This will help the adoption of synchronized media features in the accessibility space by enabling &quot;non-destructive&quot; methods to adding additional modes of narration to existing media resources.</p>
+</section>
+</section>
+<section id="ocf-package-example">
+<h2>OCF PACKAGE EXAMPLE</h2>
+<p>Files are represented as <em>cursive</em></p>
+<ul>
+<li>OCF
+<ul>
+<li>
+<p>META-INF</p>
+<ul>
+<li><em>container.xml</em></li>
+<li><em>metadata.xml</em></li>
+<li><em>encryption.xml</em></li>
+<li><em>etc</em></li>
+</ul>
+</li>
+<li>
+<p><em>my-sync-comic.smil</em></p>
+</li>
+<li>
+<p>assets</p>
+<ul>
+<li>sounds</li>
+<li>text</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<pre><code class="language-xml">
+&lt;container version=&quot;1.0&quot; xmlns=&quot;urn:oasis:names:tc:opendocument:xmlns:container&quot;&gt;
+    &lt;rootfiles&gt;
+        &lt;rootfile full-path=&quot;my-sync-comic.smil&quot;
+            media-type=&quot;application/smil+xml&quot; /&gt;
+    &lt;/rootfiles&gt;
+&lt;/container&gt;
+
+</code></pre>
+</section>
+</body>
+</html>

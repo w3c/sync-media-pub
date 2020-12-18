@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Synchronized Media for Publications CG: SyncMedia Examples</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8"><link rel="stylesheet" href="css/page.css"/></head>
+    <body><h1>SyncMedia Examples</h1>
+Fri Nov 13 2020
+<p class="wip">This document is a work in progress</p>
+<section id="html-document-with-audio-narration">
+<h2>HTML document with audio narration</h2>
+<p>This is a typical example of a structured document with audio narration. It features:</p>
+<ul>
+<li>Text fragments highlighted as the audio plays.</li>
+<li>Semantic information:
+<ul>
+<li>There is a page number (often given in ebooks as print page equivalents), indicated via <code>role</code>. This allows Sync Media Players to offer users an option to skip page number announcements</li>
+<li>The document contains a table, also indicated via <code>role</code>, allowing players to offer users an option to escape and return to the main reading flow.</li>
+</ul>
+</li>
+<li>Nested highlights: When active, the table is outlined with a yellow border, and individual rows are highlighted as they are read.</li>
+</ul>
+<section id="syncmedia-presentation">
+<h3>SyncMedia presentation</h3>
+<pre><code>&lt;smil&gt;
+    &lt;head&gt;
+        &lt;sync:track sync:trackType=&quot;contentDocument&quot; sync:defaultSrc=&quot;file.html&quot; 
+            sync:defaultFor=&quot;text&quot; sync:label=&quot;Page&quot;&gt;
+            &lt;param name=&quot;cssClass&quot; value=&quot;highlight&quot;/&gt;
+        &lt;/sync:track&gt;
+        &lt;sync:track sync:trackType=&quot;audioNarration&quot; sync:label=&quot;Narration&quot; 
+            sync:defaultSrc=&quot;audio.mp3&quot; sync:defaultFor=&quot;audio&quot; /&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;par&gt;
+            &lt;audio src=&quot;#t=0,5&quot;/&gt;
+            &lt;text src=&quot;#h1&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par&gt;
+            &lt;audio src=&quot;#t=5,10&quot;/&gt;
+            &lt;text src=&quot;#p1&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par&gt;
+            &lt;audio src=&quot;#t=10,15&quot;/&gt;
+            &lt;text src=&quot;#p2&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par sync:role=&quot;doc-pagebreak&quot;&gt;
+            &lt;audio src=&quot;#t=15,17&quot;/&gt;
+            &lt;text src=&quot;#pg&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par&gt;
+            &lt;audio src=&quot;#t=17,20&quot;/&gt;
+            &lt;text src=&quot;#p3&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par&gt;
+            &lt;audio src=&quot;#t=20,22&quot;/&gt;
+            &lt;text src=&quot;#h2&quot;/&gt;
+        &lt;/par&gt;
+        &lt;par sync:role=&quot;table&quot;&gt;
+            &lt;text src=&quot;#table&quot;/&gt;
+            &lt;seq&gt;
+                &lt;par&gt;
+                    &lt;audio src=&quot;#t=22,25&quot;/&gt;
+                    &lt;text src=&quot;#tr1&quot;&gt;
+                &lt;/par&gt;
+                &lt;par&gt;
+                    &lt;audio src=&quot;#t=25,30&quot;/&gt;
+                    &lt;text src=&quot;#tr2&quot;&gt;
+                &lt;/par&gt;
+                &lt;par&gt;
+                    &lt;audio src=&quot;#t=30,35&quot;/&gt;
+                    &lt;text src=&quot;#tr3&quot;&gt;
+                &lt;/par&gt;
+                &lt;par&gt;
+                    &lt;audio src=&quot;#t=35,40&quot;/&gt;
+                    &lt;text src=&quot;#tr4&quot;&gt;
+                &lt;/par&gt;
+            &lt;/seq&gt;
+        &lt;/par&gt;
+        &lt;par&gt;                  
+            &lt;audio src=&quot;#t=40,45&quot;/&gt;
+            &lt;text src=&quot;#p4&quot;&gt;
+        &lt;/par&gt;
+    &lt;/body&gt;
+&lt;/smil&gt;
+
+</code></pre>
+</section>
+<section id="html-document">
+<h3>HTML document</h3>
+<p>This is the corresponding HTML document for the above SyncMedia presentation.</p>
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+    &lt;head&gt;
+        &lt;style&gt;
+            body {
+                background-color: #FFE1E6;
+                line-height: 2;
+            }
+            table {
+                border-collapse: collapse;
+                background-color: azure;
+            }
+            thead {
+                background-color: navy;
+                color: white;
+            }
+            td {
+                border: thin black solid;
+                padding: 0.5rem;
+            }
+            .highlight {
+                background-color: lightyellow;
+            }
+            #table.highlight {
+                border: thick solid yellow;
+                background-color: azure;
+            }
+            #tr1.highlight {
+                color: yellow;
+                background-color: navy;
+            }
+
+        &lt;/style&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;main&gt;
+            &lt;h1 id=&quot;h1&quot;&gt;Los Angeles, California&lt;/h1&gt;
+            &lt;p id=&quot;p1&quot;&gt;Anim anim ex deserunt laboris voluptate non exercitation ad consequat tempor et.&lt;/p&gt;
+            &lt;p id=&quot;p2&quot;&gt;Officia cillum commodo qui amet exercitation veniam.&lt;/p&gt;
+            &lt;span id=&quot;pg4&quot;&gt;4&lt;/span&gt;
+            &lt;p id=&quot;p3&quot;&gt;Aliqua mollit officia commodo nulla sunt excepteur in ex nostrud dolore dolor do in.&lt;/p&gt;
+            &lt;h2 id=&quot;h2&quot;&gt;Average Summer Temperatures in Los Angeles&lt;/h2&gt;
+            &lt;table class=&quot;highlight&quot; id=&quot;table&quot; summary=&quot;average summer temperatures in los angeles&quot;&gt;
+                &lt;thead&gt;
+                    &lt;tr id=&quot;tr1&quot; &gt;
+                        &lt;td&gt;Month&lt;/td&gt;
+                        &lt;td&gt;High&lt;/td&gt;
+                        &lt;td&gt;Low&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/thead&gt;
+                &lt;tbody&gt;
+                    &lt;tr id=&quot;tr2&quot; class=&quot;highlight&quot;&gt;
+                        &lt;td&gt;June&lt;/td&gt;
+                        &lt;td&gt;79&lt;/td&gt;
+                        &lt;td&gt;62&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr id=&quot;tr3&quot;&gt;
+                        &lt;td&gt;July&lt;/td&gt;
+                        &lt;td&gt;83&lt;/td&gt;
+                        &lt;td&gt;65&lt;/td&gt;
+                    &lt;/tr&gt;
+                    &lt;tr id=&quot;tr4&quot;&gt;
+                        &lt;td&gt;August&lt;/td&gt;
+                        &lt;td&gt;85&lt;/td&gt;
+                        &lt;td&gt;66&lt;/td&gt;
+                    &lt;/tr&gt;
+                &lt;/tbody&gt;
+            &lt;/table&gt;
+            &lt;p id=&quot;p4&quot;&gt;Proident est veniam eu ea est culpa amet.&lt;/p&gt;
+        &lt;/main&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+</section>
+<section id="audio-only-presentation">
+<h3>Audio-only presentation</h3>
+<ul>
+<li>Nested structures</li>
+<li>Semantics</li>
+</ul>
+</section>
+<section id="presentation-with-secondary-audio">
+<h3>Presentation with secondary audio</h3>
+<ul>
+<li>Sound effects</li>
+<li>Background music</li>
+</ul>
+</section>
+<section id="video-with-text-transcript">
+<h3>Video with text transcript</h3>
+<ul>
+<li>Synchronized highlight for the transcript</li>
+</ul>
+</section>
+<section id="epub-with-separate-audio-overlay">
+<h3>EPUB with separate audio overlay</h3>
+<ul>
+<li>EPUB chunks referenced with CFI</li>
+<li>Overlay side-loaded</li>
+</ul>
+</section>
+<section id="svg-comic-with-audio-narration">
+<h3>SVG comic with audio narration</h3>
+<ul>
+<li>Zoom in on each comic panel</li>
+</ul>
+</section>
+</section>
+</body>
+</html>
