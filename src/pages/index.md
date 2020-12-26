@@ -30,5 +30,5 @@ The following are the currently available draft documents:
 
 These documents were developed by this community group but are not considered current or necessarily complete.
 
-* [Synchronized Narration](archives/synchronized-narration.html)
-* [Incorporating Synchronized Narration into a Publication Manifest](archives/incorporating-synchronized-narration.html)
+* [Synchronized Narration](archived/synchronized-narration.html)
+* [Incorporating Synchronized Narration into a Publication Manifest](archived/incorporating-synchronized-narration.html)
