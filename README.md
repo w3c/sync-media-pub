@@ -2,6 +2,4 @@
 
 This is the repository for ongoing work done by the [W3C Synchronized Multimedia for Publications Community Group](https://www.w3.org/community/sync-media-pub/).
 
-The Community Group was formed to recommend the best way to synchronize audio or video with Web Publications and other document formats being developed by the [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/), in order to make the publications accessible to people with different types of reading requirements.
-
-The purpose of the CG is to collect requirements, analyze existing technologies as potential solutions, and make a recommendation for the best way forward.
+The task of the CG is to explore and develop media synchronization techniques compatible with publishing formats on the web, including [Audiobooks](https://www.w3.org/TR/audiobooks/), [EPUB](https://www.w3.org/publishing/groups/epub-wg/), and standalone [HTML](https://www.w3.org/html/).
