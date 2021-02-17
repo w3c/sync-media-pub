@@ -156,8 +156,8 @@ Properties on media objects are used to
 
 | Term | Data type | Description |
 | -----| --------- | ------------|
-| `clipBegin`{#clipBegin}| [SMIL MediaClipping attribute value](https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping) | Start of a timed media clip | 
-| `clipEnd`{#clipEnd} | [SMIL MediaClipping attribute value](https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping) | End of a timed media clip |
+| `clipBegin`{#clipBegin}| Media clip value, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipBegin">clipBegin</a> | Start of a timed media clip | 
+| `clipEnd`{#clipEnd} | Media clip value, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipEnd">clipEnd</a> | End of a timed media clip |
 | `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
 | `repeatCount`{#repeatCount} | Number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> | For timed media. Specifies the number of iterations. |
 | `src`{#src} | URL | Location of media file, optionally including a media fragment [[media-frags]] | 
@@ -165,7 +165,8 @@ Properties on media objects are used to
 
 
 ::: {.note}
-EPUB Media Overlays <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> are valid clip begin and end values, because the [SMIL MediaClipping Module](https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping) states that if no metric specifier is given, Normal Play time (`npt`) is assumed (not `smpte`).
+EPUB Media Overlays <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> are considered valid clip begin and end values, because the [SMIL MediaClipping Module](https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping) states that if no metric specifier is given, Normal Play time (`npt`) is assumed (not `smpte`).
+:::
 
 If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are present, clipping MUST be applied to the resource with respect to the media fragment offset(s), as defined in [All Media Fragment Clients](https://www.w3.org/TR/media-frags/#media-fragment-clients). 
 
