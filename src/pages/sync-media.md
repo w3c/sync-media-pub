@@ -144,7 +144,7 @@ The table below describes the media objects in SyncMedia. `Ref` can be used to r
 | `audio`{#audio} | Node | References audio media.| 
 | `image`{#image} | Node | References image media.|
 | `ref`{#ref} | Node | Generic media reference | 
-| `text`{#text} | Node | References text content in an HTML document.|
+| `text`{#text} | Node | References content in an external text-based document.|
 | `video`{#video} | Node | References video media.|
 
 #### Properties
