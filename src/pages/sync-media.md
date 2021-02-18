@@ -16,6 +16,8 @@ layout: spec.njk
 
 SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishing/epub32/epub-mediaoverlays.html) and, like Media Overlays, is built on [[SMIL3]]. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions. 
 
+A more detailed comparison of SyncMedia to both SMIL3 and EPUB3 Media Overlays can be found in the [SyncMedia Explainer](explainer.html#relationship-to-smil3-and-epub-media-overlays).
+
 ## SyncMedia
 
 This section defines SyncMedia's terms and properties, and gives examples. The examples in this document are expressed as SMIL XML with the `sync` namespace used for custom extensions. 

@@ -3,6 +3,8 @@ title: SyncMedia Explainer
 ---
 This document is a work in progress {.wip}
 
+[[TOC]]
+
 ## Background
 
 The formal historical precedent for the concept of SyncMedia is the [EPUB3 Media Overlays specification](http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html) (digital publications with synchronized text-audio playback).
@@ -17,7 +19,7 @@ A SyncMedia presentation is a linear timeline of external media objects. The tim
 
 Examples of SyncMedia use cases are:
 * HTML document synchronized with audio narration
-* Audio-only presentation, structured with SyncMedia to provide sentence-level previous/next controls
+* Audio-only presentation, structured with SyncMedia to provide phrase-level navigation
 * SVG synchronized with audio
 * Video synchronized with a transcript
 
@@ -36,6 +38,36 @@ The technology selection is to __extend SMIL 3.0__ with customizations. Given th
 
 Choosing a serialization format (e.g. XML or JSON) was not part of this selection process, as the Synchronized Media for Publications CG felt [it is more desireable to define a model first](https://lists.w3.org/Archives/Public/public-sync-media-pub/2020Jul/0005.html) before deciding on one or multiple serializations.  
 
+## Relationship to SMIL3 and EPUB Media Overlays
+
+SyncMedia is, like EPUB3 Media Overlays, a subset of SMIL3 plus custom extensions. SyncMedia puts fewer restrictions on the use of SMIL3 than EPUB3 Media Overlays does, and, additionally, it incorporates more elements from SMIL3. The custom extensions in EPUB Media Overlays have been replaced in SyncMedia with more generic mechanisms.
+
+The following table compares SyncMedia features with the closest point of comparison in EPUB3 Media Overlays.
+
+| Purpose | SyncMedia feature | EPUB3 Media Overlays feature |
+|---------|-------------------|-----------------------------|
+| Semantics | `sync:role` plus [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/), [WAI-ARIA Document Structure Roles](https://www.w3.org/TR/wai-aria/#document_structure_roles) and [landmark roles](https://www.w3.org/TR/wai-aria-1.1/#landmark_roles)   | [`epub:type`](https://www.w3.org/publishing/epub/epub-contentdocs.html#attrdef-epub-type) plus [EPUB SSV](https://idpf.github.io/epub-vocabs/structure/)|
+| Nested text structures | Unrestricted use of `par` and `seq` nesting | [`epub:textref`](https://www.w3.org/publishing/epub/epub-mediaoverlays.html#attrdef-body-textref) | 
+| Styling | `param` elements | Metadata in the EPUB Package Document |
+| Parallel timed media, e.g. background music | Unrestricted use of `par` and `seq` nesting | None |
+| Reference embedded media | Dereference src of appropriate media element (`text`, `video`, `image`, `audio`, `ref`), e.g. `<video src="page.html#vid-elem" clipBegin="0" clipEnd="3">` | Not really supported, just worked around.|
+
+SyncMedia's custom extensions on top of its use of SMIL3 are:
+
+| Custom extension | Type | Context | Required |
+|------------------|------|---------|----------|
+| List of param names | Attribute values | Param element's `name` attribute | No |
+| `sync:role` | Attribute | Time container elements | No |
+| `sync:track` | Element | Document head | No |
+| `sync:track` | Attribute | Media elements | No |
+| `sync:label` | Attribute | Track element | Yes* |
+| `sync:defaultSrc` | Attribute | Track element | No |
+| `sync:defaultFor` | Attribute | Track element | No |
+| `sync:trackType` | Attribute | Track element | No |
+| List of track types | Attribute values | Track element's `sync:trackType` attribute | No |
+
+\* Required on the `sync:track` element; use of which is itself optional
+
 ## Features
 
 ### Navigation
@@ -44,5 +76,7 @@ Choosing a serialization format (e.g. XML or JSON) was not part of this selectio
 
 * Features afforded by tracks
 * Tracks vs SMIL regions
+
+Application: lets user mix different tracks during playback.
 
 ### Self-contained within HTML
