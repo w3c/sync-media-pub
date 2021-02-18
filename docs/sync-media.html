@@ -45,6 +45,7 @@
 <section id="relationship-to-other-specifications">
 <h2>Relationship to Other Specifications</h2>
 <p>SyncMedia is an evolution of <a href="https://www.w3.org/publishing/epub32/epub-mediaoverlays.html">EPUB3 Media Overlays</a> and, like Media Overlays, is built on [[SMIL3]]. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions.</p>
+<p>A more detailed comparison of SyncMedia to both SMIL3 and EPUB3 Media Overlays can be found in the <a href="explainer.html#relationship-to-smil3-and-epub-media-overlays">SyncMedia Explainer</a>.</p>
 </section>
 <section id="syncmedia">
 <h2>SyncMedia</h2>
@@ -220,7 +221,7 @@
 <tr>
 <td><code id="text">text</code></td>
 <td>Node</td>
-<td>References text content in an HTML document.</td>
+<td>References content in an external text-based document.</td>
 </tr>
 <tr>
 <td><code id="video">video</code></td>
@@ -248,12 +249,12 @@
 <tbody>
 <tr>
 <td><code id="clipBegin">clipBegin</code></td>
-<td><a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a></td>
+<td>Media clip value, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipBegin">clipBegin</a></td>
 <td>Start of a timed media clip</td>
 </tr>
 <tr>
 <td><code id="clipEnd">clipEnd</code></td>
-<td><a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">Clock value</a></td>
+<td>Media clip value, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipEnd">clipEnd</a></td>
 <td>End of a timed media clip</td>
 </tr>
 <tr>
@@ -278,9 +279,12 @@
 </tr>
 </tbody>
 </table>
+<div class="note ">
+<p>EPUB Media Overlays <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> are considered valid clip begin and end values, because the <a href="https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping">SMIL MediaClipping Module</a> states that if no metric specifier is given, Normal Play time (<code>npt</code>) is assumed (not <code>smpte</code>).</p>
+</div>
 <p>If both an <code>src</code> with a media fragment and <code>clipBegin</code>/<code>clipEnd</code> attributes are present, clipping MUST be applied to the resource with respect to the media fragment offset(s), as defined in <a href="https://www.w3.org/TR/media-frags/#media-fragment-clients">All Media Fragment Clients</a>.</p>
 <div class="note ">
-<p>It is RECOMMENDED to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with clip start/end points. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
+<p>It is RECOMMENDED to use a media fragment on <code>src</code> to refer to a large chunk of media; and to use <code>clipBegin</code> and <code>clipEnd</code> for defining fine-grained clips. This is to separate the requirement on the client of retrieving the resource, perhaps done using a URI request to a server, from locating a segment of the resource, done with <a href="https://www.w3.org/TR/media-frags/#valid-uri-temporal">Media Fragments clip start/end points</a>. Otherwise, if a client is fetching every phrase individually, it would then have to implement complex caching to smooth out playback so as to remove glitching between clips.</p>
 </div>
 </section>
 <section id="embedded-media">
@@ -668,7 +672,7 @@
             <td><a href="#track">`sync:track`</a></td>
             <td>
                 <ul>
-                    <li><a href="#label">`sync:label`</a></li>
+                    <li><a href="#label">`sync:label`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
                     <li><a href="#trackType">`sync:trackType`</a></li>
@@ -684,8 +688,8 @@
             <td><a href="#param">`param`</a></td>
             <td>
                 <ul>
-                    <li><a href="#name">`name`</a></li>
-                    <li><a href="#value">`value`</a></li>
+                    <li><a href="#name">`name`</a> <span class="deemph">(required)</span></li>
+                    <li><a href="#value">`value`</a> <span class="deemph">(required)</span></li>
                 </ul>
             </td>
             <td>Empty</td>
@@ -757,7 +761,7 @@
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
@@ -771,7 +775,7 @@
             <td><a href="#image">`image`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                 </ul>
@@ -790,7 +794,7 @@
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
@@ -804,7 +808,7 @@
             <td><a href="#text">`text`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
@@ -822,7 +826,7 @@
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>

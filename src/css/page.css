@@ -2,6 +2,7 @@ body {
     font-family: sans-serif;
     width: 80%;
     margin: auto;
+    line-height: 1.5;
 }
 h1 {
     font-size: xx-large;
@@ -17,3 +18,11 @@ ul {
     padding: 1rem;
 }
 
+table {
+    line-height: 2;
+    border-collapse: collapse;
+}
+td {
+    border: thin black solid;
+    padding: 5px;
+}
