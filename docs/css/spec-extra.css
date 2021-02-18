@@ -2,6 +2,11 @@
     background-color: antiquewhite;
     
 }
+.deemph {
+    font-style: italic;
+    font-weight: lighter;
+    font-size: smaller;
+}
 div.TODO {
     border: darkorange thick solid;
     padding: 1rem;

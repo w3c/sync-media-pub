@@ -428,7 +428,7 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#track">`sync:track`</a></td>
             <td>
                 <ul>
-                    <li><a href="#label">`sync:label`</a></li>
+                    <li><a href="#label">`sync:label`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
                     <li><a href="#defaultFor">`sync:defaultFor`</a></li>
                     <li><a href="#trackType">`sync:trackType`</a></li>
@@ -444,8 +444,8 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#param">`param`</a></td>
             <td>
                 <ul>
-                    <li><a href="#name">`name`</a></li>
-                    <li><a href="#value">`value`</a></li>
+                    <li><a href="#name">`name`</a> <span class="deemph">(required)</span></li>
+                    <li><a href="#value">`value`</a> <span class="deemph">(required)</span></li>
                 </ul>
             </td>
             <td>Empty</td>
@@ -517,7 +517,7 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#clipBegin">`clipBegin`</a></li>
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
@@ -531,7 +531,7 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#image">`image`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                 </ul>
@@ -550,7 +550,7 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
@@ -564,7 +564,7 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#text">`text`</a></td>
             <td>
                 <ul>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
@@ -582,7 +582,7 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
-                    <li><a href="#src">`src`</a></li>
+                    <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#track">`sync:track`</a></li>
                 </ul>
             </td>
