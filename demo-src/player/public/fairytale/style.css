@@ -1,0 +1,36 @@
+body {
+    font-family: Verdana, sans-serif;
+    line-height: 1.5;
+    background-color: black;
+    color: white;
+}
+body {
+    display: flex;
+}
+.highlight {
+    color: greenyellow;
+}
+
+.phase1 {
+    background-color: red;
+}
+
+.phase2 {
+    background-color: green;
+}
+.phase3 {
+    background-color: blue;
+}
+.phase4 {
+    background-color: yellow;
+    content:  "HI";
+}
+
+#square {
+    height: 30rem;
+    width: 30rem;
+    opacity: 50%;
+    transition-property: color;
+    transition-duration: 2s;
+    transition-delay: 1s;
+}

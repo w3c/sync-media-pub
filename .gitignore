@@ -1,7 +1,6 @@
 .DS_Store
 node_modules
-demo/player-bkup
-demo/synclib/tests/files/packaged
+demo-src/player-bkup
 notes
 .DS_Store
 examples

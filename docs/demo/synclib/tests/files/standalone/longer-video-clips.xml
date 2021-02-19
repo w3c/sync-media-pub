@@ -1,0 +1,29 @@
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:sync="https://w3c.github.io/sync-media-pub/" version="3.0">
+    <head>
+        <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+            <dc:description>The video clips in each par have the longest duration. The &lt;par&gt; is not done until all its children are done.</dc:description>
+        </metadata>
+        <sync:track sync:defaultSrc="chapter01.html" sync:defaultFor="text" sync:label="Page" sync:trackType="contentDocument">
+            <param name="cssClass" value="highlight"/>
+        </sync:track>
+        <sync:track sync:defaultSrc="chapter01.mp3" sync:defaultFor="audio" sync:label="Narration" sync:trackType="audioNarration"/>
+        <sync:track sync:defaultSrc="vid.mov" sync:defaultFor="video" sync:label="Sign language" sync:trackType="signLanguageVideo"/>
+    </head>
+    <body>
+        <par>
+            <audio clipBegin="0" clipEnd="10"/>
+            <video clipBegin="0" clipEnd="15"/>
+            <text src="#heading_1"/>
+        </par>
+        <par>
+            <audio clipBegin="10" clipEnd="20"/>
+            <video clipBegin="15" clipEnd="30"/>
+            <text src="#para_01"/>
+        </par>
+        <par>
+            <audio clipBegin="20" clipEnd="30"/>
+            <video clipBegin="30" clipEnd="45"/>
+            <text src="#para_02"/>
+        </par>
+    </body>
+</smil>

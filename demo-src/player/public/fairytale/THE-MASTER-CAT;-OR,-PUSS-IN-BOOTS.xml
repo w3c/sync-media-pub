@@ -1,0 +1,209 @@
+<smil xmlns="http://www.w3.org/ns/SMIL" xmlns:sync="https://w3c.github.io/sync-media-pub/" version="3.0">
+    <head>
+        <sync:track 
+            sync:label="Page" 
+            sync:defaultSrc="THE-MASTER-CAT;-OR,-PUSS-IN-BOOTS.html" 
+            sync:defaultFor="text"
+            sync:trackType="contentDocument">
+            <param name="cssClass" value="highlight"/>
+        </sync:track>
+        <sync:track 
+            sync:label="Narration" 
+            sync:defaultSrc="http://www.archive.org/download/blue_fairy_book_0707_librivox/bluefairybook_14_lang_64kb.mp3" 
+            sync:defaultFor="audio"
+            sync:trackType="audioNarration">
+            <param name="playbackRate" value="2.0"/>
+        </sync:track>
+        <sync:track
+            sync:label="Background music"
+            sync:defaultSrc="out.mp3"
+            id="background-music-track"
+            sync:trackType="backgroundMusic"/>
+        <sync:track
+            id="colors"
+            sync:label="Color animation"
+            sync:defaultSrc="THE-MASTER-CAT;-OR,-PUSS-IN-BOOTS.html"
+            sync:trackType="contentDocument"/>
+    </head>
+    <body>
+        <par>
+            <text src="#sn-0"/>
+            <audio clipBegin="18.97" clipEnd="22.32"/>
+        </par>
+        <par>
+            <!-- <audio sync:track="background-music-track" clipBegin="0" clipEnd="10">
+            </audio> -->
+            <seq>
+                
+                <par>
+                    <text src="#sn-1"/>
+                    <audio clipBegin="22.32" clipEnd="45.07"/>
+                    <text src="#square">
+                        <param name="cssClass" value="phase1"/>
+                    </text>
+                </par>
+                <par>
+                    <text src="#sn-2"/>
+                    <audio clipBegin="45.07" clipEnd="56.74"/>
+                    <text src="#square">
+                        <param name="cssClass" value="phase2"/>
+                    </text>
+                </par>
+                <par>
+                    <text src="#sn-3"/>
+                    <audio clipBegin="56.74" clipEnd="63.05"/>
+                    <text src="#square">
+                        <param name="cssClass" value="phase3"/>
+                    </text>
+                </par>
+                <par>
+                    <text src="#sn-4"/>
+                    <audio clipBegin="63.05" clipEnd="76.09"/>
+                    <text src="#square">
+                        <param name="cssClass" value="phase4"/>
+                    </text>
+                </par>
+                <par>
+                    <text src="#sn-5"/>
+                    <audio clipBegin="76.09" clipEnd="119.51"/>
+                </par>
+                <par>
+                    <text src="#sn-6"/>
+                    <audio clipBegin="119.51" clipEnd="141.96"/>
+                </par>
+                <par>
+                    <text src="#sn-7"/>
+                    <audio clipBegin="141.96" clipEnd="153.10"/>
+                </par>
+                <par>
+                    <text src="#sn-8"/>
+                    <audio clipBegin="153.10" clipEnd="158.30"/>
+                </par>
+                <par>
+                    <text src="#sn-9"/>
+                    <audio clipBegin="158.30" clipEnd="180.26"/>
+                </par>
+                <par>
+                    <text src="#sn-10"/>
+                    <audio clipBegin="180.26" clipEnd="195.94"/>
+                </par>
+                <par>
+                    <text src="#sn-11"/>
+                    <audio clipBegin="195.94" clipEnd="205.15"/>
+                </par>
+                <par>
+                    <text src="#sn-12"/>
+                    <audio clipBegin="205.15" clipEnd="214.39"/>
+                </par>
+                <par>
+                    <text src="#sn-13"/>
+                    <audio clipBegin="214.39" clipEnd="218.44"/>
+                </par>
+                <par>
+                    <text src="#sn-14"/>
+                    <audio clipBegin="218.44" clipEnd="245.02"/>
+                </par>
+                <par>
+                    <text src="#sn-15"/>
+                    <audio clipBegin="245.02" clipEnd="255.33"/>
+                </par>
+                <par>
+                    <text src="#sn-16"/>
+                    <audio clipBegin="255.33" clipEnd="287.19"/>
+                </par>
+                <par>
+                    <text src="#sn-17"/>
+                    <audio clipBegin="287.19" clipEnd="296.11"/>
+                </par>
+                <par>
+                    <text src="#sn-18"/>
+                    <audio clipBegin="296.11" clipEnd="301.37"/>
+                </par>
+                <par>
+                    <text src="#sn-19"/>
+                    <audio clipBegin="301.37" clipEnd="307.98"/>
+                </par>
+                <par>
+                    <text src="#sn-20"/>
+                    <audio clipBegin="307.98" clipEnd="313.86"/>
+                </par>
+                <par>
+                    <text src="#sn-21"/>
+                    <audio clipBegin="313.86" clipEnd="318.91"/>
+                </par>
+                <par>
+                    <text src="#sn-22"/>
+                    <audio clipBegin="318.91" clipEnd="327.65"/>
+                </par>
+                <par>
+                    <text src="#sn-23"/>
+                    <audio clipBegin="327.65" clipEnd="334.32"/>
+                </par>
+                <par>
+                    <text src="#sn-24"/>
+                    <audio clipBegin="334.32" clipEnd="352.55"/>
+                </par>
+                <par>
+                    <text src="#sn-25"/>
+                    <audio clipBegin="352.55" clipEnd="375.10"/>
+                </par>
+                <par>
+                    <text src="#sn-26"/>
+                    <audio clipBegin="375.10" clipEnd="379.80"/>
+                </par>
+                <par>
+                    <text src="#sn-27"/>
+                    <audio clipBegin="379.80" clipEnd="390.86"/>
+                </par>
+                <par>
+                    <text src="#sn-28"/>
+                    <audio clipBegin="390.86" clipEnd="397.14"/>
+                </par>
+                <par>
+                    <text src="#sn-29"/>
+                    <audio clipBegin="397.14" clipEnd="418.29"/>
+                </par>
+                <par>
+                    <text src="#sn-30"/>
+                    <audio clipBegin="418.29" clipEnd="432.96"/>
+                </par>
+                <par>
+                    <text src="#sn-31"/>
+                    <audio clipBegin="432.96" clipEnd="437.13"/>
+                </par>
+                <par>
+                    <text src="#sn-32"/>
+                    <audio clipBegin="437.13" clipEnd="445.42"/>
+                </par>
+                <par>
+                    <text src="#sn-33"/>
+                    <audio clipBegin="445.42" clipEnd="457.35"/>
+                </par>
+                <par>
+                    <text src="#sn-34"/>
+                    <audio clipBegin="457.35" clipEnd="461.31"/>
+                </par>
+                <par>
+                    <text src="#sn-35"/>
+                    <audio clipBegin="461.31" clipEnd="473.06"/>
+                </par>
+                <par>
+                    <text src="#sn-36"/>
+                    <audio clipBegin="473.06" clipEnd="502.70"/>
+                </par>
+                <par>
+                    <text src="#sn-37"/>
+                    <audio clipBegin="502.70" clipEnd="507.33"/>
+                </par>
+                <par>
+                    <text src="#sn-38"/>
+                    <audio clipBegin="507.33" clipEnd="515.50"/>
+                </par>
+                <par>
+                    <text src="#sn-39"/>
+                    <audio clipBegin="515.50" clipEnd="521.11"/>
+                </par>
+            </seq>
+        </par>
+    </body>
+</smil>
