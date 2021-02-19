@@ -3,10 +3,13 @@ title: SyncMedia Community Group Overview
 ---
 This is an overview of work being done by the Synchronized Media for Publications Community Group.
 
+* [Github repository](https://github.com/w3c/sync-media-pub)
+* [Mailing list archives](https://lists.w3.org/Archives/Public/public-sync-media-pub/)
+
 ## Introduction
 
 ### History
-The [Synchronized Media for Publications Community Group](#https://www.w3.org/community/sync-media-pub/) was formed to recommend the best way to synchronize media with document formats being developed by the
+The [Synchronized Media for Publications Community Group](https://www.w3.org/community/sync-media-pub/) was formed to recommend the best way to synchronize media with document formats being developed by the
 [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/), in order to make publications accessible to people with different types of reading requirements.
 
 ### Present
