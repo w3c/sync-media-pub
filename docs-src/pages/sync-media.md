@@ -3,7 +3,7 @@ title: SyncMedia 1.0
 layout: spec.njk
 ---
 <section id="abstract">
-    <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of different types of media, orchestrated in a timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
+    <p>This specification defines SyncMedia, an XML format for synchronized media presentations. A presentation consists of different types of media, orchestrated in a timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
 </section>
 
 <section id="sotd">
@@ -14,13 +14,23 @@ layout: spec.njk
 
 ## Relationship to Other Specifications
 
-SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishing/epub32/epub-mediaoverlays.html) and, like Media Overlays, is built on [[SMIL3]]. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom extensions. 
+SyncMedia is an evolution of [EPUB3 Media Overlays](https://www.w3.org/publishing/epub32/epub-mediaoverlays.html) and, like Media Overlays, is built on [[SMIL3]]. Compared to Media Overlays, SyncMedia incorporates additional SMIL concepts, and also includes custom features. 
 
 A more detailed comparison of SyncMedia to both SMIL3 and EPUB3 Media Overlays can be found in the [SyncMedia Explainer](explainer.html#relationship-to-smil3-and-epub-media-overlays).
 
 ## SyncMedia
 
-This section defines SyncMedia's terms and properties, and gives examples. The examples in this document are expressed as SMIL XML with the `sync` namespace used for custom extensions. 
+SyncMedia is an XML format for synchronized media presentations. It uses a subset of [[SMIL3]] and also defines its own custom features. SyncMedia files use the filename extension `.sync`. 
+
+The default namespace for SyncMedia is that of SMIL: `http://www.w3.org/ns/SMIL`. 
+
+SyncMedia custom features use the SyncMedia namespace, which is `https://w3.github.io/sync-media-pub`.
+
+::: {.note}
+This is a placeholder namespace URL; see [issue 36](https://github.com/w3c/sync-media-pub/issues/36)
+:::
+
+This section defines SyncMedia's elements and attributes, and gives examples. 
 
 ### Definitions  
 
@@ -57,46 +67,51 @@ This section defines SyncMedia's terms and properties, and gives examples. The e
 
 ### Document Structure
 
+Each SyncMedia document MUST have a `smil` element as its root. 
+
 A SyncMedia document contains two parts: a `head` and a `body`. The head contains metainformation and track information. The temporal presentation of media objects is laid out in the body. Time containers can be used to render media in parallel or to arrange sequences. 
 
 A SyncMedia document MUST have a `body`. It MAY have a `head`.
 
-| Term | Data type | Description |
-| -----| --------- | ------------|
-| `head`{#head} | Node | Information not related to temporal behavior |
-| `body`{#body} | Node | Main [=sequential time container=] for the presentation. |
+| Element | Description |
+| --------|-------------|
+| `smil`{#smil} | Root element |
+| `head`{#head} | Information not related to temporal behavior |
+| `body`{#body} | Main [=sequential time container=] for the presentation. |
 
 ### Time Containers
 
-Media objects are arranged in time containers, which determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers MAY be nested in other time containers (but MUST NOT be nested  in media objects).
+Media objects are arranged in time containers, which determine whether they are rendered together (in parallel) or one after the other (in sequence). Time containers MAY be nested in other time containers (but MUST NOT be nested in media objects).
 
-| Term | Data type | Description |
-| -----| --------- | ------------|
-| `seq`{#seq} | Node | A [=sequential time container=] for media and/or time containers. |
-| `par`{#par} | Node | A [=parallel time container=] for media and/or time containers. | 
+| Element | Description |
+|---------|-------------|
+| `seq`{#seq} | A [=sequential time container=] for media and/or time containers. |
+| `par`{#par} | A [=parallel time container=] for media and/or time containers. | 
 
 
 {% example "Using time containers to associate text references with audio clips, to create a synchronized text and audio presentation"%}
-<body>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
-        <text src="chapter01.html#heading_01"/>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
-        <text src="chapter01.html#para_01"/>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
-        <text src="chapter01.html#para_02"/>
-    </par>
-</body>
+<smil xmlns="http://www.w3.org/ns/SMIL">
+    <body>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
+            <text src="chapter01.html#heading_01"/>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
+            <text src="chapter01.html#para_01"/>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
+            <text src="chapter01.html#para_02"/>
+        </par>
+    </body>
+</smil>
 {% endexample %}
 
 
 <section id="structural-semantics">
 <h4>Structural semantics</h4>
-<p>Structural semantics MAY be added to time containers via the <a href="#role"><code>role</code></a> property. Values MUST come from <a href="https://www.w3.org/TR/wai-aria/#document_structure_roles">WAI-ARIA Document Structure</a> or <a href="https://www.w3.org/TR/dpub-aria-1.0/">DPUB-ARIA</a>.</p>
+<p>Structural semantics MAY be added to time containers via the <a href="#sync:role"><code>sync:role</code></a> attribute. Values MUST come from <a href="https://www.w3.org/TR/wai-aria/#document_structure_roles">WAI-ARIA Document Structure</a> or <a href="https://www.w3.org/TR/dpub-aria-1.0/">DPUB-ARIA</a>.</p>
 
 <section class="informative">
 <h5>Benefits of structural semantics</h5>
@@ -105,11 +120,11 @@ Media objects are arranged in time containers, which determine whether they are 
 </section>
 </section>
 
-#### Properties
+#### Attributes
 
-| Term | Data type | Description |
-| -----| --------- | ------------|
-| `role`{#role} | One or more `strings` | Semantic role(s) | 
+| Attribute | Description |
+|-----------|-------------|
+| `sync:role`{#sync:role} | One or more semantic role(s) | 
 
  
 
@@ -119,20 +134,22 @@ __TODO__
 :::
 
 {% example "Using role to mark a page number" %}
-<body>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
-        <text src="chapter01.html#para_02"/>
-    </par>
-    <par sync:role="doc-pagebreak">
-        <audio src="chapter01.mp3" clipBegin="60" clipEnd="62"/>
-        <text src="chapter01.html#pg_04"/>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="62" clipEnd="70"/>
-        <text src="chapter01.html#para_03"/>
-    </par>
-</body>
+<smil xmlns="http://www.w3.org/ns/SMIL" sync:xmlns="https://w3.github.io/sync-media-pub">
+    <body>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
+            <text src="chapter01.html#para_02"/>
+        </par>
+        <par sync:role="doc-pagebreak">
+            <audio src="chapter01.mp3" clipBegin="60" clipEnd="62"/>
+            <text src="chapter01.html#pg_04"/>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="62" clipEnd="70"/>
+            <text src="chapter01.html#para_03"/>
+        </par>
+    </body>
+</smil>
 {% endexample %}
 
 ### Media Objects
@@ -141,33 +158,33 @@ Media resources are included in SyncMedia via media objects. The actual media re
 
 The table below describes the media objects in SyncMedia. `Ref` can be used to represent any media, but authors often prefer to use media type-specific synonyms.
 
-| Term | Data type | Description |
-| -----| --------- | ----------- | 
-| `audio`{#audio} | Node | References audio media.| 
-| `image`{#image} | Node | References image media.|
-| `ref`{#ref} | Node | Generic media reference | 
-| `text`{#text} | Node | References content in an external text-based document.|
-| `video`{#video} | Node | References video media.|
+| Element | Description |
+|---------|-------------|
+| `audio`{#audio} | References audio media.| 
+| `image`{#image} | References image media.|
+| `ref`{#ref} | Generic media reference | 
+| `text`{#text} | References content in an external text-based document.|
+| `video`{#video} | References video media.|
 
-#### Properties
+#### Attributes
 
-Properties on media objects are used to 
+Attributes on media objects are used to 
 * express the location of the media source, including segment
 * assign a media object to a [=track=]
 * indicate that a media object repeats
 
-| Term | Data type | Description |
-| -----| --------- | ------------|
-| `clipBegin`{#clipBegin}| Media clip value, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipBegin">clipBegin</a> | Start of a timed media clip | 
-| `clipEnd`{#clipEnd} | Media clip value, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipEnd">clipEnd</a> | End of a timed media clip |
-| `panZoom`{#panZoom} | Ordered list of 4 values, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>| Rectangular portion of media object |
-| `repeatCount`{#repeatCount} | Number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> | For timed media. Specifies the number of iterations. |
-| `src`{#src} | URL | Location of media file, optionally including a media fragment [[media-frags]] | 
-| `track`{#trackref} | ID | Specifies the ID of a track.|
+| Attribute | Description |
+|-----------|-------------|
+| `clipBegin`{#clipBegin}| Start of a timed media clip, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipBegin">clipBegin</a> | 
+| `clipEnd`{#clipEnd} | End of a timed media clip, as in SMIL3's <a data-cite="SMIl3/smil30.html#smil-extended-media-object-adef-clipEnd">clipEnd</a> |
+| `panZoom`{#panZoom} | Rectangular portion of media object, as in SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-adef-panZoom">panZoom</a>|
+| `repeatCount`{#repeatCount} | Specifies the number of iterations of a timed media object. Values are a number, or "indefinite", as in SMIL3's <a data-cite="SMIL3/smil-timing.html#adef-repeatCount">repeatCount</a> |
+| `src`{#src} | URL of media file, optionally including a media fragment [[media-frags]] | 
+| `sync:track`{#sync:trackref} | ID of a `sync:track` element.|
 
 
 ::: {.note}
-EPUB Media Overlays <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> are considered valid clip begin and end values, because the [SMIL MediaClipping Module](https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping) states that if no metric specifier is given, Normal Play time (`npt`) is assumed (not `smpte`).
+EPUB Media Overlays <a href="https://www.w3.org/publishing/epub/epub-mediaoverlays.html#app-clock-examples">clock values</a> are considered valid clip begin and end values, because the [SMIL MediaClipping Module](https://www.w3.org/TR/SMIL/smil-extended-media-object.html#smilMediaNS-MediaClipping) states that if no metric specifier is given, Normal Play Time (`npt`) is assumed (not `smpte`).
 :::
 
 If both an `src` with a media fragment and `clipBegin`/`clipEnd` attributes are present, clipping MUST be applied to the resource with respect to the media fragment offset(s), as defined in [All Media Fragment Clients](https://www.w3.org/TR/media-frags/#media-fragment-clients). 
@@ -180,6 +197,8 @@ It is RECOMMENDED to use a media fragment on `src` to refer to a large chunk of 
 
 Embedded media, such as a video in an HTML document, MAY be referenced by the URL of its embedding document plus a selector.
 
+Therefore, [=media object renderer=]s SHOULD support opening an HTML document and dereferencing content based on a selector.
+
 {% example "Referring to video media contained within an HTML document" %}
 <par>
     <text src="doc.html#para1"/>
@@ -187,56 +206,60 @@ Embedded media, such as a video in an HTML document, MAY be referenced by the UR
 </par>
 {% endexample %}
 
+
+
 #### Parameters
 
 SyncMedia uses SMIL3's <a data-cite="SMIL3/smil30.html#smil-extended-media-object-edef-param">param</a> to send parameters to [=media object renderer=]s.
 
-| Term | Data type | Description |
-| -----| --------- | ------------|
-| `param`{#param} | Node | Name/value pair sent to a media object renderer. |
+| Element | Description |
+|---------|-------------|
+| `param`{#param} | Media object rendering parameter. |
 
-The properties of `param` are:
+The attributes for `param` are:
 
-| Term | Data type | Description |
-| -----| ----------|-------------|
-| `name`{#name} | `string` | Parameter name |
-| `value`{#value} | `string` | Parameter value |
+| Attribute | Description |
+|-----------|-------------|
+| `name`{#name} | Parameter name |
+| `value`{#value} | Parameter value |
 
-The following parameter `name`s are defined:
+The following parameter `name` values are defined:
 
-| Name | Allowed value(s) | For media type | Description | 
+| Name | Allowed value(s) | Description | For media object(s) | 
 |------| ------|------------|-------------|
-| `cssClass` | One or more strings | Media that can be styled with CSS | Indicates class name(s) to apply |
-| `clipPath` | As defined by the [SVG path data attribute](https://www.w3.org/TR/SVG11/paths.html#DAttribute) | Visual media | The shape that will be used to apply a clip mask to the media |
-| `pan` | Between -1 (full left) and 1 (full right) | Audible media | Indicates the volume pan |
-| `playbackRate` | 1.0 (normal rate), less, or more | Timed media | Indicates the playback rate. Values SHOULD align with HTML's {%raw%}{{HTMLMediaElement/playbackRate}}{%endraw%}. |
-| `volume` | Between 0 and 1 | Audible media | Indicates the volume |
+| `cssClass` | One or more strings | Indicates class name(s) to apply | Media that can be styled with CSS | 
+| `clipPath` | As defined by the [SVG path data attribute](https://www.w3.org/TR/SVG11/paths.html#DAttribute) | The shape that will be used to apply a clip mask to the media | Visual media |
+| `pan` | Between -1 (full left) and 1 (full right) | Indicates the left/right pan | Audible media |
+| `playbackRate` | 1.0 (normal rate), less, or more | Indicates the playback rate. Values SHOULD align with HTML's {%raw%}{{HTMLMediaElement/playbackRate}}{%endraw%}. | Timed media |
+| `volume` | Between 0 and 1 | Indicates the volume | Audible media |
 
 ::: {.note}
 `clipPath` specifies a clipping path using an SVG path definition. The clipping is applied to the visible region of the Media Object on which it is defined. When combined with `panZoom`, the `clipPath` SHOULD be applied inside the rect defined by the `panZoom` attribute.
 :::
 
 {% example "Using param to add synchronized highlighting to HTML element" %}
-<body>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
-        <text src="chapter01.html#heading_01">
-            <param name="cssClass" value="highlight"/>
-        </text>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
-        <text src="chapter01.html#para_01">
-            <param name="cssClass" value="highlight"/>
-        </text>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
-        <text src="chapter01.html#para_02">
-            <param name="cssClass" value="highlight"/>
-        </text>
-    </par>
-</body>
+<smil xmlns="http://www.w3.org/ns/SMIL">
+    <body>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
+            <text src="chapter01.html#heading_01">
+                <param name="cssClass" value="highlight"/>
+            </text>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
+            <text src="chapter01.html#para_01">
+                <param name="cssClass" value="highlight"/>
+            </text>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="50" clipEnd="60"/>
+            <text src="chapter01.html#para_02">
+                <param name="cssClass" value="highlight"/>
+            </text>
+        </par>
+    </body>
+</smil>
 {% endexample %}
 
 
@@ -250,18 +273,18 @@ SyncMedia presentations organize media objects of the same types into virtual sp
 
 All of these features reduce verbosity as otherwise these properties would have to be explicitly stated on each media object. 
 
-| Term | Description |
-| -----| ----------- |
-| `track`{#track} | A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` MAY have [=media parameters=], which act as defaults for [=Media Objects=] on that track.  |
+| Element | Description |
+|---------|-------------|
+| `sync:track`{#sync:track} | A virtual space to which [=Media Objects=] are assigned. A user agent MAY offer interface controls on a per-track basis (e.g. adjust volume on the narration track). A `sync:track` MAY have [=media parameters=], which act as defaults for [=Media Objects=] on that track.  |
 
-#### Properties
+#### Attributes
 
-| Term | Data type | Description |
-| -----| --------- | ------------|
-| `label`{#label} | `string` | The track's label |
-| `defaultSrc`{#defaultSrc} | `URL` | Source of the default file that media objects on this track will use.|
-| `defaultFor`{#defaultFor} | One of: `audio`, `image`, `video`, `text`, `ref` | Media objects of the type specified are automatically assigned to this track. |
-| `trackType`{#trackType} | One of: `backgroundAudio`, `audioNarration`, `signLanguageVideo`, `contentDocument` | Presentation feature embodied by this track. |
+| Attribute | Description |
+|-----------|-------------|
+| `sync:label`{#sync:label} | The track's label |
+| `sync:defaultSrc`{#sync:defaultSrc} | URL of the default file that media objects on this track will use.|
+| `sync:defaultFor`{#sync:defaultFor} | Media objects of the type specified (one of: `audio`, `image`, `video`, `text`, `ref`) are automatically assigned to this track. |
+| `sync:trackType`{#sync:trackType} | Indicates which presentation feature is embodied by this track. |
 
 ::: .TODO
 __TODO__:
@@ -270,66 +293,70 @@ __TODO__:
 
 
 {% example "A track for an HTML document with default values and a cssClass param" %}
-<head>
-    <sync:track sync:label="Page" sync:defaultFor="text" 
-        sync:defaultSrc="chapter01.html" sync:trackType="contentDocument">
-        <param name="cssClass" value="highlight"/>
-    </sync:track>
-</head>
-<body>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
-        <text src="#heading_01"/>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
-        <text src="#para_01"/>
-    </par>
-    <par>
-        <audio src="chapter01.mp3" clipEnd="50" clipEnd="60"/>
-        <text src="#para_02"/>
-    </par>
-</body>
+<smil xmlns="http://www.w3.org/ns/SMIL" sync:xmlns="https://w3.github.io/sync-media-pub">
+    <head>
+        <sync:track sync:label="Page" sync:defaultFor="text" 
+            sync:defaultSrc="chapter01.html" sync:trackType="contentDocument">
+            <param name="cssClass" value="highlight"/>
+        </sync:track>
+    </head>
+    <body>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
+            <text src="#heading_01"/>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
+            <text src="#para_01"/>
+        </par>
+        <par>
+            <audio src="chapter01.mp3" clipEnd="50" clipEnd="60"/>
+            <text src="#para_02"/>
+        </par>
+    </body>
+</smil>
 {% endexample %}
 
 {% example "Two audio tracks: one for narration (the default track for audio media objects), and one for background music."%}
-<head>
-    <sync:track id="background-music" sync:trackType="backgroundAudio">
-        <param name="volume" value="0.5"/>
-    </sync:track>
-    <sync:track sync:label="Narration" sync:defaultFor="audio" sync:trackType="audioNarration"/>
-    <sync:track sync:label="Page" sync:defaultFor="text" sync:trackType="contentDocument">
-        <param name="cssClass" value="highlight"/>
-    </sync:track>
-</head>
-<body>
-    <par>
-        <audio sync:track="background-music" src="bkmusic.mp3" repeat="indefinite"/>
-        <seq>
-            <par>
-                <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
-                <text src="chapter01.html#heading_01"/>
-            </par>
-            <par>
-                <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
-                <text src="chapter01.html#para_01"/>
-            </par>
-            <par>
-                <audio src="chapter01.mp3" clipEnd="50" clipEnd="60"/>
-                <text src="chapter01.html#para_02"/>
-            </par>
-        </seq>
-    </par>
-</body>
+<smil xmlns="http://www.w3.org/ns/SMIL" sync:xmlns="https://w3.github.io/sync-media-pub">
+    <head>
+        <sync:track id="background-music" sync:trackType="backgroundAudio">
+            <param name="volume" value="0.5"/>
+        </sync:track>
+        <sync:track sync:label="Narration" sync:defaultFor="audio" sync:trackType="audioNarration"/>
+        <sync:track sync:label="Page" sync:defaultFor="text" sync:trackType="contentDocument">
+            <param name="cssClass" value="highlight"/>
+        </sync:track>
+    </head>
+    <body>
+        <par>
+            <audio sync:track="background-music" src="bkmusic.mp3" repeat="indefinite"/>
+            <seq>
+                <par>
+                    <audio src="chapter01.mp3" clipBegin="30" clipEnd="40"/>
+                    <text src="chapter01.html#heading_01"/>
+                </par>
+                <par>
+                    <audio src="chapter01.mp3" clipBegin="40" clipEnd="50"/>
+                    <text src="chapter01.html#para_01"/>
+                </par>
+                <par>
+                    <audio src="chapter01.mp3" clipEnd="50" clipEnd="60"/>
+                    <text src="chapter01.html#para_02"/>
+                </par>
+            </seq>
+        </par>
+    </body>
+</smil>
 {% endexample %}
 
-The reason for including a narration `track`, even though it supplies no default values, is because it would enable a user agent to have separate controls for narration audio vs background music audio. {.note}
+The reason for including a narration `sync:track`, even though it supplies no default values, is because it would enable a user agent to have separate controls for narration audio vs background music audio. {.note}
 
 
 ### Metadata
 SyncMedia has a generic mechanism for incorporating metadata but does not define any specific metadata. Metadata MUST go in the SyncMedia document `head`.
 
-| Term | Description |
+| Element | Description |
 | -----| ----------- |
 | `metadata`{#metadata} | Extension point that allows the inclusion of metadata from any metainformation structuring language |
 
@@ -344,7 +371,7 @@ SyncMedia has a generic mechanism for incorporating metadata but does not define
 
 | Track attribute | Impact on media object |
 |-----------------|------------------------|
-| defaultSrc      | Provides the `src` for the media object. If the media object has an `src` which is only a selector, then the selector is appended to the track's `defaultSrc`. Any other value for a media object `src` overrides the track's `defaultSrc`. |
+| `sync:defaultSrc` | Provides the `src` for the media object. If the media object has an `src` which is only a selector, then the selector is appended to the track's `sync:defaultSrc`. Any other value for a media object `src` overrides the track's `sync:defaultSrc`. |
 
 In addition, any [=media parameters=] defined for a track are inherited by any media objects on that track. The exception is when the media objects themselves provide a parameter of the same `name`, in which case, the media object's parameter `value` overrides the track's parameter `value`.
 
@@ -352,7 +379,7 @@ In addition, any [=media parameters=] defined for a track are inherited by any m
 
 After the SyncMedia document has been processed, it is ready to be rendered.
 
-| Object | Rendering behavior | 
+| Element | Rendering behavior | 
 |--------|--------------------|
 | `body` | Render like `seq`  |
 | `seq` | Render each child in order, each starting after the previous completes. Done when the last child is finished.|
@@ -377,29 +404,34 @@ __TODO__: how much to cover here?
 * Exposing controls for multitrack presentations
 * Note about global adjustments and track types (indicated by `trackType`) that they might not make sense for, e.g. speeding up a presentation but not speeding up the background music.
 
-## Encoding and Serialization
+## XML
 
-::: .TODO
-__TODO__: 
-[Issue 10](https://github.com/w3c/sync-media-pub/issues/10)
-:::
+### Additional attributes
 
-### XML
+In addition to the attributes already covered, this section adds the following standard XML attributes:
 
-Note about global XML attributes applying everywhere, e.g. `id` {.note}
+| Attribute | Description |
+|-----------|-------------|
+| `xml:base`{#xml:base} | Document base URL, as defined in [[XMLBASE]] |
+| `xml:id`{#xml:id} | Unique identifier for an element, as defined in [[XML-ID]]|
+| `xml:lang`{#xml:lang} | Language identifier, as defined in [[XML]] |
 
-Note about the root element `smil`, which hasn't been mentioned yet {.note}
+### Content model
 
-Note about custom extensions in the `sync` namespace {.note}
-
-#### Content model
+This is the XML content model for SyncMedia. Required elements and attributes are indicated.
 
 <table summary="XML content model for SyncMedia">
     <thead><tr><th>Element</th><th>Attributes</th><th>Content</th></tr></thead>
     <tbody>
         <tr>
-            <td>`smil`</td>
-            <td>None</td>
+            <td><a href="#smil">`smil`</a> <span class="deemph">(required)</span></td>
+            <td>
+                <ul>
+                    <li><a href="#xml:base">`xml:base`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
+                </ul>
+            </td>
             <td>
                 In this order:
                 <ul>
@@ -410,28 +442,40 @@ Note about custom extensions in the `sync` namespace {.note}
         </tr>
         <tr>
             <td><a href="#head">`head`</a></td>
-            <td>None</td>
+            <td>
+                <ul>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
+                </ul>
+            </td>
             <td>
                 In any order:
                 <ul>
                     <li><a href="#metadata">`metadata`</a> (0 or more)</li>
-                    <li><a href="#track">`sync:track`</a> (0 or more)</li>
+                    <li><a href="#sync:track">`sync:track`</a> (0 or more)</li>
                 </ul>
             </td>
         </tr>
         <tr>
             <td><a href="#metadata">`metadata`</a></td>
-            <td>None</td>
+            <td>
+                <ul>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
+                </ul>
+            </td>
             <td>0 or more elements from any namespace</td>
         </tr>
         <tr>
-            <td><a href="#track">`sync:track`</a></td>
+            <td><a href="#sync:track">`sync:track`</a></td>
             <td>
                 <ul>
-                    <li><a href="#label">`sync:label`</a> <span class="deemph">(required)</span></li>
-                    <li><a href="#defaultSrc">`sync:defaultSrc`</a></li>
-                    <li><a href="#defaultFor">`sync:defaultFor`</a></li>
-                    <li><a href="#trackType">`sync:trackType`</a></li>
+                    <li><a href="#sync:label">`sync:label`</a> <span class="deemph">(required)</span></li>
+                    <li><a href="#sync:defaultSrc">`sync:defaultSrc`</a></li>
+                    <li><a href="#sync:defaultFor">`sync:defaultFor`</a></li>
+                    <li><a href="#sync:trackType">`sync:trackType`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -446,6 +490,8 @@ Note about custom extensions in the `sync` namespace {.note}
                 <ul>
                     <li><a href="#name">`name`</a> <span class="deemph">(required)</span></li>
                     <li><a href="#value">`value`</a> <span class="deemph">(required)</span></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>Empty</td>
@@ -454,7 +500,9 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#body">`body`</a></td>
             <td>
                 <ul>
-                    <li><a href="#role">`sync:role`</a></li>
+                    <li><a href="#sync:role">`sync:role`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -474,7 +522,9 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#seq">`seq`</a></td>
             <td>
                 <ul>
-                    <li><a href="#role">`sync:role`</a></li>
+                    <li><a href="#sync:role">`sync:role`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -494,7 +544,9 @@ Note about custom extensions in the `sync` namespace {.note}
             <td><a href="#par">`par`</a></td>
             <td>
                 <ul>
-                    <li><a href="#role">`sync:role`</a></li>
+                    <li><a href="#sync:role">`sync:role`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -518,7 +570,9 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#clipEnd">`clipEnd`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
-                    <li><a href="#track">`sync:track`</a></li>
+                    <li><a href="#sync:trackref">`sync:track`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -532,8 +586,10 @@ Note about custom extensions in the `sync` namespace {.note}
             <td>
                 <ul>
                     <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
-                    <li><a href="#track">`sync:track`</a></li>
+                    <li><a href="#sync:trackref">`sync:track`</a></li>
                     <li><a href="#panZoom">`panZoom`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -551,7 +607,9 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
-                    <li><a href="#track">`sync:track`</a></li>
+                    <li><a href="#sync:trackref">`sync:track`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -565,7 +623,9 @@ Note about custom extensions in the `sync` namespace {.note}
             <td>
                 <ul>
                     <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
-                    <li><a href="#track">`sync:track`</a></li>
+                    <li><a href="#sync:trackref">`sync:track`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -583,7 +643,9 @@ Note about custom extensions in the `sync` namespace {.note}
                     <li><a href="#panZoom">`panZoom`</a></li>
                     <li><a href="#repeatCount">`repeatCount`</a></li>
                     <li><a href="#src">`src`</a> <span class="deemph">(required)</span></li>
-                    <li><a href="#track">`sync:track`</a></li>
+                    <li><a href="#sync:trackref">`sync:track`</a></li>
+                    <li><a href="#xml:id">`xml:id`</a></li>
+                    <li><a href="#xml:lang">`xml:lang`</a></li>
                 </ul>
             </td>
             <td>
@@ -594,14 +656,6 @@ Note about custom extensions in the `sync` namespace {.note}
         </tr>
     </tbody>
 </table>
-
-
-### JSON
-
-::: .TODO
-__TODO__:
-Lossless roundtrip from XML to JSON
-:::
 
 ## Acknowledgements {.appendix}
 
