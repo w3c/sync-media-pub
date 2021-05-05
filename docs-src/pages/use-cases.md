@@ -2,7 +2,7 @@
 title: Use cases
 ---
 
-# Comicbooks with guided narration
+## Comicbooks with guided narration
 
 There are hundreds of thousands of existing titles of comicbooks, graphic novels and other publications which storytelling techniques rely heavily on more or less complex page layout. Deconstructing such page designs to fit on smaller screens or adding accessibility features for such publications is very hard, and many times not feasible as entire pages are often rendered as single bitmap images. 
 
@@ -10,7 +10,7 @@ SyncMedia lets an author describe a narrative journey through an existing public
 
 SyncMedia further allows the author to add spoken narration to each step and by doing so add accessibility features such as adding alternate descriptions of the overall context, as specific dialog present in speech bubbles etc.  
 
-# Combined EPUB and Audiobooks
+## Combined EPUB and Audiobooks
 
 A very common use case for synchronization of different types of media is in book subscription services. Users of these services often expect a "seamless" transition between the text rendition and audio renditions of the same book. This is a feature that is hard to develop and maintain since there are no standardized ways to express these synchronization points.
 
@@ -18,39 +18,45 @@ SyncMedia offers a standardized way to add granular to relationships between equ
 
 In addition to acting as a mapping between media formats its explicit linking between locations within the different formats also allow for parallell playback, analogous to the way that EPUB Media Overlays work.
 
-# Sentence-level navigation in Audiobooks
+## Sentence-level navigation in Audiobooks
 
 Junko, an audiobook reader, wants to navigate a W3C Audiobook not only via chapter but also by sentence. In this example, the audiobook does not have any associated HTML text. But even when there is no text equivalent, SyncMedia has the ability to arrange audio segments in a timeline and a SyncMedia-aware player will allow moving through this timeline via segment. This book was produced so that these segments represent sentences, and so Junko can navigate the publication at the sentence level. 
 
-# Add background music
+## Add background music
 
 Olga, a content creator, wants to include background music in her narrated publication. She chooses SyncMedia because it allows her to isolate the background music on its own `sync:track` and also allows her to use different music for different chapters.
 
-# User control over background music
+## User control over background music
 
 Sanjay starts reading a SyncMedia-enhanced publication that contains background music. He wants to mute the background music because he has an [Auditory Processing Disorder](https://www.inpp.org.uk/intervention-adults-children/help-by-diagnosis/auditory-processing-disorder/) that makes the background music very distracting. His SyncMedia-aware player gives him independent control over each `sync:track` and allows him to mute the background music track but leave the narration track unaffected.
 
-# User control over sound effects
+## User control over sound effects
 
 Casey starts reading a SyncMedia-enhanced comic book that includes sound effects in parallel with the narration. They would prefer to hear less of the sound effects and more of the narration. By using a SyncMedia-aware player, they are able to independently adjust the volume levels of the different types of audio, because the author of the comic book has used the `sync:track` feature of SyncMedia to place the sound effects audio on a different track than the narration audio.
 
-# Narrated text book
+## Narrated text book
 
 Francesca, who has low-vision, prefers to read with very large text and simultaneous audio narration. She purchases the SyncMedia-enhanced version of a book for these reasons. When she reads, they can enlarge the HTML-based text, which reflows naturally on whatever size of screen she's using; and with the addition of SyncMedia for narration, the book has audio segments associated with each sentence. Her SyncMedia-aware player not only gives her high-level navigation for moving between publication chapters, but also lets her move by sentence. The experience is seamless because the text and audio remain synchronized throughout. 
 
-# Synchronized text highlighting
+## Synchronized text highlighting
 
 https://w3c.github.io/coga/content-usable/#objective-8-support-adaptation-and-personalization-0
 
 
-# Resume mid-presentation 
+## Resume mid-presentation 
 
 Olivia has been enjoying a SyncMedia-enhanced publication but gets interrupted and has to stop reading. When she resumes later, her SyncMedia-aware player automatically picks up where she left off.
 
-# Speed adjustments
+## Speed adjustments
 
 Juan is listening to a narrated book while also reading the text on a screen. They read slowly and want to reduce the rate of the narration to match. Their SyncMedia-aware player lets them slow down the presentation to 50% and maintains the fidelity of the audio (e.g. pitch) as much as possible. The rate modification does not affect the synchronization aspect of the presentation: the text segments are still aligned with the audio segments, even at a different playback speed.
 
+
+## Regional navigation
+
+David has a fixed layout book where the sequential progression through the main document is not defined by its DOM order but rather by its visual layout. He uses the SyncMedia file to describe the progression, and a SyncMedia-aware reading system has features allowing David's readers to move through the visual narrative accordingly.
+
+In this case, the concept of playback is actually limited to displaying spatial regions, one at a time, controlled by user interaction to move from one to the next.
 
 ## TODO
 
