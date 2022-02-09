@@ -60,3 +60,11 @@ See mailing-list discussion:
 http://lists.w3.org/Archives/Public/public-sync-media-pub/2018Mar/0003.html  
 
 Also see: https://github.com/w3c/publ-a11y/wiki/Publishing-issues-for-Silver#7-media-overlays
+
+## Examples of similar technologies
+
+* [National Geographic Archives](https://archive.org/details/nationalgeograph21890nati/page/108/mode/2up)
+    * TTS
+    * image of a page with a moving highlight
+    * speed up/slow down audio
+    * change page and move thru presentation via slider control

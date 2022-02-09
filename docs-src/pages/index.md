@@ -17,7 +17,21 @@ The [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/) is
 
 ## Documents
 
-The following are the currently available draft documents:
+The following are the currently available documents created in this CG. They represent two different strategies to synchronize media: 1. [With WebVTT](#with-webvtt) and 2. [With SMIL](#with-smil). 
+
+### With WebVTT
+
+This experimental approach defines a usage of WebVTT to synchronize HTML elements with audio. This would be good for combining single straightforward media references, e.g. one audio file for one HTML document. This also is suited to a web browser environment, when combined with a small amount of Javascript. No specialized player is needed.
+
+* [Overview](https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0000.html)
+* [Demos](https://daisy.github.io/accessible-books-in-browsers/#demos)
+* [Sample file](https://github.com/daisy/accessible-books-in-browsers/blob/main/demos/moby-dick/vtt/chapter_001.vtt)
+* [Notes on Incorporating with Audiobooks](https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0003.html)
+
+
+### With SMIL
+
+This approach defines a usage of SMIL plus extensions. This would be good for combining multiple non-destructive media references, e.g. portions of many audio files for one HTML document. This is completely declarative with no associated scripting. This also is suited to a "player" type of environment, where a SyncMedia-aware user agent is rendering the content. Implementation is more involved than the example above with WebVTT.
 
 * [SyncMedia 1.0](sync-media.html)
 * [Explainer](explainer.html)

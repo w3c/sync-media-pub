@@ -4,3 +4,4 @@ demo-src/player-bkup
 notes
 .DS_Store
 examples
+.vscode/launch.json

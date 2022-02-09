@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta charset="utf-8"><link rel="stylesheet" href="css/page.css"/></head>
     <body><h1>SyncMedia Community Group Overview</h1>
-<p>Last updated Fri Feb 19 2021</p>
+<p>Last updated Wed Feb 09 2022</p>
 <p>This is an overview of work being done by the Synchronized Media for Publications Community Group.</p>
 <ul>
 <li><a href="https://github.com/w3c/sync-media-pub">Github repository</a></li>
@@ -25,7 +25,20 @@
 </section>
 <section id="documents">
 <h2>Documents</h2>
-<p>The following are the currently available draft documents:</p>
+<p>The following are the currently available documents created in this CG. They represent two different strategies to synchronize media: 1. <a href="#with-webvtt">With WebVTT</a> and 2. <a href="#with-smil">With SMIL</a>.</p>
+<section id="with-webvtt">
+<h3>With WebVTT</h3>
+<p>This experimental approach defines a usage of WebVTT to synchronize HTML elements with audio. This would be good for combining single straightforward media references, e.g. one audio file for one HTML document. This also is suited to a web browser environment, when combined with a small amount of Javascript. No specialized player is needed.</p>
+<ul>
+<li><a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0000.html">Overview</a></li>
+<li><a href="https://daisy.github.io/accessible-books-in-browsers/#demos">Demos</a></li>
+<li><a href="https://github.com/daisy/accessible-books-in-browsers/blob/main/demos/moby-dick/vtt/chapter_001.vtt">Sample file</a></li>
+<li><a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0003.html">Notes on Incorporating with Audiobooks</a></li>
+</ul>
+</section>
+<section id="with-smil">
+<h3>With SMIL</h3>
+<p>This approach defines a usage of SMIL plus extensions. This would be good for combining multiple non-destructive media references, e.g. portions of many audio files for one HTML document. This is completely declarative with no associated scripting. This also is suited to a &quot;player&quot; type of environment, where a SyncMedia-aware user agent is rendering the content. Implementation is more involved than the example above with WebVTT.</p>
 <ul>
 <li><a href="sync-media.html">SyncMedia 1.0</a></li>
 <li><a href="explainer.html">Explainer</a></li>
@@ -40,6 +53,7 @@
 <li><a href="design-principles.html">Design principles</a></li>
 <li><a href="examples.html">Examples</a></li>
 </ul>
+</section>
 </section>
 <section id="archives">
 <h2>Archives</h2>

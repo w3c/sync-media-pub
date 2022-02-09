@@ -756,6 +756,30 @@ var app = (function () {
             }
             return trackObj;
         });
+        obj.metadata = {};
+        let metadataElm = Array.from(node.getElementsByTagName('metadata'));
+        if (metadataElm.length > 0) {
+            metadataElm = metadataElm[0]; // there's just one <metadata> element
+            Array.from(metadataElm.children).map(metaElm => {
+                // support <meta name=".." content=".."/>
+                // and
+                // <customTag>value</customTag> e.g. <dc:description>...</dc:description>
+                if (metaElm.tagName == 'meta') {
+                    let name = metaElm.getAttribute('name');
+                    let content = metaElm.getAttribute('content');
+                    if (name && content) {
+                        obj.metadata[name] = content;
+                    }
+                }
+                else {
+                    let name = metaElm.tagName;
+                    let content = metaElm.textContent;
+                    if (name && content) {
+                        obj.metadata[name] = content;
+                    }
+                }
+            });
+        }
         return obj;
     }
 
@@ -1698,7 +1722,7 @@ var app = (function () {
     		c: function create() {
     			iframe_1 = element("iframe");
     			attr_dev(iframe_1, "class", "nodisplay svelte-tab4hn");
-    			add_location(iframe_1, file$1, 101, 0, 3399);
+    			add_location(iframe_1, file$1, 109, 0, 3769);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1740,6 +1764,14 @@ var app = (function () {
     	let iframe;
     	let startEvents;
     	let endEvents;
+
+    	// keep track of what class(es) the current step has added
+    	// the user could press prev/next before we reach an end event for the current start event
+    	// so we might have to undo what the start event did manually
+    	let startEventCssClasses = [];
+
+    	let directionOfTimegraph = 1; // 1 = forward; -1 = backward
+    	let timegraphEntryIndex = 0;
 
     	let isInViewport = (elm, doc = iframe.contentDocument) => {
     		let bounding = elm.getBoundingClientRect();
@@ -1861,6 +1893,9 @@ var app = (function () {
     		iframe,
     		startEvents,
     		endEvents,
+    		startEventCssClasses,
+    		directionOfTimegraph,
+    		timegraphEntryIndex,
     		isInViewport,
     		applyStyle,
     		removeStyle,
@@ -1875,6 +1910,9 @@ var app = (function () {
     		if ("iframe" in $$props) $$invalidate(0, iframe = $$props.iframe);
     		if ("startEvents" in $$props) startEvents = $$props.startEvents;
     		if ("endEvents" in $$props) endEvents = $$props.endEvents;
+    		if ("startEventCssClasses" in $$props) startEventCssClasses = $$props.startEventCssClasses;
+    		if ("directionOfTimegraph" in $$props) directionOfTimegraph = $$props.directionOfTimegraph;
+    		if ("timegraphEntryIndex" in $$props) timegraphEntryIndex = $$props.timegraphEntryIndex;
     		if ("isInViewport" in $$props) isInViewport = $$props.isInViewport;
     		if ("applyStyle" in $$props) applyStyle = $$props.applyStyle;
     		if ("removeStyle" in $$props) removeStyle = $$props.removeStyle;
@@ -2328,7 +2366,7 @@ var app = (function () {
     	return block;
     }
 
-    // (65:0) {:then}
+    // (66:0) {:then}
     function create_then_block(ctx) {
     	let t0;
     	let div0;
@@ -2439,21 +2477,21 @@ var app = (function () {
     			button3 = element("button");
     			button3.textContent = "Play";
     			attr_dev(div0, "class", "texts svelte-1x877iy");
-    			add_location(div0, file$4, 70, 0, 1969);
+    			add_location(div0, file$4, 71, 0, 2023);
     			attr_dev(div1, "class", "images");
-    			add_location(div1, file$4, 76, 0, 2094);
+    			add_location(div1, file$4, 77, 0, 2148);
     			attr_dev(div2, "class", "videos");
-    			add_location(div2, file$4, 82, 0, 2222);
+    			add_location(div2, file$4, 83, 0, 2276);
     			button0.disabled = button0_disabled_value = !/*$syncMedia*/ ctx[0].canGotoPreviousPlayable();
     			attr_dev(button0, "class", "svelte-1x877iy");
-    			add_location(button0, file$4, 88, 0, 2350);
+    			add_location(button0, file$4, 89, 0, 2404);
     			button1.disabled = button1_disabled_value = !/*$syncMedia*/ ctx[0].canGotoNextPlayable();
     			attr_dev(button1, "class", "svelte-1x877iy");
-    			add_location(button1, file$4, 89, 0, 2465);
+    			add_location(button1, file$4, 90, 0, 2519);
     			attr_dev(button2, "class", "svelte-1x877iy");
-    			add_location(button2, file$4, 90, 0, 2568);
+    			add_location(button2, file$4, 91, 0, 2622);
     			attr_dev(button3, "class", "svelte-1x877iy");
-    			add_location(button3, file$4, 91, 0, 2608);
+    			add_location(button3, file$4, 92, 0, 2662);
     		},
     		m: function mount(target, anchor) {
     			for (let i = 0; i < each_blocks_3.length; i += 1) {
@@ -2701,14 +2739,14 @@ var app = (function () {
     		block,
     		id: create_then_block.name,
     		type: "then",
-    		source: "(65:0) {:then}",
+    		source: "(66:0) {:then}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (67:0) {#each $syncMedia.assets.filter(a => a.type == "audio") as asset}
+    // (68:0) {#each $syncMedia.assets.filter(a => a.type == "audio") as asset}
     function create_each_block_3(ctx) {
     	let audioasset;
     	let current;
@@ -2751,14 +2789,14 @@ var app = (function () {
     		block,
     		id: create_each_block_3.name,
     		type: "each",
-    		source: "(67:0) {#each $syncMedia.assets.filter(a => a.type == \\\"audio\\\") as asset}",
+    		source: "(68:0) {#each $syncMedia.assets.filter(a => a.type == \\\"audio\\\") as asset}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (72:1) {#each $syncMedia.assets.filter(a => a.type == "text") as asset}
+    // (73:1) {#each $syncMedia.assets.filter(a => a.type == "text") as asset}
     function create_each_block_2(ctx) {
     	let textasset;
     	let current;
@@ -2799,14 +2837,14 @@ var app = (function () {
     		block,
     		id: create_each_block_2.name,
     		type: "each",
-    		source: "(72:1) {#each $syncMedia.assets.filter(a => a.type == \\\"text\\\") as asset}",
+    		source: "(73:1) {#each $syncMedia.assets.filter(a => a.type == \\\"text\\\") as asset}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (78:1) {#each $syncMedia.assets.filter(a => a.type == "image") as asset}
+    // (79:1) {#each $syncMedia.assets.filter(a => a.type == "image") as asset}
     function create_each_block_1(ctx) {
     	let imageasset;
     	let current;
@@ -2847,14 +2885,14 @@ var app = (function () {
     		block,
     		id: create_each_block_1.name,
     		type: "each",
-    		source: "(78:1) {#each $syncMedia.assets.filter(a => a.type == \\\"image\\\") as asset}",
+    		source: "(79:1) {#each $syncMedia.assets.filter(a => a.type == \\\"image\\\") as asset}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (84:1) {#each $syncMedia.assets.filter(a => a.type == "video") as asset}
+    // (85:1) {#each $syncMedia.assets.filter(a => a.type == "video") as asset}
     function create_each_block(ctx) {
     	let videoasset;
     	let current;
@@ -2895,14 +2933,14 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(84:1) {#each $syncMedia.assets.filter(a => a.type == \\\"video\\\") as asset}",
+    		source: "(85:1) {#each $syncMedia.assets.filter(a => a.type == \\\"video\\\") as asset}",
     		ctx
     	});
 
     	return block;
     }
 
-    // (61:17)   <p>Loading...</p>  {:then}
+    // (62:17)   <p>Loading...</p>  {:then}
     function create_pending_block(ctx) {
     	let p;
 
@@ -2910,7 +2948,7 @@ var app = (function () {
     		c: function create() {
     			p = element("p");
     			p.textContent = "Loading...";
-    			add_location(p, file$4, 62, 0, 1731);
+    			add_location(p, file$4, 63, 0, 1785);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, p, anchor);
@@ -2927,7 +2965,7 @@ var app = (function () {
     		block,
     		id: create_pending_block.name,
     		type: "pending",
-    		source: "(61:17)   <p>Loading...</p>  {:then}",
+    		source: "(62:17)   <p>Loading...</p>  {:then}",
     		ctx
     	});
 
@@ -3065,7 +3103,9 @@ var app = (function () {
     	}
 
     	async function loadSyncMedia() {
-    		let file = "/fairytale/THE-MASTER-CAT;-OR,-PUSS-IN-BOOTS.xml";
+    		// let file = '/fairytale/THE-MASTER-CAT;-OR,-PUSS-IN-BOOTS.xml';
+    		let file = "/cc-shared-culture/cc-shared-culture.xml";
+
     		let url = new URL(file, document.baseURI);
     		let parsedSyncMedia = new SyncMedia();
     		await parsedSyncMedia.loadUrl(url);
