@@ -13,7 +13,7 @@ The [Synchronized Media for Publications Community Group](https://www.w3.org/com
 [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/), in order to make publications accessible to people with different types of reading requirements.
 
 ### Present
-The [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/) is now only tasked with the maintenance of its previous specifications and is no longer very active; however, the work here continues to be to explore and develop synchronization techniques compatible with publishing formats on the web, including [Audiobooks](https://www.w3.org/TR/audiobooks/), [EPUB](https://www.w3.org/publishing/groups/epub-wg/), and standalone [HTML](https://www.w3.org/html/).
+The [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/) is now primarily focused on spec maintenance; however, the work here continues to be to explore and develop synchronization techniques compatible with publishing formats on the web, including [Audiobooks](https://www.w3.org/TR/audiobooks/), [EPUB](https://www.w3.org/publishing/groups/epub-wg/), and standalone [HTML](https://www.w3.org/html/).
 
 ## Documents
 
