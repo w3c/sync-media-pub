@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@11ty/eleventy": "^0.11.0",
+    "@11ty/eleventy": "^1.0.2",
     "gulp": "^4.0.2",
     "gulp-pretty-html": "^2.0.10",
     "html-entities": "^1.3.1",
