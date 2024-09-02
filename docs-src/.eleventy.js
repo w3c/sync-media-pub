@@ -1,35 +1,50 @@
-const Entities = require('html-entities').AllHtmlEntities;
+import { AllHtmlEntities } from 'html-entities'; 
+import prettier from "prettier";
+import path from "path";
+import { default as markdown } from './markdown.js';
 
-module.exports = function(eleventyConfig) {
-    let options = {
-        html: true
-    };
-    let markdownLib = require("markdown-it")(options)
-        .use(require("markdown-it-anchor"))
-        .use(require("markdown-it-attrs"))
-        .use(require('markdown-it-header-sections'))
-        .use(require("markdown-it-table-of-contents"), 
-            {
-                "includeLevel": [2],
-                "containerHeaderHtml": `<p class="toclabel">Contents:<p>`
-            }
-        )
-        .use(require("markdown-it-deflist"))
-        .use(require("markdown-it-div"));
-    
-    eleventyConfig.setLibrary("md", markdownLib);
-
+function init(eleventyConfig) {
+    eleventyConfig.setLibrary("md", markdown());
     eleventyConfig.addPassthroughCopy({"css": "css"});
+    eleventyConfig.addPassthroughCopy({"demos/raven": "demos/raven"});
 
     eleventyConfig.addFilter('dump', obj => {
         return util.inspect(obj)
     });
+    eleventyConfig.addFilter('json', value => {
+        const jsonString = JSON.stringify(value, null, 4).replace(/</g, '\\u003c')
+        return jsonString;
+    });
 
     eleventyConfig.addPairedShortcode("example", (content, title) => {
-        const entities = new Entities();
+        const entities = new AllHtmlEntities();
         return `<pre class="example" title="${title}">${entities.encode(content)}</pre>`;
     });
+
+    eleventyConfig.addTransform("prettier", function (content, outputPath) {
+        const extname = path.extname(outputPath);
+        switch (extname) {
+          case ".html":
+          case ".json":
+            // Strip leading period from extension and use as the Prettier parser.
+            const parser = extname.replace(/^./, "");
+            return prettier.format(content, { parser, tabWidth: 4 });
     
+          default:
+            return content;
+        }
+    });
+    if (process.env.HTTPS) {
+        eleventyConfig.setServerOptions({
+            https: {
+                key: "./localhost.key",
+                cert: "./localhost.cert",
+            },
+            showVersion: true,
+        });
+    }
+
+
     return {
         dir: {
             input: "pages",
@@ -38,3 +53,5 @@ module.exports = function(eleventyConfig) {
         }
     };
   };
+
+  export default init;

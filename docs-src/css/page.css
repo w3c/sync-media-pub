@@ -26,3 +26,27 @@ td {
     border: thin black solid;
     padding: 5px;
 }
+
+.lookhere {
+    font-size: larger;
+}
+.lookhere::after {
+    content: "NEW 🧨";
+    font-variant: small-caps;
+    font-size: x-small;
+    padding-left: 8px;
+    background-color: yellow;
+}
+.lookhere::after:hover {
+    transform: rotateX(45deg);
+}
+.note {
+    font-style: italic;
+    border: thin black solid;
+    padding: .5rem;
+    border-radius: 5px;
+}
+.note::before {
+    content: "Note: ";
+    font-style: normal;
+}
