@@ -1,6 +1,21 @@
----
-title: SyncMedia 1.0
-layout: spec.njk
+---json
+{
+    "title": "SyncMedia",
+    "layout": "spec.njk",
+    "editors": [
+        {
+            "name": "Marisa DeMeglio",
+            "company": "DAISY Consortium",
+            "companyURL": "https://www.daisy.org",
+            "w3cid": 35713
+        }, 
+        {
+            "name": "Lars Wallin",
+            "company": "Colibrio AB",
+            "companyURL": "https://colibrio.com"
+        }
+    ]
+}
 ---
 <section id="abstract">
     <p>This specification defines SyncMedia, an XML format for synchronized media presentations. A presentation consists of different types of media, orchestrated in a timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    

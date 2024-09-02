@@ -1,6 +1,21 @@
----
-title: SyncMedia 1.0
-layout: spec.njk
+---json
+{
+    "title": "SyncMedia 1.0",
+    "layout": "spec.njk",
+    "editors": [
+        {
+            "name": "Marisa DeMeglio",
+            "company": "DAISY Consortium",
+            "companyURL": "https://www.daisy.org",
+            "w3cid": 35713
+        }, 
+        {
+            "name": "Lars Wallin",
+            "company": "Colibrio AB",
+            "companyURL": "https://colibrio.com"
+        }
+    ]
+}
 ---
 <section id="abstract">
     <p>This specification defines SyncMedia, a format for synchronized media presentations. A presentation consists of media, potentially of different types, orchestrated in a linear timeline. SyncMedia presentations are rendered to a user by a SyncMedia-aware player.</p>    
@@ -364,7 +379,7 @@ Which serialization format(s) to define is TBD
 
 ::: .TODO
 __TODO__: 
-Determine the MIME type(s) for SyncMedia documents. See [this issue](https://github.com/w3c/sync-media-pub/issues/10)</a>
+Determine the MIME type(s) for SyncMedia documents. See [this issue](https://github.com/w3c/sync-media-pub/issues/10)
 :::
 
 ### XML
