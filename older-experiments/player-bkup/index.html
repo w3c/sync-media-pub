@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Sync Player</title>
+        <meta charset="utf-8"/>
+        <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+        <link rel="stylesheet" href="css/base.css"/>
+        <link rel="stylesheet" href="css/player.css"/>
+        <link rel="stylesheet" href="css/controls.css"/>
+        <script src="index.js" type="module"></script>
+    </head>
+    <body>
+        
+        <main>
+            <div id="player-page" aria-live="polite">
+            </div>
+            <p id="player-captions" aria-live="polite" class="disabled">
+            </p>
+        </main>
+        
+        <footer id="controls" aria-live="polite" aria-label="playback controls">
+            <div id="adjust">
+                <div id="volume-wrapper" class="slider">
+                    <label for="volume">Volume</label>
+                    <input id="volume" type="range" min="0" max="100">
+                    <span id="volume-value"></span>
+                    <button aria-label="Mute" id="mute" title="Mute">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-volume"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <line class="mute-x" x1="23" y1="9" x2="17" y2="15"></line>
+                            <line class="mute-x" x1="17" y1="9" x2="23" y2="15"></line>
+                        </svg>
+                    </button>
+                </div>
+
+                <div id="rate-wrapper" class="slider">
+                    <label for="rate">Rate</label>
+                    <input id="rate" type="range" min="50" max="200">
+                    <span id="rate-value"></span>
+                    <button id="reset-rate">
+                        Reset
+                    </button>
+                </div>
+            </div>
+            
+            <div id="transport">
+                
+                <button id="prev" aria-label="Previous">
+                    <svg alt="Previous icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-rewind">
+                        <polygon points="11 19 2 12 11 5 11 19"></polygon>
+                        <polygon points="22 19 13 12 22 5 22 19"></polygon>
+                    </svg>
+                </button>
+                <button id="play-pause" aria-label="Play/Pause">
+                    <svg id="pause" alt="Pause icon" class="disabled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-pause">
+                        <rect x="6" y="4" width="4" height="16"></rect>
+                        <rect x="14" y="4" width="4" height="16"></rect>
+                    </svg>
+                    <svg id="play" alt="Play icon" class="disabled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" 
+                        stroke-linecap="round" stroke-linejoin="round" class="feather feather-play">
+                        <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                    </svg>
+                </button>
+                <button id="next" aria-label="Next">
+                    <svg alt="Next icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" 
+                        stroke-linejoin="round" class="feather feather-fast-forward">
+                        <polygon points="13 19 22 12 13 5 13 19"></polygon>
+                        <polygon points="2 19 11 12 2 5 2 19"></polygon>
+                    </svg>
+                </button>
+                <button id="caption-page" aria-label="Toggle captions">
+                    <svg id="caption" alt="Caption icon" class="disabled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                        class="feather feather-message-square"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                    <svg id="page" alt="Page icon" class="disabled" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" 
+                        class="feather feather-file-text"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                </button>
+                
+            </div>
+            <p id="chapter-progress" aria-live="polite">
+                <span class="label">Progress:</span> <span id="current-position">--</span>
+            </p>
+            
+        </footer>
+    </body>
+</html>

@@ -1,0 +1,225 @@
+@import "../../common/colors.css";
+
+:root {
+    --enabled-opacity: 80%;
+    --disabled-opacity: 30%;
+}
+
+footer {
+    display: grid;
+    grid-column-gap: 1rem;
+    grid-template-columns: 20% auto 20%;
+    grid-template-rows: 1fr;
+    grid-template-areas:
+    "adjust transport status";
+}
+#adjust {
+    grid-area: adjust;
+    display: grid;
+}
+#transport {
+    grid-area: transport;
+    justify-self: center;
+    display: flex;
+    align-self: center;
+    align-items: center;
+}
+#chapter-progress {
+    grid-area: status;
+    align-self: center;
+    justify-self: right;
+}
+footer div.slider {
+    display: grid;
+    grid-template-columns: 20% 50% 15% 10%;
+    grid-column-gap: 0.5rem;
+    align-items: center;
+    /*! position: relative; */
+    /*! left: -48px; */
+}
+footer input {
+    background: var(--workaroundbk);
+}
+footer input::-moz-range-track{
+    background-color: lightgray;
+    opacity: var(--enabled-opacity);
+    height: 5px;
+    border-radius: 5px;
+}
+footer input::-webkit-slider-runnable-track {
+    background-color: lightgray;
+    opacity: var(--enabled-opacity);
+    height: 5px;
+    border-radius: 5px;
+}
+footer input::-ms-track {
+    background-color: lightgray;
+    opacity: var(--enabled-opacity);
+    height: 5px;
+    border-radius: 5px;
+}
+footer input::-moz-range-thumb {
+    height: 20px;
+    cursor: pointer;
+    border: none;
+}
+footer input::-webkit-slider-thumb {
+    height: 20px;
+    cursor: pointer;
+    margin: -4px; /* alignment fix for chrome */
+}
+footer input::-ms-thumb {
+    height: 20px;
+    cursor: pointer;
+}
+div.slider.disabled label, div.slider.disabled span {
+    opacity: var(--disabled-opacity);
+}
+div.slider.disabled input::-moz-range-track {
+    opacity: var(--disabled-opacity);
+}
+div.slider.disabled input::-webkit-slider-runnable-track {
+    opacity: var(--disabled-opacity);
+}
+div.slider.disabled input::-ms-track {
+    opacity: var(--disabled-opacity);
+}
+div.slider.disabled input::-moz-range-thumb {
+    opacity: var(--disabled-opacity);
+    cursor: default;
+}
+div.slider.disabled input::-webkit-slider-thumb {
+    opacity: var(--disabled-opacity);
+    cursor: default;
+}
+div.slider.disabled input::-ms-thumb {
+    opacity: var(--disabled-opacity);
+    cursor: default;
+}
+
+footer button {
+    width: 4rem;
+    height: 4rem;
+}
+
+#adjust button {
+    text-align: left;
+    height: min-content;
+    width: 2rem;
+    height: 2rem;
+}
+#adjust button svg {
+    padding: 4px;
+}
+path {
+    stroke: white;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+}
+svg {
+    opacity: 90%;
+    pointer-events: all;
+}
+#transport svg:hover {
+    fill: var(--hover);
+    stroke: var(--hover);
+    opacity: 80% !important;
+}
+#bookmark svg:hover line {
+    stroke: var(--bk);
+}
+#mute, #reset-rate {
+    width: min-content;
+    padding: 0;
+}
+line.mute-x:not(.muted) {
+    display: none;
+}
+#play-pause {
+    width: 6rem;
+    height: 6rem;
+}
+#chapter-progress span {
+    display: block;
+}
+@media (max-width: 768px) {
+    footer {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        grid-row-gap: 0.5rem;
+        grid-template-areas:
+        "transport"
+        "adjust"
+        "status";
+        justify-items: center;
+    }
+    #transport button:not(#play-pause) {
+        width: 3rem;
+        height: 3rem;
+    }
+    #play-pause {
+        width: 4rem;
+        height: 4rem;
+    }
+    #adjust label {
+        visibility: hidden;
+    }
+    #chapter-progress {
+        margin: 0;
+        font-size: smaller;
+        justify-self: center;
+    }
+    #chapter-progress .label {
+        display: none;
+    }
+    #volume-wrapper {
+        display: none;
+    }
+    #rate-wrapper {
+        grid-template-rows: 50% auto auto auto;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    #transport button:not(#play-pause) {
+        width: 3rem;
+        height: 3rem;
+    }
+    #play-pause {
+        width: 4rem;
+        height: 4rem;
+    }
+    #adjust {
+        position: relative;
+        left: -3rem;
+    }
+    #rate-wrapper {
+        display: grid;
+        grid-template-areas: 
+            "label slider value"
+            "reset reset reset";
+        grid-column-gap: 0.5rem;
+        grid-row-gap: 0;
+        align-items: center;
+    }
+    #rate-wrapper label {
+        grid-area: label;
+    }
+    #rate-wrapper input {
+        grid-area: slider;
+    }
+    #rate-wrapper span {
+        grid-area: value;
+    }
+    #rate-wrapper button {
+        grid-area: reset;
+        justify-self: center;
+    }
+    #adjust label {
+        visibility: hidden;
+    }
+    #volume-wrapper {
+        display: none;
+    }
+}

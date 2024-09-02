@@ -1,0 +1,40 @@
+@import 'base.css';
+@import '../../common/colors.css';
+
+.-active-element {
+    color: var(--hltext);
+    opacity: 0.9;
+    transition: color .4s;
+}
+
+.-document-playing {
+
+}
+main {
+    line-height: 1.5;
+}
+a, a:visited {
+    color: var(--text);
+    padding-left: 1vh;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline !important;
+}
+nav[role=doc-toc] ol {
+    /* list-style-type: none; */
+    line-height: 5vh;
+    padding-left: 0;
+    color: var(--text);
+    grid-column: 1;
+}
+
+nav[role=doc-toc] a.current, nav[role=doc-toc] a.current:visited {
+    color: var(--hltext);
+    opacity: 0.9;
+    transition: color 1s;
+}
+nav[role=doc-toc] li {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}

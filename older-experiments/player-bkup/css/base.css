@@ -1,0 +1,25 @@
+@import '../../common/colors.css';
+
+body {
+    font-family: Arial;
+    background-color: var(--bk);
+    color: var(--text);
+}
+
+a, a:visited {
+    color: var(--text);
+    padding-left: 1vh;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline !important;
+}
+.disabled {
+    display: none;
+}
+button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    color: var(--text);
+}
