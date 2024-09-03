@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+</head>
+
+<body>
+  <section id="abstract">
+    <p>These use cases provide context and expected user agent behavior for Synchronized Narration.</p>
+  </section>
+
+  <section id="sotd">
+    <p>This draft is still under consideration within the Synchronized Media for Publications Community Group and is subject to change. The most prominent issues will be referenced in the document with links provided.</p>
+  </section>
+
+  <section id="syncnarr-usecases">
+    <h1>Synchronized Narration Use Cases</h1>
+    <section id="text-audio">
+      <h2>Text supplemented with pre-recorded audio narration</h2>
+      <ul>
+        <li>Use an authored navigation interface (e.g. TOC) to reach a point in a content document, and start audio playback from there</li>
+        <li>Move around the text content and have the audio playback keep up. E.g.
+          <ul>
+            <li>Previous/next paragraph</li>
+            <li>Previous/next page</li>
+          </ul>
+        </li>
+        <li>Start playback by clicking a point mid-page</li>
+        <li>Speed up/slow down the audio while not affecting the pitch (timescale modification)</li>
+        <li>Navigate by time chunk (e.g. skip forward/back 10s)</li>
+        <li>Text chunks are highlighted in sync with the audio playback, at the authored granularity</li>
+        <li>Text display keeps up with audio. E.g. start audio playback and have the pages turn automatically.</li>
+        <li>Selectively filter out content based on semantics ("skippability" in the DAISY world). Note: might there be overlap here with WP personalization?</li>
+        <li>Jump out of complex structures and back into the reading flow ("escapability" in the DAISY world)</li>
+        <li>Support multiple granularities of navigation, switchable on the fly by the user. E.g.<ul>
+            <li>Previous/next paragraph</li>
+            <li>Previous/next sentence</li>
+            <li>Previous/next word or phrase</li>
+          </ul>
+        </li>
+      </ul>
+
+    </section>
+
+    <section id="audio-toc">
+      <h2>Audio + TOC book</h2>
+      <p>An audio book needs to include paragraph-level navigation in what otherwise has only chapters marked (in the TOC). Once inside a chapter, users navigate paragraph-by-paragraph.</p>
+    </section>
+
+    <section id="audio-text-editions">
+      <h2>Integrating audio and text editions of a book</h2>
+      <p>A publisher has made parallel editions of a publication: one is audio, and the other is text. Adding a synchronized media "glue" layer gives the user a playback experience like what's described in the text+audio example above. </p>
+    </section>
+
+  </section>
+
+</body>
+
+</html>
