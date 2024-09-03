@@ -19,7 +19,7 @@ This is an overview of work being done by the [Synchronized Media for Publicatio
 * [Use cases](/use-cases)
 * [Draft spec](/sync-media-lite)
 * Demos
-  * [Book reader](TODO)
+  * [Book reader](https://daisy.github.io/accessible-books-in-browsers/)
   * [Poem with multi-level highlighting](/demos/raven/index.html)
   * [Using TextTrackCues to play SMIL](https://github.com/marisademeglio/mo-player)
   * [Enhanced W3C Audiobooks demo](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
