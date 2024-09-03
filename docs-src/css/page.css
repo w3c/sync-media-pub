@@ -37,9 +37,6 @@ td {
     padding-left: 8px;
     background-color: yellow;
 }
-.lookhere::after:hover {
-    transform: rotateX(45deg);
-}
 .note {
     font-style: italic;
     border: thin black solid;
@@ -49,4 +46,13 @@ td {
 .note::before {
     content: "Note: ";
     font-style: normal;
+}
+.stale::after {
+    background-color: gray;
+}
+.c2021::after {
+    content: "last updated 2021 🏴‍☠️";
+}
+.c2020::after {
+    content: "last updated 2020 🏴‍☠️";
 }

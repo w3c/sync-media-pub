@@ -1,32 +1,30 @@
 ---
 title: SyncMedia Community Group Overview
 ---
-This is an overview of work being done by the Synchronized Media for Publications Community Group.
+This is an overview of work being done by the [Synchronized Media for Publications Community Group](#about-this-group). 
 
 * [Github repository](https://github.com/w3c/sync-media-pub)
 * [Mailing list archives](https://lists.w3.org/Archives/Public/public-sync-media-pub/)
 
 
-## Approaches
+## Latest work: SyncMediaLite
 
-Three different approaches have been explored to synchronize narration with HTML text, and possibly more. Their names are unfortunately similar.
-
-### [SyncLite (WebVTT-based)](synclite){.lookhere}
-
-* Uses the browser's inbuilt cue synchronization capabilities
+* Uses the browser's inbuilt cue synchronization capabilities via WebVTT
 * Easy to implement a synchronized text highlight
 * Works well for common use cases of audio narrated HTML documents
 
-### [SyncMedia (SMIL-based)](smil)
+### Documents
 
-* Expands EPUB's existing use of SMIL 
-* Full implementation is challenging
-* Could support many different mixed media scenarios
+* [Explainer](/explainer)
+* [Use cases](/use-cases)
+* [Draft spec](/sync-media-lite)
+* Demos
+  * [Book reader](TODO)
+  * [Poem with multi-level highlighting](/demos/raven/index.html)
+  * [Using TextTrackCues to play SMIL](https://github.com/marisademeglio/mo-player)
+  * [Enhanced W3C Audiobooks demo](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
 
-### [Sync Narration (JSON-based)](json)
-* Uses custom JSON format for timing and media info
-* Implementation feasibility similar to Media Overlays
-
+See [other work](https://github.com/w3c/sync-media-pub/tree/main/other-work) for more ideas this group has had over the years, including experiments with SMIL, and a syntactically-light JSON format. 
 
 ## About this group
 
