@@ -5,3 +5,5 @@ notes
 .DS_Store
 examples
 .vscode/launch.json
+player
+localhost*
