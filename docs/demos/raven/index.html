@@ -5,6 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:,">
     <title>Reading demo: The Raven, by Edgar Allen Poe</title>
 </head>
 
@@ -191,12 +192,23 @@
     </aside>
     
     <aside aria-labelled-by="narration-title" id="narration">
+
         <h2 id="narration-title">Narration</h2>
-        <audio id="narration-audio" src="raven.mp3" controls>
-            <track id="text-sync" kind="metadata" src="raven.vtt" label="Highlighting" default/>
-        </audio>
-        <div id="narration-highlight">
-            <h3>Highlights:</h3>
+        <div>
+            <audio id="narration-audio" src="raven.mp3" controls>
+                <track id="text-sync" kind="metadata" src="raven.vtt" label="Highlighting" default/>
+            </audio>
+            <div id="narration-highlight">
+                <h3>Highlights:</h3>
+            </div>
+        </div>
+        <div>
+            <button id="prev">Prev</button>
+            <button id="next">Next</button>
+            <select id="group-option">
+                <option value="Stanza">Stanza</option>
+                <option value="Line">Line</option>
+            </select>
         </div>
     </aside>
 
@@ -208,9 +220,13 @@
         // group names are in in highlight priority order
         // this would be nice to indicate delclaratively
         let groupNames = ['Stanza', 'Line', 'Word'];
+        document.querySelector("#next").onclick = e => nextCue(document.querySelector("#group-option").value);
+        document.querySelector("#prev").onclick = e => prevCue(document.querySelector("#group-option").value);
+        
         audio.onpause = e => {
             console.log("PAUSE");
         };
+        audio.volume = .25;
         audio.oncanplaythrough = e => {
             if (!didSetup) {
                 let cues = Array.from(track.cues);
@@ -272,6 +288,76 @@
             }           
         }
         
+        function nextCue(group) {
+            if (!track.activeCues.length) {
+                console.log("No active cues");
+                return;
+            }
+            let activeCueForGroup = Array.from(track.activeCues).find(cue => JSON.parse(cue.text).group == group);
+            if (!activeCueForGroup) {
+                console.log("No active cue for group ", group);
+                return;
+            }
+            console.log("Current #", activeCueForGroup.id, `(time ${activeCueForGroup.startTime})`);
+            let sortedCues = sortCuesByTime();
+            let idx = sortedCues.findIndex(cue => cue.id == activeCueForGroup.id);
+            if (idx != -1 && idx < sortedCues.length - 1) {
+                for (let i = idx + 1; i < sortedCues.length; i++) {
+                    let payload = JSON.parse(sortedCues[i].text);
+                    if (payload.group == group) {
+                        let newTime = sortedCues[i].startTime;
+                        console.log("Skipping to ", newTime, " #", sortedCues[i].id);
+                        document.querySelector("#next").disabled = true;
+                        audio.addEventListener("timeupdate", e => {
+                            document.querySelector("#next").disabled = false;
+                            audio.play();
+                        }, { once: true });
+                        audio.currentTime = newTime;
+                        break;
+                    }
+                }
+            }
+        }
+
+        function prevCue(group) {
+            if (!track.activeCues.length) {
+                console.log("No active cues");
+                return;
+            }
+            let activeCueForGroup = Array.from(track.activeCues).find(cue => JSON.parse(cue.text).group == group);
+            if (!activeCueForGroup) {
+                console.log("No active cue for group ", group);
+                return;
+            }
+            console.log("Current #", activeCueForGroup.id, `(time ${activeCueForGroup.startTime})`);
+            let sortedCues = sortCuesByTime();
+            let idx = sortedCues.findIndex(cue => cue.id == activeCueForGroup.id);
+            if (idx != -1 && idx > 0) {
+                for (let i = idx - 1; i > -1; i--) {
+                    let payload = JSON.parse(sortedCues[i].text);
+                    if (payload.group == group) {
+                        let newTime = sortedCues[i].startTime;
+                        console.log("Skipping to ", newTime, " #", sortedCues[i].id);
+                        document.querySelector("#next").disabled = true;
+                        audio.addEventListener("timeupdate", e => {
+                            document.querySelector("#next").disabled = false;
+                            audio.play();
+                        }, { once: true });
+                        audio.currentTime = newTime;
+                        break;
+                    }
+                }
+            }
+        }
+
+        function sortCuesByTime(group) {
+            let sortedCues = Array.from(track.cues).sort((a,b) => {
+                let timeA = parseFloat(a.startTime);
+                let timeB = parseFloat(b.startTime);
+                return a.startTime < b.startTime ? -1 : a.startTime > b.startTime ? 1 : 0;
+            });
+            return sortedCues;
+        }
         
         function isInViewport(elm) {
             let bounding = elm.getBoundingClientRect();
@@ -304,7 +390,7 @@
                 startContainer: node,
                 startOffset: 0,
                 endContainer: node.nextSibling,
-                endOffset: 0
+                endOffset: 0 
             });
         }
     </script>

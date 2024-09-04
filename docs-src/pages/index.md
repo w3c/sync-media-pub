@@ -18,11 +18,16 @@ This is an overview of work being done by the [Synchronized Media for Publicatio
 * [Explainer](/explainer)
 * [Use cases](/use-cases)
 * [Draft spec](/sync-media-lite)
-* Demos
-  * [Book reader](https://daisy.github.io/accessible-books-in-browsers/)
-  * [Poem with multi-level highlighting](/demos/raven/index.html)
-  * [Using TextTrackCues to play SMIL](https://github.com/marisademeglio/mo-player)
-  * [Enhanced W3C Audiobooks demo](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
+* Demos:
+  * [Accessible Books in Browsers](https://daisy.github.io/accessible-books-in-browsers/): 
+  _Self-playing text and audio books. The books here are converted automatically from DAISY 2.02/EPUB into multi-chapter sets of HTML files with built-in playback for SyncMediaLite_
+  * [The Raven](/demos/raven/index.html)
+  _Poem with multi-level highlighting. This is a single-page document with built-in playback for SyncMediaLite and advanced highlighting features_
+  * [The World's Best Audiobook](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
+  _Enhanced W3C Audiobooks demo. This is more of a traditional "player" where the book documents are loaded into an `iframe`. The books are W3C Audiobooks with SyncMediaLite incorporated._
+  * [Using TextTrackCues to play EPUB Media Overlays](https://github.com/marisademeglio/mo-player)
+  _Using the same techniques as SyncMediaLite playback, this Media Overlays `.smil` file can be played_
+  
 
 See [other work](https://github.com/w3c/sync-media-pub/tree/main/other-work) for more ideas this group has had over the years, including experiments with SMIL, and a syntactically-light JSON format. 
 

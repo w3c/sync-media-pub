@@ -8,6 +8,7 @@
     "serve": "cross-env DEBUG=Eleventy* eleventy --serve",
     "serve-https": "cross-env HTTPS=true DEBUG=Eleventy* eleventy --serve",
     "build": "npm run clean && eleventy",
+    "buildwatch": "eleventy --watch",
     "clean": "rimraf docs",
     "http-serve": "cd ../docs && http-serve",
     "dev": "npm run clean && npm run serve"
