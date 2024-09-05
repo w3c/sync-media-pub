@@ -483,6 +483,12 @@ CSS.highlights.set(cuePayload.group, highlight);
                         feature, for example allowing a way to move to the next
                         word, sentence, or paragraph.
                     </p>
+                    <p>
+                        Cues may appear in a WebVTT file in any order, not
+                        necessarily in document flow order. They can be sorted
+                        by timestamp when it is necessary to calculate previous
+                        and next cues.
+                    </p>
                 </section>
                 <section id="skip%2Fescape" tabindex="-1">
                     <h4 tabindex="-1">Skip/escape</h4>
@@ -587,9 +593,9 @@ WEBVTT
             <p>
                 For example, in the context of a multi-HTML document
                 presentation (like a book), this would enable a chapter to start
-                playing as soon as it loads. When it's done, the user agent can
-                load the next HTML file, which would in turn start playing as
-                soon as it loads.
+                playing as soon as it loads. When it's done, the next HTML file
+                gets loaded automatically and starts playing as soon as it
+                loads.
             </p>
             <p>
                 The page ultimately controls the request to enable/disable

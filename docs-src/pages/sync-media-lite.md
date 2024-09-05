@@ -262,6 +262,8 @@ CSS.highlights.set(cuePayload.group, highlight);
 
 This user interface feature lets a user move between cues. When paired with the available [`group`](#group) values, it enables variation on the previous/next navigation feature, for example allowing a way to move to the next word, sentence, or paragraph.
 
+Cues may appear in a WebVTT file in any order, not necessarily in document flow order. They can be sorted by timestamp when it is necessary to calculate previous and next cues.
+
 #### Skip/escape
 
 A user listening to a narrated document has certain elements "set to skip", e.g. page number announcements might be turned off; or wants to "escape" from a complex structure, e.g. a table or nested list, and return to the main content flow.
@@ -328,7 +330,7 @@ WEBVTT
 
 In order to be able to potentially automatically start playback of HTML media elements, the HTML document to be synchronized should be served with a compatible [`autoplay` policy](https://html.spec.whatwg.org/multipage/infrastructure.html#policy-controlled-features). 
 
-For example, in the context of a multi-HTML document presentation (like a book), this would enable a chapter to start playing as soon as it loads. When it's done, the user agent can load the next HTML file, which would in turn start playing as soon as it loads.
+For example, in the context of a multi-HTML document presentation (like a book), this would enable a chapter to start playing as soon as it loads. When it's done, the next HTML file gets loaded automatically and starts playing as soon as it loads.
 
 The page ultimately controls the request to enable/disable autoplay, so allowing `autoplay` at the server level is reasonable.
 
