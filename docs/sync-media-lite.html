@@ -168,10 +168,7 @@
                             <td><code id="group">group</code></td>
                             <td>Optional</td>
                             <td>String or array of strings</td>
-                            <td>
-                                Name of the group the cue belongs to. Can be any
-                                author-defined string.
-                            </td>
+                            <td>Name(s) of the group(s) the cue belongs to.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -204,13 +201,14 @@ WEBVTT
                 </p>
                 <div class="note">
                     <p>
-                        This example uses Fragment Selectors, which link to
-                        element <code>id</code>s, but the
+                        This example uses <code>FragmentSelector</code>s, which
+                        link to element <code>id</code>s, but the
                         <a href="#selector">selector</a> property allows other
-                        selectors too. See
-                        <a href="#css-selectors">CSS Selectors</a> for an
-                        example of a more flexible way to reference HTML text,
-                        including sub-element ranges.
+                        selectors too. Other examples in this document use
+                        <code>CssSelector</code>s and
+                        <code>TextRangeSelector</code>s. See
+                        <a href="#word-level-selectors">Word-level selectors</a>
+                        for notes on referencing sub-element ranges.
                     </p>
                 </div>
             </section>
@@ -304,16 +302,11 @@ let track = Array.from(document.querySelector(&apos;audio&apos;).textTracks)[0];
 Array.from(track.cues).map(cue =&gt; {
     cue.onenter = e =&gt; {
         let cuePayload = JSON.parse(cue.text);
-        let selector = cuePayload.selector;
-        // highlight the text based on the selector
+        doHighlighting(cuePayload.selector);
     };
 });
 </pre
                 >
-                <p>
-                    There are several types of events; this is just an example
-                    of one of them.
-                </p>
             </section>
             <section id="text-highlights" tabindex="-1">
                 <h3 tabindex="-1">Text highlights</h3>
@@ -369,9 +362,11 @@ function createRange(selector) {
                     using that range.
                 </p>
                 <pre class="example" title="Using the CSS Custom Highlight API">
-let range = createRange(selector);
-let highlight = new Highlight(range);
-CSS.highlights.set(&quot;sync&quot;, highlight); // the name &quot;sync&quot; is arbitrary
+function doHighlighting(selector) {
+    let range = createRange(selector);
+    let highlight = new Highlight(range);
+    CSS.highlights.set(&quot;sync&quot;, highlight); // &quot;sync&quot; is chosen arbitrarily here
+}
 </pre
                 >
                 <p>
@@ -382,7 +377,7 @@ CSS.highlights.set(&quot;sync&quot;, highlight); // the name &quot;sync&quot; is
                     >.
                 </p>
                 <pre class="example" title="Author-defined highlight CSS">
-::highlight {
+::highlight(sync) {
     background-color: yellow;
 }
 </pre
@@ -511,32 +506,12 @@ CSS.highlights.set(cuePayload.group, highlight);
                 </section>
             </section>
         </section>
-        <section class="appendix" id="css-selectors" tabindex="-1">
-            <h2 class="appendix" tabindex="-1">CSS Selectors</h2>
+        <section class="appendix" id="word-level-selectors" tabindex="-1">
+            <h2 class="appendix" tabindex="-1">Word-level selectors</h2>
             <p>
-                This example uses CSS selectors to highlight the lines in a
-                poem.
-            </p>
-            <div class="note">
-                <p>
-                    <a href="/demos/raven/index.html">The text of the poem</a>
-                    did not need to be marked up with <code>id</code>s!
-                </p>
-            </div>
-            <pre class="example" title="Cue payload with CssSelector">
-{
-    &quot;selector&quot;:{
-        &quot;type&quot;: &quot;CssSelector&quot;, 
-        &quot;value&quot;: &quot;nth-child(1 of .stanza) &gt; :nth-child(1 of .line)&quot;
-    }
-}
-</pre
-            >
-            <p>
-                In addition to this, using
-                <code>refinedBy: {type: &quot;TextPositionSelector&quot;}</code>
-                inside a CssSelector allows pointing to a sub-element character
-                range.
+                It is possible to use a <code>CssSelector</code> with a
+                <code>TextPositionSelector</code> to reference a sub-element
+                character range.
             </p>
             <pre
                 class="example"
@@ -555,32 +530,32 @@ CSS.highlights.set(cuePayload.group, highlight);
 }
 </pre
             >
-            <pre
-                class="example"
-                title="Associating text with a timeline using CssSelectors and TextPositionSelectors."
-            >
-WEBVTT
-
-1
-00:00:01.200 --&gt; 00:00:01.400
-{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;.title&quot;, &quot;refinedBy&quot;: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 0, &quot;end&quot;: 2}}}
-
-2
-00:00:01.400 --&gt; 00:00:02.100
-{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;.title&quot;, &quot;refinedBy&quot;: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 4, &quot;end&quot;: 8}}}
-
-3
-00:00:02.800 --&gt; 00:00:03.100
-{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;.author&quot;, &quot;refinedBy&quot;: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 0, &quot;end&quot;: 1}}}
-
-4
-00:00:03.100 --&gt; 00:00:03.900
-{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;.author&quot;, &quot;refinedBy&quot;: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 3, &quot;end&quot;: 7}}}
-</pre
-            >
+            <p>
+                See the
+                <a href="#example-multi-level-highlights"
+                    >multi-level highlights example</a
+                >
+                for a WebVTT excerpt using this type of selector.
+            </p>
+            <div class="note">
+                <p>
+                    <a href="/demos/raven/index.html">The text of the poem</a>
+                    in the example did not need to be marked up with
+                    <code>id</code>s!
+                </p>
+            </div>
         </section>
         <section class="appendix" id="autoplay-policy" tabindex="-1">
             <h2 class="appendix" tabindex="-1">Autoplay policy</h2>
+            <div class="note">
+                <p>
+                    At the time of writing, autoplay policy implementations were
+                    not working sufficiently for proper testing, but many
+                    browsers have another way to do this via a setting to allow
+                    autoplay per domain. This is not necessarily the most
+                    user-friendly way but it does work.
+                </p>
+            </div>
             <p>
                 In order to be able to potentially automatically start playback
                 of HTML media elements, the HTML document to be synchronized

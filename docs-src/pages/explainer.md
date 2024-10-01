@@ -37,8 +37,8 @@ In EPUB Media Overlays, this is done with fragment identifiers. By expanding thi
 
 EPUB Media Overlays could be replaced with SyncMediaLite, with the following modifications:
 
-* Restrict: there can be one audio file per HTML document
-* Restrict: the audio file must play in the correct order by default
+* Restrict: there can be one audio file per HTML document. 
+* Restrict: the audio file must play in the correct order by default. 
 * Expand: allow additional selectors, not just fragment IDs.
 * Adapt: allow the EPUB package document's `media-overlay` attribute to accept a list of space-separated values
 

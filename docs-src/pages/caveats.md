@@ -10,7 +10,7 @@ In any case where EPUB Media Overlays need to be transformed to work in a WebVTT
 
 ## Multiple audio files. 
 
-It's theoretically permitted in EPUB Media Overlays to have sync points in the same file referencing different audio files (in practice this isn't seen). 
+It's theoretically permitted in EPUB Media Overlays to have sync points in the same SMIL file referencing different audio files (in practice this isn't common). 
 
 ## Non-contiguous audio segments.
 

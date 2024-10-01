@@ -60,7 +60,7 @@ Each cue has an identifier (a number, in the example) and contains [timing infor
 | Name | Required | Type | Description |
 | -----|----------|------|-------------|
 | `selector`{#selector} | Required | [Selector](https://www.w3.org/TR/selectors-states/#selectors) | Selects the text in the document that corresponds with this cue. |
-| `group`{#group} | Optional | String or array of strings | Name of the group the cue belongs to. Can be any author-defined string. |
+| `group`{#group} | Optional | String or array of strings | Name(s) of the group(s) the cue belongs to. |
 
 {% example "A WebVTT file" %}
 WEBVTT
@@ -83,7 +83,7 @@ Because of how WebVTT files are parsed, it is important to not have a blank line
 ["Note that you cannot provide blank lines inside a metadata block, because the blank line signifies the end of the WebVTT cue,"](https://www.w3.org/TR/webvtt1/#introduction-metadata).
 
 :::{.note}
-This example uses Fragment Selectors, which link to element `id`s, but the [selector](#selector) property allows other selectors too. See [CSS Selectors](#css-selectors) for an example of a more flexible way to reference HTML text, including sub-element ranges.
+This example uses `FragmentSelector`s, which link to element `id`s, but the [selector](#selector) property allows other selectors too. Other examples in this document use `CssSelector`s and `TextRangeSelector`s. See [Word-level selectors](#word-level-selectors) for notes on referencing sub-element ranges.
 :::
 
 
@@ -132,13 +132,10 @@ let track = Array.from(document.querySelector('audio').textTracks)[0];
 Array.from(track.cues).map(cue => {
     cue.onenter = e => {
         let cuePayload = JSON.parse(cue.text);
-        let selector = cuePayload.selector;
-        // highlight the text based on the selector
+        doHighlighting(cuePayload.selector);
     };
 });
 {% endexample %}
-
-There are several types of events; this is just an example of one of them. 
 
 ### Text highlights
 
@@ -175,15 +172,17 @@ function createRange(selector) {
 Then create a [Custom Highlight](https://www.w3.org/TR/css-highlight-api-1/) using that range.
 
 {% example "Using the CSS Custom Highlight API" %}
-let range = createRange(selector);
-let highlight = new Highlight(range);
-CSS.highlights.set("sync", highlight); // the name "sync" is arbitrary
+function doHighlighting(selector) {
+    let range = createRange(selector);
+    let highlight = new Highlight(range);
+    CSS.highlights.set("sync", highlight); // "sync" is chosen arbitrarily here
+}
 {% endexample %}
 
 Style the highlight using the [`::highlight` pseudo-element](https://www.w3.org/TR/css-pseudo-4/#highlight-pseudo-element).
 
 {% example "Author-defined highlight CSS" %}
-::highlight {
+::highlight(sync) {
     background-color: yellow;
 }
 {% endexample %}
@@ -272,24 +271,9 @@ HTML document semantics provide all necessary information, requiring only to rep
 
 
 
-## CSS Selectors {.appendix}
+## Word-level selectors {.appendix}
 
-This example uses CSS selectors to highlight the lines in a poem. 
-
-::: {.note}
-[The text of the poem](/demos/raven/index.html) did not need to be marked up with `id`s!
-:::
-
-{% example "Cue payload with CssSelector"%}
-{
-    "selector":{
-        "type": "CssSelector", 
-        "value": "nth-child(1 of .stanza) > :nth-child(1 of .line)"
-    }
-}
-{% endexample %}
-
-In addition to this, using `refinedBy: {type: "TextPositionSelector"}` inside a CssSelector allows pointing to a sub-element character range. 
+It is possible to use a `CssSelector` with a `TextPositionSelector` to reference a sub-element character range. 
 
 {% example "Selecting a word with character offsets via TextPositionSelector"%}
 {
@@ -305,28 +289,17 @@ In addition to this, using `refinedBy: {type: "TextPositionSelector"}` inside a 
 }
 {% endexample %}
 
+See the [multi-level highlights example](#example-multi-level-highlights) for a WebVTT excerpt using this type of selector.
+::: {.note}
+[The text of the poem](/demos/raven/index.html) in the example did not need to be marked up with `id`s!
+:::
 
-{% example "Associating text with a timeline using CssSelectors and TextPositionSelectors."%}
-WEBVTT
-
-1
-00:00:01.200 --> 00:00:01.400
-{"selector": {"type": "CssSelector", "value": ".title", "refinedBy": {"type": "TextPositionSelector", "start": 0, "end": 2}}}
-
-2
-00:00:01.400 --> 00:00:02.100
-{"selector": {"type": "CssSelector", "value": ".title", "refinedBy": {"type": "TextPositionSelector", "start": 4, "end": 8}}}
-
-3
-00:00:02.800 --> 00:00:03.100
-{"selector": {"type": "CssSelector", "value": ".author", "refinedBy": {"type": "TextPositionSelector", "start": 0, "end": 1}}}
-
-4
-00:00:03.100 --> 00:00:03.900
-{"selector": {"type": "CssSelector", "value": ".author", "refinedBy": {"type": "TextPositionSelector", "start": 3, "end": 7}}}
-{% endexample %}
 
 ## Autoplay policy {.appendix}
+
+:::{.note}
+At the time of writing, autoplay policy implementations were not working sufficiently for proper testing, but many browsers have another way to do this via a setting to allow autoplay per domain. This is not necessarily the most user-friendly way but it does work.
+:::
 
 In order to be able to potentially automatically start playback of HTML media elements, the HTML document to be synchronized should be served with a compatible [`autoplay` policy](https://html.spec.whatwg.org/multipage/infrastructure.html#policy-controlled-features). 
 
