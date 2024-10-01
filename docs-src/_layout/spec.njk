@@ -1,21 +1,12 @@
 {%- extends 'htmleton.njk' -%}
 {%- block head -%}
-    <link rel="stylesheet" href="css/spec-extra.css"/>    
+    <link rel="stylesheet" href="/css/spec-extra.css"/>    
     <script src='https://www.w3.org/Tools/respec/respec-w3c' class='remove' defer="defer"></script>
     <script class='remove'>
         var respecConfig = {
             specStatus: "CG-DRAFT",
             group: "sync-media-pub",
-            editors: [{
-                name: "Marisa DeMeglio",
-                company: "DAISY Consortium",
-                companyURL: "https://www.daisy.org",
-                w3cid: 35713
-            }, {
-                name: "Lars Wallin",
-                company: "Colibrio AB",
-                companyURL: "https://colibrio.com"
-            }],
+            editors: {{editors | json | safe}},
             edDraftURI: "https://w3c.github.io/sync-media-pub{{page.url}}",
             shortName: "sync-media-pub",
             noRecTrack: true,

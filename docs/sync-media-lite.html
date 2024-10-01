@@ -1,0 +1,735 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <title>Synchronized Media for Publications CG: SyncMediaLite</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/spec-extra.css" />
+        <script
+            src="https://www.w3.org/Tools/respec/respec-w3c"
+            class="remove"
+            defer="defer"
+        ></script>
+        <script class="remove">
+            var respecConfig = {
+                specStatus: "CG-DRAFT",
+                group: "sync-media-pub",
+                editors: [
+                    {
+                        name: "Marisa DeMeglio",
+                        company: "DAISY Consortium",
+                        companyURL: "https://www.daisy.org",
+                        w3cid: 35713,
+                    },
+                ],
+                edDraftURI:
+                    "https://w3c.github.io/sync-media-pub/sync-media-lite.html",
+                shortName: "sync-media-pub",
+                noRecTrack: true,
+                copyrightStart: "2019",
+                includePermalinks: true,
+                permalinkEdge: true,
+                permalinkHide: false,
+                diffTool:
+                    "http://www.aptest.com/standards/htmldiff/htmldiff.pl",
+                github: {
+                    repoURL: "https://github.com/w3c/sync-media-pub",
+                    branch: "master",
+                },
+                localBiblio: {},
+                xref: "web-platform",
+            };
+        </script>
+    </head>
+    <body>
+        <section id="abstract">
+            <p>
+                This document shows how to use
+                <a href="https://www.w3.org/TR/webvtt1/">WebVTT</a>, along with
+                HTML, CSS, and Javascript for synchronizing text highlights with
+                timed media playback, consumable directly in a web browser.
+            </p>
+        </section>
+        <section id="sotd"></section>
+        <section id="conformance"></section>
+        <section id="relationship-to-other-specifications" tabindex="-1">
+            <h2 tabindex="-1">Relationship to Other Specifications</h2>
+            <section id="webvtt" tabindex="-1">
+                <h3 tabindex="-1">WebVTT</h3>
+                <p>
+                    The synchronization data is in a WebVTT file; specifically,
+                    a
+                    <a
+                        href="https://www.w3.org/TR/webvtt1/#file-using-metadata-content"
+                        >file using metadata content</a
+                    >.
+                </p>
+            </section>
+            <section id="html" tabindex="-1">
+                <h3 tabindex="-1">HTML</h3>
+                <p>
+                    The text to be synchronized with timed media playback is in
+                    an
+                    <a href="https://html.spec.whatwg.org/multipage/">HTML</a>
+                    document, consumed in a web browser.
+                </p>
+            </section>
+            <section id="timed-media" tabindex="-1">
+                <h3 tabindex="-1">Timed media</h3>
+                <p>
+                    This document does not specify which format(s) of timed
+                    media are allowed. The media must be able to be rendered via
+                    an
+                    <a
+                        href="https://html.spec.whatwg.org/multipage/media.html#htmlmediaelement"
+                        >HTMLMediaElement</a
+                    >.
+                </p>
+            </section>
+            <section id="css" tabindex="-1">
+                <h3 tabindex="-1">CSS</h3>
+                <p>
+                    The highlight style is specified via the
+                    <a
+                        href="https://www.w3.org/TR/css-pseudo-4/#highlight-pseudo-element"
+                        ><code>::highlight</code> pseudo-element</a
+                    >.
+                </p>
+            </section>
+            <section id="javascript" tabindex="-1">
+                <h3 tabindex="-1">Javascript</h3>
+                <p>
+                    A small amount of Javascript is used to pair
+                    <a
+                        href="https://html.spec.whatwg.org/multipage/media.html#texttrackcue"
+                        >TextTrackCue</a
+                    >
+                    events with
+                    <a href="https://www.w3.org/TR/css-highlight-api-1/"
+                        >Custom Highlights</a
+                    >.
+                </p>
+            </section>
+            <section id="selectors-and-states" tabindex="-1">
+                <h3 tabindex="-1">Selectors and states</h3>
+                <p>
+                    Identify text to be highlighted with
+                    <a href="https://www.w3.org/TR/selectors-states/#selectors"
+                        >a selector</a
+                    >.
+                </p>
+            </section>
+        </section>
+        <section id="file-details" tabindex="-1">
+            <h2 tabindex="-1">File Details</h2>
+            <section id="the-webvtt-file" tabindex="-1">
+                <h3 tabindex="-1">The WebVTT file</h3>
+                <p>
+                    The synchronization data must follow WebVTT's
+                    <a href="https://www.w3.org/TR/webvtt1/#file-structure"
+                        >file structure</a
+                    >, which consists of a series of cues, following the
+                    <code>WEBVTT</code> declaration at the top.
+                </p>
+                <p>
+                    Each cue has an identifier (a number, in the example) and
+                    contains
+                    <a href="https://www.w3.org/TR/webvtt1/#webvtt-cue-timings"
+                        >timing information</a
+                    >
+                    for the media segment. It also includes a JSON-formatted
+                    custom cue payload with these properties:
+                </p>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Required</th>
+                            <th>Type</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code id="selector">selector</code></td>
+                            <td>Required</td>
+                            <td>
+                                <a
+                                    href="https://www.w3.org/TR/selectors-states/#selectors"
+                                    >Selector</a
+                                >
+                            </td>
+                            <td>
+                                Selects the text in the document that
+                                corresponds with this cue.
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><code id="group">group</code></td>
+                            <td>Optional</td>
+                            <td>String or array of strings</td>
+                            <td>Name(s) of the group(s) the cue belongs to.</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <pre class="example" title="A WebVTT file">
+WEBVTT
+
+1
+00:00:00.000 --&gt; 00:00:03.187
+{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;dtb1&quot;},&quot;group&quot;:&quot;phrase&quot;}
+
+2
+00:00:03.187 --&gt; 00:00:07.184
+{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;dtb2&quot;},&quot;group&quot;:&quot;phrase&quot;}
+
+3
+00:00:07.184 --&gt; 00:00:10.945
+{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;dtb3&quot;},&quot;group&quot;:&quot;phrase&quot;}
+
+</pre
+                >
+                <p>
+                    Because of how WebVTT files are parsed, it is important to
+                    not have a blank line anywhere in the cue payload.<br />
+                    <a
+                        href="https://www.w3.org/TR/webvtt1/#introduction-metadata"
+                        >&quot;Note that you cannot provide blank lines inside a
+                        metadata block, because the blank line signifies the end
+                        of the WebVTT cue,&quot;</a
+                    >.
+                </p>
+                <div class="note">
+                    <p>
+                        This example uses <code>FragmentSelector</code>s, which
+                        link to element <code>id</code>s, but the
+                        <a href="#selector">selector</a> property allows other
+                        selectors too. Other examples in this document use
+                        <code>CssSelector</code>s and
+                        <code>TextRangeSelector</code>s. See
+                        <a href="#word-level-selectors">Word-level selectors</a>
+                        for notes on referencing sub-element ranges.
+                    </p>
+                </div>
+            </section>
+            <section
+                id="associating-the-webvtt-file-with-the-htmlmediaelement"
+                tabindex="-1"
+            >
+                <h3 tabindex="-1">
+                    Associating the WebVTT file with the HTMLMediaElement
+                </h3>
+                <p>
+                    The synchronization data of WebVTT is associated with an
+                    <a
+                        href="https://html.spec.whatwg.org/multipage/media.html#media-elements"
+                        >HTMLMediaElement</a
+                    >
+                    by being referenced as a metadata track on that media
+                    object.
+                </p>
+                <pre class="example" title="Audio element with metadata track">
+&lt;audio controls autoplay src=&quot;chapter.mp3&quot;&gt;
+ &lt;track default src=&quot;highlight.vtt&quot; kind=&quot;metadata&quot;&gt;
+&lt;/audio&gt;
+</pre
+                >
+                <div class="note">
+                    <p>
+                        The entire audio file can be used, or a portion of it
+                        can be used via
+                        <a
+                            href="https://www.w3.org/TR/media-frags/#media-fragment-clients"
+                            >media fragments</a
+                        >.
+                    </p>
+                </div>
+            </section>
+            <section id="styling-the-highlight" tabindex="-1">
+                <h3 tabindex="-1">Styling the highlight</h3>
+                <p>
+                    Style the highlight in CSS using the
+                    <a
+                        href="https://www.w3.org/TR/css-pseudo-4/#highlight-styling"
+                        ><code>::highlight</code> pseudo-element</a
+                    >:
+                </p>
+                <pre class="example" title="CSS for the highlight">
+::highlight {
+    background-color: yellow;
+}
+</pre
+                >
+                <p>
+                    <a href="#text-highlights">Text highlights</a> shows how to
+                    make the cue into a
+                    <a href="https://www.w3.org/TR/css-highlight-api-1/"
+                        >CSS Highlight</a
+                    >
+                    and therefore available to style in this way.
+                </p>
+                <div class="note">
+                    <p>
+                        There are limitations when styling highlight
+                        pseudo-elements. Refer to
+                        <a
+                            href="https://www.w3.org/TR/css-pseudo-4/#highlight-styling"
+                            >Styling Highlights</a
+                        >.
+                    </p>
+                </div>
+            </section>
+        </section>
+        <section id="processing" tabindex="-1">
+            <h2 tabindex="-1">Processing</h2>
+            <p>
+                This section covers how to link media playback with text
+                highlighting, using browser APIs.
+            </p>
+            <section id="cue-events" tabindex="-1">
+                <h3 tabindex="-1">Cue events</h3>
+                <p>
+                    As the HTMLMediaElement plays, associated TextTrackCues will
+                    trigger events when their timestamp is reached. For example,
+                    this is how to listen to the <code>enter</code> event, for
+                    when a cue starts:
+                </p>
+                <pre
+                    class="example"
+                    title="Handling cue 'enter' events on an audio element"
+                >
+let track = Array.from(document.querySelector(&apos;audio&apos;).textTracks)[0];
+Array.from(track.cues).map(cue =&gt; {
+    cue.onenter = e =&gt; {
+        let cuePayload = JSON.parse(cue.text);
+        doHighlighting(cuePayload.selector);
+    };
+});
+</pre
+                >
+            </section>
+            <section id="text-highlights" tabindex="-1">
+                <h3 tabindex="-1">Text highlights</h3>
+                <p>
+                    This is how to programatically create a
+                    <a href="https://www.w3.org/TR/css-highlight-api-1/"
+                        >Custom Highlight</a
+                    >
+                    from a <a href="#selector">selector</a>.
+                </p>
+                <p>
+                    Create a
+                    <a href="https://dom.spec.whatwg.org/#interface-staticrange"
+                        >StaticRange</a
+                    >
+                    from a <a href="#selector"><code>selector</code></a
+                    >.
+                </p>
+                <pre class="example" title="Selector for a portion of text">
+{
+    &quot;selector&quot;:{
+        &quot;type&quot;: &quot;CssSelector&quot;, 
+        &quot;value&quot;: &quot;nth-child(1 of .stanza) &gt; :nth-child(1 of .line)&quot;,
+        &quot;refinedBy&quot;: {
+            &quot;type&quot;: &quot;TextPositionSelector&quot;,
+            &quot;start&quot;: 0,
+            &quot;end&quot;: 4
+        }
+    }
+}
+</pre
+                >
+                <pre
+                    class="example"
+                    title="Creating a range from that selector"
+                >
+function createRange(selector) {
+    let node = document.querySelector(selector.value);
+    return new StaticRange({
+        startContainer: node.firstChild,
+        startOffset: selector.refinedBy.start,
+        endContainer: node.firstChild,
+        endOffset: selector.refinedBy.end + 1
+    });
+}
+</pre
+                >
+                <p>
+                    Then create a
+                    <a href="https://www.w3.org/TR/css-highlight-api-1/"
+                        >Custom Highlight</a
+                    >
+                    using that range.
+                </p>
+                <pre class="example" title="Using the CSS Custom Highlight API">
+function doHighlighting(selector) {
+    let range = createRange(selector);
+    let highlight = new Highlight(range);
+    CSS.highlights.set(&quot;sync&quot;, highlight); // &quot;sync&quot; is chosen arbitrarily here
+}
+</pre
+                >
+                <p>
+                    Style the highlight using the
+                    <a
+                        href="https://www.w3.org/TR/css-pseudo-4/#highlight-pseudo-element"
+                        ><code>::highlight</code> pseudo-element</a
+                    >.
+                </p>
+                <pre class="example" title="Author-defined highlight CSS">
+::highlight(sync) {
+    background-color: yellow;
+}
+</pre
+                >
+                <section id="layering-highlights" tabindex="-1">
+                    <h4 tabindex="-1">Layering highlights</h4>
+                    <p>
+                        Multiple simultaneous highlights are possible when cues
+                        overlap. Here is an example with cues for a nested
+                        document structure of stanzas, lines, and words.
+                    </p>
+                    <div class="note">
+                        <p>
+                            Cues with overlapping timing work best when they
+                            belong to different groups.
+                        </p>
+                    </div>
+                    <pre class="example" title="Multi-level highlights">
+WEBVTT
+
+1
+00:00:07.800 --&gt; 00:00:08.200
+{&quot;group&quot;:&quot;word&quot;, &quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 0, &quot;end&quot;: 3}}}
+
+2
+00:00:08.200 --&gt; 00:00:08.800
+{&quot;group&quot;:&quot;word&quot;, &quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 5, &quot;end&quot;: 8}}}
+
+3
+00:00:08.800 --&gt; 00:00:09.200
+{&quot;group&quot;:&quot;word&quot;, &quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 10 &quot;end&quot;: ,0&quot;}}}
+
+4
+00:00:07.800 --&gt; 00:00:12.600
+{&quot;group&quot;:&quot;line&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(1 of .line)&quot;}
+
+5
+00:00:12.600 --&gt; 00:00:16.200
+{&quot;group&quot;:&quot;line&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(2 of .line)&quot;}
+
+6
+00:00:17.200 --&gt; 00:00:21.000
+{&quot;group&quot;:&quot;line&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(3 of .line)&quot;}
+
+7
+00:00:07.800 --&gt; 00:00:31.100
+{&quot;group&quot;:&quot;stanza&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza)&quot;}
+
+</pre
+                    >
+                    <p>
+                        In that example, cues #1, #4, and #7 all start at the
+                        same time. Their purpose can be distinguished by their
+                        <code>group</code> value and therefore their highlights
+                        can all be different, for example the stanza can have a
+                        light background, the line can have a stronger
+                        background, and the word can be underlined.
+                    </p>
+                    <p>
+                        A highlight is registered with the HighlightRegistry
+                        with a key. Use the <code>group</code> name for this key
+                        to style cues based on their
+                        <code>group</code> value(s).
+                    </p>
+                    <pre class="example" title="Create highlight from group">
+let range = createRange(cuePayload.selector)
+let highlight = new Highlight(range);
+CSS.highlights.set(cuePayload.group, highlight); 
+</pre
+                    >
+                    <pre class="example" title="CSS styles for highlights">
+::highlight(stanza) {
+    background-color: lightyellow;
+}
+
+::highlight(line) {
+    text-decoration: none;
+    background-color: yellow;
+}
+::highlight(word) {
+    text-decoration: underline;
+    text-decoration-style:dotted;
+    text-decoration-thickness: 2px;
+}
+</pre
+                    >
+                </section>
+            </section>
+            <section id="content-navigation" tabindex="-1">
+                <h3 tabindex="-1">Content navigation</h3>
+                <section id="previous%2Fnext-navigation" tabindex="-1">
+                    <h4 tabindex="-1">Previous/next navigation</h4>
+                    <p>
+                        This user interface feature lets a user move between
+                        cues. When paired with the available
+                        <a href="#group"><code>group</code></a> values, it
+                        enables variation on the previous/next navigation
+                        feature, for example allowing a way to move to the next
+                        word, sentence, or paragraph.
+                    </p>
+                    <p>
+                        Cues may appear in a WebVTT file in any order, not
+                        necessarily in document flow order. They can be sorted
+                        by timestamp when it is necessary to calculate previous
+                        and next cues.
+                    </p>
+                </section>
+                <section id="skip%2Fescape" tabindex="-1">
+                    <h4 tabindex="-1">Skip/escape</h4>
+                    <p>
+                        A user listening to a narrated document has certain
+                        elements &quot;set to skip&quot;, e.g. page number
+                        announcements might be turned off; or wants to
+                        &quot;escape&quot; from a complex structure, e.g. a
+                        table or nested list, and return to the main content
+                        flow.
+                    </p>
+                    <p>
+                        HTML document semantics provide all necessary
+                        information, requiring only to reposition the audio
+                        timeline past any cues that reference a construct being
+                        escaped or skipped. Therefore including skip/escape
+                        semantics and nesting in the WebVTT file becomes
+                        unnecessary.
+                    </p>
+                </section>
+            </section>
+        </section>
+        <section class="appendix" id="word-level-selectors" tabindex="-1">
+            <h2 class="appendix" tabindex="-1">Word-level selectors</h2>
+            <p>
+                It is possible to use a <code>CssSelector</code> with a
+                <code>TextPositionSelector</code> to reference a sub-element
+                character range.
+            </p>
+            <pre
+                class="example"
+                title="Selecting a word with character offsets via TextPositionSelector"
+            >
+{
+    &quot;selector&quot;:{
+        &quot;type&quot;: &quot;CssSelector&quot;, 
+        &quot;value&quot;: &quot;nth-child(1 of .stanza) &gt; :nth-child(1 of .line)&quot;,
+        &quot;refinedBy&quot;: {
+            &quot;type&quot;: &quot;TextPositionSelector&quot;,
+            &quot;start&quot;: 0,
+            &quot;end&quot;: 4
+        }
+    }
+}
+</pre
+            >
+            <p>
+                See the
+                <a href="#example-multi-level-highlights"
+                    >multi-level highlights example</a
+                >
+                for a WebVTT excerpt using this type of selector.
+            </p>
+            <div class="note">
+                <p>
+                    <a href="/demos/raven/index.html">The text of the poem</a>
+                    in the example did not need to be marked up with
+                    <code>id</code>s!
+                </p>
+            </div>
+        </section>
+        <section class="appendix" id="autoplay-policy" tabindex="-1">
+            <h2 class="appendix" tabindex="-1">Autoplay policy</h2>
+            <div class="note">
+                <p>
+                    At the time of writing, autoplay policy implementations were
+                    not working sufficiently for proper testing, but many
+                    browsers have another way to do this via a setting to allow
+                    autoplay per domain. This is not necessarily the most
+                    user-friendly way but it does work.
+                </p>
+            </div>
+            <p>
+                In order to be able to potentially automatically start playback
+                of HTML media elements, the HTML document to be synchronized
+                should be served with a compatible
+                <a
+                    href="https://html.spec.whatwg.org/multipage/infrastructure.html#policy-controlled-features"
+                    ><code>autoplay</code> policy</a
+                >.
+            </p>
+            <p>
+                For example, in the context of a multi-HTML document
+                presentation (like a book), this would enable a chapter to start
+                playing as soon as it loads. When it's done, the next HTML file
+                gets loaded automatically and starts playing as soon as it
+                loads.
+            </p>
+            <p>
+                The page ultimately controls the request to enable/disable
+                autoplay, so allowing <code>autoplay</code> at the server level
+                is reasonable.
+            </p>
+        </section>
+        <section
+            class="appendix"
+            id="incorporating-into-other-formats"
+            tabindex="-1"
+        >
+            <h2 class="appendix" tabindex="-1">
+                Incorporating into other formats
+            </h2>
+            <p>
+                In cases where the audio narration file is not referenced in the
+                HTML document, more scaffolding is required to make the
+                association among the HTML document, the audio narration, and
+                the WebVTT cues.
+            </p>
+            <p>
+                <a href="#associating-the-webvtt-file-with-the-htmlmediaelement"
+                    >This relationship</a
+                >
+                then has to be made programatically by the user agent handling
+                the format.
+            </p>
+            <div class="note">
+                <p>These are ideas, nothing official yet!</p>
+            </div>
+            <section id="epub" tabindex="-1">
+                <h4 tabindex="-1">EPUB</h4>
+                <p>
+                    Similar to how an EPUB manifest associates a Media Overlay
+                    document with a Content Document:
+                </p>
+                <pre
+                    class="example"
+                    title="Media Overlays in EPUB package file manifest"
+                >
+&lt;item href=&quot;chapter1.xhtml&quot; id=&quot;ch1&quot; media-type=&quot;application/xhtml+xml&quot; media-overlay=&quot;ch1-overlay&quot;/&gt;
+&lt;item href=&quot;audio/ch1.mp3&quot; id=&quot;ch1-audio&quot; media-type=&quot;audio/mpeg&quot;/&gt;
+&lt;item href=&quot;chapter1.smil&quot; id=&quot;ch1-overlay&quot; media-type=&quot;application/smil+xml&quot;/&gt;
+</pre
+                >
+                <p>
+                    We can expand the <code>media-overlay</code> attribute to
+                    allow multiple values, and determine the purpose of each via
+                    its <code>media-type</code>:
+                </p>
+                <pre class="example" title="WebVTT in EPUB package file">
+&lt;item href=&quot;chapter1.xhtml&quot; id=&quot;ch1&quot; media-type=&quot;application/xhtml+xml&quot; media-overlay=&quot;ch1-audio ch1-vtt&quot;/&gt;
+&lt;item href=&quot;audio/ch1.mp3&quot; id=&quot;ch1-audio&quot; media-type=&quot;audio/mpeg&quot;/&gt;
+&lt;item href=&quot;ch1.vtt&quot; id=&quot;ch1-vtt&quot; media-type=&quot;text/vtt&quot;/&gt;
+</pre
+                >
+                <p>
+                    The EPUB Reading System then dynamically loads the audio and
+                    associates the WebVTT file with it. It uses a small amount
+                    of scripting to synchronize highlights with cue events.
+                </p>
+            </section>
+            <section id="audiobooks" tabindex="-1">
+                <h4 tabindex="-1">Audiobooks</h4>
+                <p>
+                    The audio file is already in the manifest; the HTML file is
+                    its <code>alternate</code>; and the WebVTT file can be
+                    another <code>alternate</code>.
+                </p>
+                <pre
+                    class="example"
+                    title="Audiobooks manifest with WebVTT reference"
+                >
+&quot;alternate&quot; : [{
+        &quot;type&quot; : &quot;LinkedResource&quot;,
+        &quot;url&quot; : &quot;text/part001-1.html&quot;,
+        &quot;encodingFormat&quot; : &quot;text/html&quot;
+    },{
+        &quot;type&quot; : &quot;LinkedResource&quot;,
+        &quot;url&quot; : &quot;text/part001-1.vtt&quot;,
+        &quot;encodingFormat&quot; : &quot;text/vtt&quot;
+    }
+]
+</pre
+                >
+                <p>
+                    This could raise the question of how the user agent presents
+                    alternate options. In this case, the desired approach is to
+                    use both <code>alternate</code>s together rather than
+                    choosing one or the other.
+                </p>
+            </section>
+        </section>
+        <section class="appendix" id="wishlist" tabindex="-1">
+            <h2 class="appendix" tabindex="-1">Wishlist</h2>
+            <section id="highlight-priority" tabindex="-1">
+                <h3 tabindex="-1">Highlight priority</h3>
+                <p>
+                    <a
+                        href="https://www.w3.org/TR/css-highlight-api-1/#priorities"
+                        >Highlight priority</a
+                    >
+                    controls the overlay order of highlights. How could a
+                    document or publication indicate its priorities? E.g. if the
+                    groups are &quot;word&quot; and &quot;paragraph&quot;, their
+                    highlights should be prioritized accordingly so that a
+                    &quot;word&quot; highlight is not hidden behind a
+                    &quot;paragraph&quot; highlight.
+                </p>
+                <p>
+                    One simple idea is to add a <code>priority</code> property
+                    to the custom cue payload. Its value would be a non-negative
+                    integer.
+                </p>
+            </section>
+            <section id="screen-reader-friendliness" tabindex="-1">
+                <h3 tabindex="-1">Screen reader friendliness</h3>
+                <p>
+                    The user pauses audio playback and wants to inspect the
+                    currently highlighted text of the document with a screen
+                    reader. How does the screen reader know where to start from?
+                    How can it be made aware of where the highlight is
+                    currently?
+                </p>
+                <div class="note">
+                    <p>
+                        This discussion about
+                        <a href="https://github.com/whatwg/html/issues/5326"
+                            >programatically setting focus navigation start
+                            point</a
+                        >
+                        is relevant.
+                    </p>
+                </div>
+            </section>
+        </section>
+        <section class="appendix" id="acknowledgements" tabindex="-1">
+            <h2 class="appendix" tabindex="-1">Acknowledgements</h2>
+            <p>
+                At the time of publication, the members of the
+                <a href="https://www.w3.org/community/sync-media-pub/"
+                    >Synchronized Multimedia for Publications Community Group</a
+                >
+                were:
+            </p>
+            <p>
+                Avneesh Singh (DAISY Consortium), Ben Dugas (Rakuten, Inc.),
+                Chris Needham (British Broadcasting Corporation), Daniel Weck
+                (DAISY Consortium), Didier Gehrer, Farrah Little (BC Libraries
+                Cooperative), George Kerscher (DAISY Consortium), Ivan Herman
+                (W3C), James Donaldson, Lars Wallin (Colibrio), Livio Mondini,
+                Lynn McCormack (CAST, Inc), Marisa DeMeglio (DAISY Consortium,
+                chair), Markku Hakkinen (Educational Testing Service), Matt
+                Garrish (DAISY Consortium), Michiel Westerbeek (Tella), Nigel
+                Megitt (British Broadcasting Corporation), Romain Deltour (DAISY
+                Consortium), Wendy Reid (Rakuten, Inc.), Zheng Xu (Rakuten,
+                Inc.)
+            </p>
+        </section>
+    </body>
+</html>

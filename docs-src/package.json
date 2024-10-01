@@ -3,26 +3,36 @@
   "version": "1.0.0",
   "description": "",
   "main": ".eleventy.js",
+  "type": "module",
   "scripts": {
-    "serve": "./node_modules/.bin/eleventy --serve",
-    "build": "./node_modules/.bin/eleventy build && ./node_modules/.bin/gulp"
+    "serve": "cross-env DEBUG=Eleventy* eleventy --serve",
+    "serve-https": "cross-env HTTPS=true DEBUG=Eleventy* eleventy --serve",
+    "build": "npm run clean && eleventy",
+    "buildwatch": "eleventy --watch",
+    "clean": "rimraf docs",
+    "http-serve": "cd ../docs && http-serve",
+    "dev": "npm run clean && npm run serve"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "@11ty/eleventy": "^0.11.0",
-    "gulp": "^4.0.2",
-    "gulp-pretty-html": "^2.0.10",
+  "devDependencies": {
+    "@11ty/eleventy": "^3.0.0-beta.1",
+    "cross-env": "^7.0.3",
+    "fs-extra": "^11.2.0",
     "html-entities": "^1.3.1",
-    "markdown-it": "^11.0.0",
-    "markdown-it-anchor": "^5.3.0",
-    "markdown-it-attrs": "^3.0.3",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.0.1",
+    "markdown-it-attrs": "^4.1.6",
     "markdown-it-deflist": "^2.0.3",
     "markdown-it-div": "^1.1.0",
     "markdown-it-header-sections": "^1.0.0",
     "markdown-it-table-of-contents": "^0.4.4",
+    "npm-run-all": "^4.1.5",
     "nunjucks": "^3.2.2",
+    "prettier": "^3.3.2",
+    "rimraf": "^5.0.7",
+    "sharp": "^0.33.4",
     "slugify": "^1.4.5"
   }
 }

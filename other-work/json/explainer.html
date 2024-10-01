@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset='utf-8'>
+  
+</head>
+
+<body>
+  <section id="abstract">
+    <p>This document is an explainer to accompany the Synchronized Narration specification.</p>
+  </section>
+
+  <section id="sotd">
+    <p>This draft is still under consideration within the Synchronized Media for Publications Community Group and is subject to change. The most prominent issues will be referenced in the document with links provided.</p>
+
+    <p class="note">This document needs to be formatted like an "Explainer"</p>
+    
+  </section>
+
+  <section id="history">
+      <h1>History</h1>
+
+      <p>The formal historical precedent for the concept of synchronized narration is the <a href="http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html">EPUB3 Media Overlays specification</a> (digital publications with synchronized text-audio playback).</p>
+
+      <p>EPUB3 Media Overlays itself can be seen as the "mainstream publishing" alternative to the <a href="http://www.daisy.org/daisypedia/daisy-digital-talking-book">DAISY Digital Talking Book format</a>, which serves the accessibility community more specifically.</p>
+
+      <p>Synchronized Narration is the evolution of these concepts, optimized for the open web platform.</p>
+
+    </section>
+
+    <section id="scope">
+      <h1>Scope</h1>
+
+      <p>Initially, the work of the Synchronized Media CG was envisioned to potentially develop a recommendation for how to integrate many different types of media into Web Publications, from video to captioning to audio narration. The concrete use
+        cases with the most interest expressed by user agent and content creators were all centered around audio narration synchronized with text, similar to <a href="https://w3c.github.io/publ-epub-revision/epub32/spec/epub-mediaoverlays.html">EPUB 3 Media Overlays</a>.</p>
+
+
+      <p>By limiting the scope of our first report to synchronizing audio narration with HTML content, we are able to:</p>
+
+      <ul>
+        <li>Create a recommendation that is easy to implement and that co-exists well with both standalone HTML content and Web Publications</li>
+        <li>Provide a path forward for existing EPUB 3 Media Overlays content to move to Web Publications</li>
+      </ul>
+
+      <p>Given sufficient interest and resources, our work can be expanded, perhaps to include more complex media types such as video, audio description, and captioning.</p>
+
+    </section>
+
+    <section id="technology-selection">
+      <h1>Technology Selection</h1>
+
+      <p>The following aspects were considered:</p>
+      <ul>
+        <li>Browser support</li>
+        <li>Ability to point to text in an external HTML5 document</li>
+        <li>Developer-friendly syntax (XML is ok; JSON is better)</li>
+        <li>Nested structure support, used for skip/escape features and multiple granularities</li>
+      </ul>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Browser support</th>
+              <th>External text</th>
+              <th>Syntax</th>
+              <th>Nesting</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="#smil">SMIL</a></td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>XML</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a href="#ttml2">TTML2</a></td>
+              <td>No</td>
+              <td>No*</td>
+              <td>XML</td>
+              <td>Yes</td>
+            </tr>
+            <tr>
+              <td><a href="#webvtt">WebVTT</a></td>
+              <td>Yes</td>
+              <td>No*</td>
+              <td>Text</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><a href="#webanimations">WebAnimations</a></td>
+              <td>Yes</td>
+              <td>n/a</td>
+              <td>n/a</td>
+              <td>n/a</td>
+            </tr>
+            <tr>
+              <td><a href="#webannotations">WebAnnotations</a></td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>JSON</td>
+              <td>No</td>
+            </tr>
+            <tr>
+              <td><a href="#custom">Custom</a></td>
+              <td>No</td>
+              <td>Yes</td>
+              <td>JSON</td>
+              <td>Yes</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h2 id="smil">SMIL</h2>
+        <p><a href="https://www.w3.org/AudioVideo/">https://www.w3.org/AudioVideo/</a></p>
+        <p>While SMIL was successfully used in EPUB3 Media Overlays, it has a verbose syntax and no specific advantages that would make us keep using it.</p>
+        <p>The SMIL working group is no longer active, and proposing changes to SMIL to make it more usable for this context does not have any path forward at this point.</p>
+
+        <h2 id="ttml2">TTML2</h2>
+        <p><a href="https://www.w3.org/TR/ttml2/">https://www.w3.org/TR/ttml2/</a></p>
+        <p>TTML2 is capable of complex media synchronization beyond text + video. However, the text lives in the same file as the timing information -- it does not support pointing to external text documents. It is possible to use custom metadata or
+          hack ID values to insert a reference, but this still means no out of the box support for what we need. This makes it hard to integrate into the Web Publications environment.</p>
+        <p>At TPAC 2018, it was confirmed that inclusion of a mechanism to point to external text documents is out of scope.</p>
+
+        <h2 id="webvtt">WebVTT</h2>
+        <p><a href="https://www.w3.org/TR/webvtt1/">https://www.w3.org/TR/webvtt1/</a></p>
+        <p>The only way to reference external text references would be via custom metadata that sits alongside audio sync points. However, we can't leverage existing browser support - our custom metadata would not be recognized by any implementations
+          except ours. Nesting is also not supported, so we couldn't represent multiple granularities or skippable/escapable structures.</p>
+
+        <h2 id="webanimations">WebAnimations</h2>
+        <p><a href="https://www.w3.org/TR/web-animations-1/">https://www.w3.org/TR/web-animations-1/</a></p>
+        <p>While web animations provides good timing and playback support, the lack of a declarative syntax makes it not an option.</p>
+
+        <h2 id="webannotations">WebAnnotations</h2>
+        <p><a href="https://www.w3.org/annotation/">https://www.w3.org/annotation/</a></p>
+        <p>Web annotations could represent everything that we need it to, possibly with some customization for nesting, but there's no associated processing model for playback as a sequence of audio clips.</p>
+      
+        <h2 id="custom">Custom</h2>
+        <p>None of the candidates above that have browser support can adequately express what we require at minimum, so we can consider creating our own format that is developer-friendly, compact, and easily supports the features we want. We can
+          learn from <a href="https://github.com/w3c/sync-media-pub/blob/master/drafts/readium2.md">Readium2 experiments</a> in representing Media Overlays in JSON.</p>
+      </section>
+    </section>
+</body>
+
+</html>

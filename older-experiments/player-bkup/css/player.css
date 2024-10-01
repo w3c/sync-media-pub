@@ -1,0 +1,160 @@
+html {
+    height: 100%;
+}
+body {
+    height: 99%;
+    display: grid;
+    grid-template-areas: 
+    "header header header"
+    "nav main aside"
+    "footer footer footer";
+    grid-template-rows: min-content minmax(auto, 78%) min-content;
+    grid-template-columns: 15% auto 20%;
+    grid-gap: 1rem;
+    overflow: hidden;
+}
+main {
+    grid-area: main;
+    overflow: scroll;
+}
+aside {
+    grid-area: aside;
+    overflow: scroll;
+}
+body > nav {
+    grid-area: nav;
+}
+body > nav details {
+    height: 100%;
+}
+body > nav details div {
+    height: 100%;
+}
+
+body > nav div {
+    overflow-y: scroll;
+}
+
+header {
+    border-bottom: 2px solid gray;
+    align-content: center; 
+    grid-area: header;
+    display: grid;
+    grid-template-areas: "title nav";
+    grid-template-columns: 80% auto;
+}
+header h1 {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+header nav {
+    grid-area: nav;
+    display: grid;
+}
+header div#pub-info {
+    grid-area: title;
+}
+header nav ul {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-evenly;
+    padding: 0;
+    align-items: center;
+}
+footer {
+    grid-area: footer;
+}  
+
+div#player-page {
+    grid-column: 2/3;
+    justify-self: center;
+    height: 100%;
+}
+
+#cover-image-container {
+    display: grid;
+}
+#cover-image-container img {
+    justify-self: center;
+}
+iframe {
+    height: 100%;
+    background-color: white;
+    border-width: 0;
+    display: block;
+}
+#player-page iframe {
+    width: 100%;
+}
+#bookmarks li {
+    display: flex;
+    margin-bottom: 1rem;
+}
+#bookmarks li button {
+    margin-left: auto; 
+}
+#bookmarks button {
+    border: thin white solid;
+    border-radius: 4px;
+    padding: 0.25rem;
+}
+#player-captions {
+    font-size: 3rem;
+    text-align: center;
+    margin-top: 2rem;
+    color: var(--hltext);
+    opacity: 0.9;
+}
+#edit-bookmarks {
+    margin: auto;
+}
+#bookmarks nav {
+    display: grid;
+}
+@media (max-width: 768px) {
+    body {
+        grid-template-areas: 
+        "header"
+        "main"
+        "footer"
+        "nav"
+        "aside";
+        grid-template-rows: min-content auto min-content min-content min-content;
+        grid-template-columns: 0.9fr;
+        grid-gap: 0.5rem
+        
+    }   
+    header h1 {
+        font-size: medium;
+    }
+    header nav ul {
+        flex-direction: column;
+        font-size: medium;        
+        justify-self: right;
+        margin-top: 1vh;
+    }
+    header nav li {
+        line-height: 1.5;
+    }
+    #player-toc {
+        margin-top: 1rem;
+        margin-bottom: 1rem;
+        font-weight: bold;
+    }
+    #edit-bookmarks {
+        margin: 0;
+        width: 3rem;
+    }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+    header h1 {
+        font-size: medium;
+    }
+    header nav {
+        font-size: medium;
+    }
+    #player-toc iframe {
+        width: 99%;    
+    }
+}

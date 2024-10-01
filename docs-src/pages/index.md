@@ -1,12 +1,37 @@
 ---
 title: SyncMedia Community Group Overview
 ---
-This is an overview of work being done by the Synchronized Media for Publications Community Group.
+This is an overview of work being done by the [Synchronized Media for Publications Community Group](#about-this-group). 
 
 * [Github repository](https://github.com/w3c/sync-media-pub)
 * [Mailing list archives](https://lists.w3.org/Archives/Public/public-sync-media-pub/)
 
-## Introduction
+
+## Latest work: SyncMediaLite
+
+* Uses the browser's inbuilt cue synchronization capabilities via WebVTT
+* Easy to implement a synchronized text highlight
+* Works well for common use cases of audio narrated HTML documents
+
+### Documents
+
+* [Explainer](/explainer)
+* [Use cases](/use-cases)
+* [Draft spec](/sync-media-lite)
+* Demos:
+  * [Accessible Books in Browsers](https://daisy.github.io/accessible-books-in-browsers/): 
+  _Self-playing text and audio books. The books here are converted automatically from DAISY 2.02/EPUB into multi-chapter sets of HTML files with built-in playback for SyncMediaLite_
+  * [The Raven](/demos/raven/index.html)
+  _Poem with multi-level highlighting. This is a single-page document with built-in playback for SyncMediaLite and advanced highlighting features_
+  * [Using TextTrackCues to play EPUB Media Overlays](https://github.com/marisademeglio/mo-player)
+  _Using the same techniques as SyncMediaLite playback, this Media Overlays `.smil` file can be played_
+  <!-- * [The World's Best Audiobook](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
+  _Enhanced W3C Audiobooks demo. This is more of a traditional "player" where the book documents are loaded into an `iframe`. The books are W3C Audiobooks with SyncMediaLite incorporated._
+  -->
+
+See [other work](https://github.com/w3c/sync-media-pub/tree/main/other-work) for more ideas this group has had over the years, including experiments with SMIL, and a syntactically-light JSON format. 
+
+## About this group
 
 ### History
 The [Synchronized Media for Publications Community Group](https://www.w3.org/community/sync-media-pub/) was formed to recommend the best way to synchronize media with document formats being developed by the
@@ -15,37 +40,5 @@ The [Synchronized Media for Publications Community Group](https://www.w3.org/com
 ### Present
 The [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/) is now primarily focused on spec maintenance; however, the work here continues to be to explore and develop synchronization techniques compatible with publishing formats on the web, including [Audiobooks](https://www.w3.org/TR/audiobooks/), [EPUB](https://www.w3.org/publishing/groups/epub-wg/), and standalone [HTML](https://www.w3.org/html/).
 
-## Documents
-
-The following are the currently available documents created in this CG. They represent two different strategies to synchronize media: 1. [With WebVTT](#with-webvtt) and 2. [With SMIL](#with-smil). 
-
-### With WebVTT
-
-This experimental approach defines a usage of WebVTT to synchronize HTML elements with audio. This would be good for combining single straightforward media references, e.g. one audio file for one HTML document. This also is suited to a web browser environment, when combined with a small amount of Javascript. No specialized player is needed.
-
-* [Overview](https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0000.html)
-* [Demos](https://daisy.github.io/accessible-books-in-browsers/#demos)
-* [Sample file](https://github.com/daisy/accessible-books-in-browsers/blob/main/demos/moby-dick/vtt/chapter_001.vtt)
-* [Notes on Incorporating with Audiobooks](https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0003.html)
-
-
-### With SMIL
-
-This approach defines a usage of SMIL plus extensions. This would be good for combining multiple non-destructive media references, e.g. portions of many audio files for one HTML document. This is completely declarative with no associated scripting. This also is suited to a "player" type of environment, where a SyncMedia-aware user agent is rendering the content. Implementation is more involved than the example above with WebVTT.
-
-* [SyncMedia 1.0](sync-media.html)
-* [Explainer](explainer.html)
-* Incorporating SyncMedia
-    * [Incorporating into a Publication Manifest](incorporating-into-pubmanifest.html)
-    * [Standalone packaging](standalone-packaging.html)
-    * [Including in an HTML doc](including-in-html.html)
-* [Use cases](use-cases.html)
-* [Design principles](design-principles.html)
-* [Examples](examples.html)    
   
-## Archives
 
-These documents were developed by this community group but are not considered current or necessarily complete.
-
-* [Synchronized Narration](archived/synchronized-narration.html)
-* [Incorporating Synchronized Narration into a Publication Manifest](archived/incorporating-synchronized-narration.html)

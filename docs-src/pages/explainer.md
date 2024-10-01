@@ -1,82 +1,45 @@
 ---
-title: SyncMedia Explainer
+title: SyncMediaLite explainer
 ---
-This document is a work in progress {.wip}
+## History: EPUB and DAISY
 
-[[TOC]]
+The use case of reading with narration and synchronized highlight has long been a part of electronic publishing, and is already supported by existing standards ([DAISY](https://daisy.org/activities/standards/daisy/), [EPUB Media Overlays](https://www.w3.org/publishing/epub32/epub-mediaoverlays.html)). Under the hood, these standards use [SMIL](https://www.w3.org/TR/SMIL3/) to synchronize an audio file with an [HTML](https://html.spec.whatwg.org/multipage/) file, by pairing timestamps with phrase IDs.
 
-## Background
+## Issues 
 
-The formal historical precedent for the concept of SyncMedia is the [EPUB3 Media Overlays specification](http://www.idpf.org/epub/31/spec/epub-mediaoverlays.html) (digital publications with synchronized text-audio playback).
+* SMIL is seen as complicated and outdated.
 
-EPUB3 Media Overlays itself can be seen as the "mainstream publishing" alternative to the [DAISY Digital Talking Book format](http://www.daisy.org/daisypedia/daisy-digital-talking-book), which is an accessible book format for people with print disabilities.
+Its roots are from the web's early days, before HTML supported native audio and video; and the full SMIL language is indeed quite complex. However, the usage of SMIL in EPUB Media Overlays is minimal and, with a few more restrictions, could be translated into a more modern format and be more easily implemented.
 
-SyncMedia is the evolution of these concepts, optimized for the open web platform, and expanded to incorporate additional media types.
+* Synchronized text and audio is expensive to produce.
 
-## Concepts
+Production of audio narrated text is a lot of work and hence not as common as standalone text or audio books. Now with more powerful speech and language processing tools, automated synchronization is becoming feasible. However, it's not fast enough to do on the client side (yet), so book producers are still going to have to create pre-synchronized contents. But advances in their own tools are going to make it easier for them to do this.
 
-A SyncMedia presentation is a linear timeline of external media objects. The timeline is arranged into parallel and sequential groupings of media references. Groupings carry semantic inflection via a `sync:role` property.
+## Synchronization on the modern web
 
-Examples of SyncMedia use cases are:
-* HTML document synchronized with audio narration
-* Audio-only presentation, structured with SyncMedia to provide phrase-level navigation
-* SVG synchronized with audio
-* Video synchronized with a transcript
+The same user experience is achieved with a more modern approach that is easier to implement. This is what is described in [SyncMediaLite](sync-media-lite).
 
-In each of these use cases, the presentation is composed of external media objects, organized into fragments, and synchronized on a timeline.
+### Media playback
 
-However, straight-through beginning-to-end playback is not the only way that the timeline will be consumed. Users may start in at a mid-point. They may escape out of complex structures (e.g. tables or asides). They may navigate through the presentation via an authored granularity (e.g. previous/next sentence). In addition, they may control other aspects of the presentation: lower the volume of background music, turn off sound effects, change the highlight color of text, or slow down a video. Therefore, the format must allow a standard way to expose this information to a user agent.
+Today, the HTMLMediaElement has built-in cue synchronization. When loaded with a series of TextTrackCues, the MediaElement will automatically fire off cue events at the right times, so unlike SMIL, it does not require hand-coding a timing engine.
 
-Just like EPUB Media Overlays, Sync Media is based on [SMIL 3.0](https://www.w3.org/TR/REC-smil/smil30.html). It is designed to offer a lossless upgrade path for existing Media Overlays documents.
+### Highlighting 
+
+The CSS Highlight API makes it easy to register highlights, which are then available for styling as pseudo-elements. There is then no need to add and remove class attributes throughout the DOM.
 
 
-## Technology Selection
+### Referencing text
 
-See [technology candidates](technology-candidates.html) for an overview of the languages that were evaluated for suitability.
+In EPUB Media Overlays, this is done with fragment identifiers. By expanding this to include the use of [selectors](https://www.w3.org/TR/selectors-states/#selectors), we have a more flexible way to reference text, without requiring IDs on all the text, and can even go to the character level. 
 
-The technology selection is to __extend SMIL 3.0__ with customizations. Given the success of SMIL with EPUB Media Overlays, it makes sense to continue down this path. And given that SMIL has not had a refresh for the modern web platform, we anticipate extending it allows these gaps to be filled.
 
-Choosing a serialization format (e.g. XML or JSON) was not part of this selection process, as the Synchronized Media for Publications CG felt [it is more desireable to define a model first](https://lists.w3.org/Archives/Public/public-sync-media-pub/2020Jul/0005.html) before deciding on one or multiple serializations.  
+## An upgrade path
 
-## Relationship to SMIL3 and EPUB Media Overlays
+EPUB Media Overlays could be replaced with SyncMediaLite, with the following modifications:
 
-SyncMedia is, like EPUB3 Media Overlays, a subset of SMIL3 plus custom extensions. SyncMedia puts fewer restrictions on the use of SMIL3 than EPUB3 Media Overlays does, and, additionally, it incorporates more elements from SMIL3. The custom extensions in EPUB Media Overlays have been replaced in SyncMedia with more generic mechanisms.
+* Restrict: there can be one audio file per HTML document. 
+* Restrict: the audio file must play in the correct order by default. 
+* Expand: allow additional selectors, not just fragment IDs.
+* Adapt: allow the EPUB package document's `media-overlay` attribute to accept a list of space-separated values
 
-The following table compares SyncMedia features with the closest point of comparison in EPUB3 Media Overlays.
-
-| Purpose | SyncMedia feature | EPUB3 Media Overlays feature |
-|---------|-------------------|-----------------------------|
-| Semantics | `sync:role` plus [DPUB-ARIA](https://www.w3.org/TR/dpub-aria-1.0/), [WAI-ARIA Document Structure Roles](https://www.w3.org/TR/wai-aria/#document_structure_roles) and [landmark roles](https://www.w3.org/TR/wai-aria-1.1/#landmark_roles)   | [`epub:type`](https://www.w3.org/publishing/epub/epub-contentdocs.html#attrdef-epub-type) plus [EPUB SSV](https://idpf.github.io/epub-vocabs/structure/)|
-| Nested text structures | Unrestricted use of `par` and `seq` nesting | [`epub:textref`](https://www.w3.org/publishing/epub/epub-mediaoverlays.html#attrdef-body-textref) | 
-| Styling | `param` elements | Metadata in the EPUB Package Document |
-| Parallel timed media, e.g. background music | Unrestricted use of `par` and `seq` nesting | None |
-| Reference embedded media | Dereference src of appropriate media element (`text`, `video`, `image`, `audio`, `ref`), e.g. `<video src="page.html#vid-elem" clipBegin="0" clipEnd="3">` | Not really supported, just worked around.|
-
-SyncMedia's custom extensions on top of its use of SMIL3 are:
-
-| Custom extension | Type | Context | Required |
-|------------------|------|---------|----------|
-| List of param names | Attribute values | Param element's `name` attribute | No |
-| `sync:role` | Attribute | Time container elements | No |
-| `sync:track` | Element | Document head | No |
-| `sync:track` | Attribute | Media elements | No |
-| `sync:label` | Attribute | Track element | Yes* |
-| `sync:defaultSrc` | Attribute | Track element | No |
-| `sync:defaultFor` | Attribute | Track element | No |
-| `sync:trackType` | Attribute | Track element | No |
-| List of track types | Attribute values | Track element's `sync:trackType` attribute | No |
-
-\* Required on the `sync:track` element; use of which is itself optional
-
-## Features
-
-### Navigation
-
-### Tracks
-
-* Features afforded by tracks
-* Tracks vs SMIL regions
-
-Application: lets user mix different tracks during playback.
-
-### Self-contained within HTML
+See [caveats](caveats) related to going from EPUB Media Overlays to SyncMediaLite.

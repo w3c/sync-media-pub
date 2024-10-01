@@ -1,67 +1,145 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
     <head>
-        <title>Synchronized Media for Publications CG: SyncMedia Community Group Overview</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta charset="utf-8"><link rel="stylesheet" href="css/page.css"/></head>
-    <body><h1>SyncMedia Community Group Overview</h1>
-<p>Last updated Thu Feb 10 2022</p>
-<p>This is an overview of work being done by the Synchronized Media for Publications Community Group.</p>
-<ul>
-<li><a href="https://github.com/w3c/sync-media-pub">Github repository</a></li>
-<li><a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/">Mailing list archives</a></li>
-</ul>
-<section id="introduction">
-<h2>Introduction</h2>
-<section id="history">
-<h3>History</h3>
-<p>The <a href="https://www.w3.org/community/sync-media-pub/">Synchronized Media for Publications Community Group</a> was formed to recommend the best way to synchronize media with document formats being developed by the
-<a href="https://www.w3.org/publishing/groups/publ-wg/">Publishing Working Group</a>, in order to make publications accessible to people with different types of reading requirements.</p>
-</section>
-<section id="present">
-<h3>Present</h3>
-<p>The <a href="https://www.w3.org/publishing/groups/publ-wg/">Publishing Working Group</a> is now primarily focused on spec maintenance; however, the work here continues to be to explore and develop synchronization techniques compatible with publishing formats on the web, including <a href="https://www.w3.org/TR/audiobooks/">Audiobooks</a>, <a href="https://www.w3.org/publishing/groups/epub-wg/">EPUB</a>, and standalone <a href="https://www.w3.org/html/">HTML</a>.</p>
-</section>
-</section>
-<section id="documents">
-<h2>Documents</h2>
-<p>The following are the currently available documents created in this CG. They represent two different strategies to synchronize media: 1. <a href="#with-webvtt">With WebVTT</a> and 2. <a href="#with-smil">With SMIL</a>.</p>
-<section id="with-webvtt">
-<h3>With WebVTT</h3>
-<p>This experimental approach defines a usage of WebVTT to synchronize HTML elements with audio. This would be good for combining single straightforward media references, e.g. one audio file for one HTML document. This also is suited to a web browser environment, when combined with a small amount of Javascript. No specialized player is needed.</p>
-<ul>
-<li><a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0000.html">Overview</a></li>
-<li><a href="https://daisy.github.io/accessible-books-in-browsers/#demos">Demos</a></li>
-<li><a href="https://github.com/daisy/accessible-books-in-browsers/blob/main/demos/moby-dick/vtt/chapter_001.vtt">Sample file</a></li>
-<li><a href="https://lists.w3.org/Archives/Public/public-sync-media-pub/2021Nov/0003.html">Notes on Incorporating with Audiobooks</a></li>
-</ul>
-</section>
-<section id="with-smil">
-<h3>With SMIL</h3>
-<p>This approach defines a usage of SMIL plus extensions. This would be good for combining multiple non-destructive media references, e.g. portions of many audio files for one HTML document. This is completely declarative with no associated scripting. This also is suited to a &quot;player&quot; type of environment, where a SyncMedia-aware user agent is rendering the content. Implementation is more involved than the example above with WebVTT.</p>
-<ul>
-<li><a href="sync-media.html">SyncMedia 1.0</a></li>
-<li><a href="explainer.html">Explainer</a></li>
-<li>Incorporating SyncMedia
-<ul>
-<li><a href="incorporating-into-pubmanifest.html">Incorporating into a Publication Manifest</a></li>
-<li><a href="standalone-packaging.html">Standalone packaging</a></li>
-<li><a href="including-in-html.html">Including in an HTML doc</a></li>
-</ul>
-</li>
-<li><a href="use-cases.html">Use cases</a></li>
-<li><a href="design-principles.html">Design principles</a></li>
-<li><a href="examples.html">Examples</a></li>
-</ul>
-</section>
-</section>
-<section id="archives">
-<h2>Archives</h2>
-<p>These documents were developed by this community group but are not considered current or necessarily complete.</p>
-<ul>
-<li><a href="archived/synchronized-narration.html">Synchronized Narration</a></li>
-<li><a href="archived/incorporating-synchronized-narration.html">Incorporating Synchronized Narration into a Publication Manifest</a></li>
-</ul>
-</section>
-</body>
+        <title>
+            Synchronized Media for Publications CG: SyncMedia Community Group
+            Overview
+        </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="/css/page.css" />
+    </head>
+    <body>
+        <h1>SyncMedia Community Group Overview</h1>
+        <p>Last updated Thu Sep 05 2024</p>
+        <p>
+            This is an overview of work being done by the
+            <a href="#about-this-group"
+                >Synchronized Media for Publications Community Group</a
+            >.
+        </p>
+        <ul>
+            <li>
+                <a href="https://github.com/w3c/sync-media-pub"
+                    >Github repository</a
+                >
+            </li>
+            <li>
+                <a
+                    href="https://lists.w3.org/Archives/Public/public-sync-media-pub/"
+                    >Mailing list archives</a
+                >
+            </li>
+        </ul>
+        <section id="latest-work%3A-syncmedialite" tabindex="-1">
+            <h2 tabindex="-1">Latest work: SyncMediaLite</h2>
+            <ul>
+                <li>
+                    Uses the browser's inbuilt cue synchronization capabilities
+                    via WebVTT
+                </li>
+                <li>Easy to implement a synchronized text highlight</li>
+                <li>
+                    Works well for common use cases of audio narrated HTML
+                    documents
+                </li>
+            </ul>
+            <section id="documents" tabindex="-1">
+                <h3 tabindex="-1">Documents</h3>
+                <ul>
+                    <li><a href="/explainer">Explainer</a></li>
+                    <li><a href="/use-cases">Use cases</a></li>
+                    <li><a href="/sync-media-lite">Draft spec</a></li>
+                    <li>
+                        Demos:
+                        <ul>
+                            <li>
+                                <a
+                                    href="https://daisy.github.io/accessible-books-in-browsers/"
+                                    >Accessible Books in Browsers</a
+                                >:
+                                <em
+                                    >Self-playing text and audio books. The
+                                    books here are converted automatically from
+                                    DAISY 2.02/EPUB into multi-chapter sets of
+                                    HTML files with built-in playback for
+                                    SyncMediaLite</em
+                                >
+                            </li>
+                            <li>
+                                <a href="/demos/raven/index.html">The Raven</a>
+                                <em
+                                    >Poem with multi-level highlighting. This is
+                                    a single-page document with built-in
+                                    playback for SyncMediaLite and advanced
+                                    highlighting features</em
+                                >
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/marisademeglio/mo-player"
+                                    >Using TextTrackCues to play EPUB Media
+                                    Overlays</a
+                                >
+                                <em
+                                    >Using the same techniques as SyncMediaLite
+                                    playback, this Media Overlays
+                                    <code>.smil</code> file can be played</em
+                                >
+                            </li>
+                        </ul>
+                        <!-- * [The World's Best Audiobook](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
+_Enhanced W3C Audiobooks demo. This is more of a traditional "player" where the book documents are loaded into an `iframe`. The books are W3C Audiobooks with SyncMediaLite incorporated._
+-->
+                    </li>
+                </ul>
+                <p>
+                    See
+                    <a
+                        href="https://github.com/w3c/sync-media-pub/tree/main/other-work"
+                        >other work</a
+                    >
+                    for more ideas this group has had over the years, including
+                    experiments with SMIL, and a syntactically-light JSON
+                    format.
+                </p>
+            </section>
+        </section>
+        <section id="about-this-group" tabindex="-1">
+            <h2 tabindex="-1">About this group</h2>
+            <section id="history" tabindex="-1">
+                <h3 tabindex="-1">History</h3>
+                <p>
+                    The
+                    <a href="https://www.w3.org/community/sync-media-pub/"
+                        >Synchronized Media for Publications Community Group</a
+                    >
+                    was formed to recommend the best way to synchronize media
+                    with document formats being developed by the
+                    <a href="https://www.w3.org/publishing/groups/publ-wg/"
+                        >Publishing Working Group</a
+                    >, in order to make publications accessible to people with
+                    different types of reading requirements.
+                </p>
+            </section>
+            <section id="present" tabindex="-1">
+                <h3 tabindex="-1">Present</h3>
+                <p>
+                    The
+                    <a href="https://www.w3.org/publishing/groups/publ-wg/"
+                        >Publishing Working Group</a
+                    >
+                    is now primarily focused on spec maintenance; however, the
+                    work here continues to be to explore and develop
+                    synchronization techniques compatible with publishing
+                    formats on the web, including
+                    <a href="https://www.w3.org/TR/audiobooks/">Audiobooks</a>,
+                    <a href="https://www.w3.org/publishing/groups/epub-wg/"
+                        >EPUB</a
+                    >, and standalone
+                    <a href="https://www.w3.org/html/">HTML</a>.
+                </p>
+            </section>
+        </section>
+    </body>
 </html>

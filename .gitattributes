@@ -1,0 +1,9 @@
+docs-src/demos/raven/raven.mp3 filter=lfs diff=lfs merge=lfs -text
+examples/emily-dickinson-poems-series-1/poems_series1_0_dickinson.mp3 filter=lfs diff=lfs merge=lfs -text
+examples/emily-dickinson-poems-series-1/poems_series1_2_dickinson.mp3 filter=lfs diff=lfs merge=lfs -text
+older-experiments/player/public/fairytale/out.mp3 filter=lfs diff=lfs merge=lfs -text
+docs/demos/raven/raven.mp3 filter=lfs diff=lfs merge=lfs -text
+examples/emily-dickinson-poems-series-1/poems_series1_1_dickinson.mp3 filter=lfs diff=lfs merge=lfs -text
+examples/emily-dickinson-poems-series-1/poems_series1_3_dickinson.mp3 filter=lfs diff=lfs merge=lfs -text
+examples/emily-dickinson-poems-series-1/poems_series1_4_dickinson.mp3 filter=lfs diff=lfs merge=lfs -text
+older-experiments/player/public/fairytale/Harp.mp3 filter=lfs diff=lfs merge=lfs -text

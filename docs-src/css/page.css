@@ -26,3 +26,33 @@ td {
     border: thin black solid;
     padding: 5px;
 }
+
+.lookhere {
+    font-size: larger;
+}
+.lookhere::after {
+    content: "NEW 🧨";
+    font-variant: small-caps;
+    font-size: x-small;
+    padding-left: 8px;
+    background-color: yellow;
+}
+.note {
+    font-style: italic;
+    border: thin black solid;
+    padding: .5rem;
+    border-radius: 5px;
+}
+.note::before {
+    content: "Note: ";
+    font-style: normal;
+}
+.stale::after {
+    background-color: gray;
+}
+.c2021::after {
+    content: "last updated 2021 🏴‍☠️";
+}
+.c2020::after {
+    content: "last updated 2020 🏴‍☠️";
+}
