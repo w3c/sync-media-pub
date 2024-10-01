@@ -15,13 +15,13 @@ This is an overview of work being done by the [Synchronized Media for Publicatio
 
 ### Documents
 
-* [Explainer](/explainer)
-* [Use cases](/use-cases)
-* [Draft spec](/sync-media-lite)
+* [Explainer](explainer)
+* [Use cases](use-cases)
+* [Draft spec](sync-media-lite)
 * Demos:
   * [Accessible Books in Browsers](https://daisy.github.io/accessible-books-in-browsers/): 
   _Self-playing text and audio books. The books here are converted automatically from DAISY 2.02/EPUB into multi-chapter sets of HTML files with built-in playback for SyncMediaLite_
-  * [The Raven](/demos/raven/index.html)
+  * [The Raven](demos/raven/index.html)
   _Poem with multi-level highlighting. This is a single-page document with built-in playback for SyncMediaLite and advanced highlighting features_
   * [Using TextTrackCues to play EPUB Media Overlays](https://github.com/marisademeglio/mo-player)
   _Using the same techniques as SyncMediaLite playback, this Media Overlays `.smil` file can be played_
