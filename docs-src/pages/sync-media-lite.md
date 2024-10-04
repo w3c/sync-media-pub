@@ -336,6 +336,8 @@ We can expand the `media-overlay` attribute to allow multiple values, and determ
 
 The EPUB Reading System then dynamically loads the audio and associates the WebVTT file with it. It uses a small amount of scripting to synchronize highlights with cue events. 
 
+Alternately, the audio for a chapter and its WebVTT file could live directly in the chapter's HTML file. 
+
 #### Audiobooks
 
 The audio file is already in the manifest; the HTML file is its `alternate`; and the WebVTT file can be another `alternate`.
