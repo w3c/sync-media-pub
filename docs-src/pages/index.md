@@ -34,11 +34,11 @@ See [other work](https://github.com/w3c/sync-media-pub/tree/main/other-work) for
 ## About this group
 
 ### History
-The [Synchronized Media for Publications Community Group](https://www.w3.org/community/sync-media-pub/) was formed to recommend the best way to synchronize media with document formats being developed by the
-[Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/), in order to make publications accessible to people with different types of reading requirements.
+The [Synchronized Media for Publications Community Group](https://www.w3.org/community/sync-media-pub/) was formed to recommend the best way to synchronize media with document formats that were being developed by the
+Publishing Working Group, in order to make publications accessible to people with different types of reading requirements.
 
 ### Present
-The [Publishing Working Group](https://www.w3.org/publishing/groups/publ-wg/) is now primarily focused on spec maintenance; however, the work here continues to be to explore and develop synchronization techniques compatible with publishing formats on the web, including [Audiobooks](https://www.w3.org/TR/audiobooks/), [EPUB](https://www.w3.org/publishing/groups/epub-wg/), and standalone [HTML](https://www.w3.org/html/).
+The [Publishing Maintenance Working Group](https://www.w3.org/groups/wg/pm/) is now primarily focused on spec maintenance; however, the work here continues to be to explore and develop synchronization techniques compatible with publishing formats on the web, including [Audiobooks](https://www.w3.org/TR/audiobooks/), [EPUB](https://www.w3.org/publishing/groups/epub-wg/), and standalone [HTML](https://www.w3.org/html/).
 
   
 
