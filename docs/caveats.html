@@ -9,50 +9,53 @@
         <link rel="stylesheet" href="css/page.css" />
     </head>
     <body>
-        <h1>SyncMediaLite caveats</h1>
-        <p>Last updated Tue Oct 01 2024</p>
-        <section
-            id="caveats-when-going-from-epub-media-overlays-to-syncmedialite"
-            tabindex="-1"
-        >
-            <h1 tabindex="-1">
-                Caveats when going from EPUB Media Overlays to SyncMediaLite
-            </h1>
-            <p>
-                When adopting a more modern synchronization strategy, as
-                described in <a href="sync-media-lite">SyncMediaLite</a>, some
-                adaptation is required. It may be that existing
-                <code>.smil</code> files have to be transformed into
-                <code>.vtt</code> files before being distributed to a system
-                that expects <code>.vtt</code>. Or the user agent may be loading
-                <code>.smil</code> files and internally transforming them to
-                <code>TextTrackCues</code> so as to avoid writing a SMIL engine.
-            </p>
-            <p>
-                In any case where EPUB Media Overlays need to be transformed to
-                work in a WebVTT-based playback scenario, there are some
-                differences to be aware of.
-            </p>
-            <section id="multiple-audio-files." tabindex="-1">
-                <h2 tabindex="-1">Multiple audio files.</h2>
+        <main>
+            <h1>SyncMediaLite caveats</h1>
+            <p>Last updated Tue Oct 01 2024</p>
+            <section
+                id="caveats-when-going-from-epub-media-overlays-to-syncmedialite"
+                tabindex="-1"
+            >
+                <h1 tabindex="-1">
+                    Caveats when going from EPUB Media Overlays to SyncMediaLite
+                </h1>
                 <p>
-                    It's theoretically permitted in EPUB Media Overlays to have
-                    sync points in the same SMIL file referencing different
-                    audio files (in practice this isn't common).
+                    When adopting a more modern synchronization strategy, as
+                    described in <a href="sync-media-lite">SyncMediaLite</a>,
+                    some adaptation is required. It may be that existing
+                    <code>.smil</code> files have to be transformed into
+                    <code>.vtt</code> files before being distributed to a system
+                    that expects <code>.vtt</code>. Or the user agent may be
+                    loading <code>.smil</code> files and internally transforming
+                    them to <code>TextTrackCues</code> so as to avoid writing a
+                    SMIL engine.
                 </p>
-            </section>
-            <section id="non-contiguous-audio-segments." tabindex="-1">
-                <h2 tabindex="-1">Non-contiguous audio segments.</h2>
                 <p>
-                    Say we have an audio file of someone saying &quot;Three one
-                    two&quot;. Our HTML text, though, says &quot;1 2 3&quot;.
-                    Theoretically, SMIL can handle this, though it's worth
-                    mentioning that this type of content is not commonly found:
+                    In any case where EPUB Media Overlays need to be transformed
+                    to work in a WebVTT-based playback scenario, there are some
+                    differences to be aware of.
                 </p>
-                <pre
-                    class="example"
-                    title="SMIL markup of non-contiguous audio segments"
-                >
+                <section id="multiple-audio-files." tabindex="-1">
+                    <h2 tabindex="-1">Multiple audio files.</h2>
+                    <p>
+                        It's theoretically permitted in EPUB Media Overlays to
+                        have sync points in the same SMIL file referencing
+                        different audio files (in practice this isn't common).
+                    </p>
+                </section>
+                <section id="non-contiguous-audio-segments." tabindex="-1">
+                    <h2 tabindex="-1">Non-contiguous audio segments.</h2>
+                    <p>
+                        Say we have an audio file of someone saying &quot;Three
+                        one two&quot;. Our HTML text, though, says &quot;1 2
+                        3&quot;. Theoretically, SMIL can handle this, though
+                        it's worth mentioning that this type of content is not
+                        commonly found:
+                    </p>
+                    <pre
+                        class="example"
+                        title="SMIL markup of non-contiguous audio segments"
+                    >
 &lt;par&gt;
     &lt;audio src=&quot;audio.mp3&quot; clipBegin=&quot;1s&quot; clipEnd=&quot;2s&quot;/&gt;
     &lt;text src=&quot;file.html#one&quot;/&gt;
@@ -66,17 +69,19 @@
     &lt;text src=&quot;file.html#three&quot;/&gt;
 &lt;/par&gt;
 </pre
-                >
-                <p>
-                    You would see the highlight and audio start with
-                    &quot;1&quot; and proceed to &quot;2&quot;, then
-                    &quot;3&quot;, since each <code>&lt;par&gt;</code> indicates
-                    what portion of audio to render.
-                </p>
-                <p>
-                    Now if you try to represent this in WebVTT, you would get:
-                </p>
-                <pre class="example" title="WebVTT version">
+                    >
+                    <p>
+                        You would see the highlight and audio start with
+                        &quot;1&quot; and proceed to &quot;2&quot;, then
+                        &quot;3&quot;, since each
+                        <code>&lt;par&gt;</code> indicates what portion of audio
+                        to render.
+                    </p>
+                    <p>
+                        Now if you try to represent this in WebVTT, you would
+                        get:
+                    </p>
+                    <pre class="example" title="WebVTT version">
 10
 00:00:01.000 --&gt; 00:00:02.000
 {&quot;selector&quot;:{&quot;type&quot;: &quot;FragmentSelector&quot;, &quot;value&quot;: &quot;one&quot;}}
@@ -90,22 +95,23 @@
 {&quot;selector&quot;:{&quot;type&quot;: &quot;FragmentSelector&quot;, &quot;value&quot;: &quot;three&quot;}}
 
 </pre
-                >
-                <p>
-                    But you would hear and see highlighted &quot;3&quot;,
-                    followed by &quot;1&quot;, then &quot;2&quot;, since the
-                    audio playback is only based on the audio file, from start
-                    to end.
-                </p>
+                    >
+                    <p>
+                        But you would hear and see highlighted &quot;3&quot;,
+                        followed by &quot;1&quot;, then &quot;2&quot;, since the
+                        audio playback is only based on the audio file, from
+                        start to end.
+                    </p>
+                </section>
+                <section id="solutions" tabindex="-1">
+                    <h2 tabindex="-1">Solutions</h2>
+                    <p>
+                        In both cases, resolving the difference requires either
+                        additional special handling by the user agent, or audio
+                        file reformulation by the producer.
+                    </p>
+                </section>
             </section>
-            <section id="solutions" tabindex="-1">
-                <h2 tabindex="-1">Solutions</h2>
-                <p>
-                    In both cases, resolving the difference requires either
-                    additional special handling by the user agent, or audio file
-                    reformulation by the producer.
-                </p>
-            </section>
-        </section>
+        </main>
     </body>
 </html>

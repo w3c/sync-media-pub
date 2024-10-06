@@ -291,7 +291,7 @@ It is possible to use a `CssSelector` with a `TextPositionSelector` to reference
 
 See the [multi-level highlights example](#example-multi-level-highlights) for a WebVTT excerpt using this type of selector.
 ::: {.note}
-[The text of the poem](/demos/raven/index.html) in the example did not need to be marked up with `id`s!
+[The text of the poem](demos/raven/index.html) in the example did not need to be marked up with `id`s!
 :::
 
 
@@ -317,7 +317,7 @@ In cases where the audio narration file is not referenced in the HTML document, 
 These are ideas, nothing official yet! 
 :::
 
-#### EPUB
+### EPUB
 
 Similar to how an EPUB manifest associates a Media Overlay document with a Content Document:
 {% example "Media Overlays in EPUB package file manifest" %}
@@ -338,7 +338,7 @@ The EPUB Reading System then dynamically loads the audio and associates the WebV
 
 Alternately, the audio for a chapter and its WebVTT file could live directly in the chapter's HTML file. 
 
-#### Audiobooks
+### Audiobooks
 
 The audio file is already in the manifest; the HTML file is its `alternate`; and the WebVTT file can be another `alternate`.
 

@@ -3,7 +3,7 @@ title: SyncMediaLite explainer
 ---
 ## History: EPUB and DAISY
 
-The use case of reading with narration and synchronized highlight has long been a part of electronic publishing, and is already supported by existing standards ([DAISY](https://daisy.org/activities/standards/daisy/), [EPUB Media Overlays](https://www.w3.org/publishing/epub32/epub-mediaoverlays.html)). Under the hood, these standards use [SMIL](https://www.w3.org/TR/SMIL3/) to synchronize an audio file with an [HTML](https://html.spec.whatwg.org/multipage/) file, by pairing timestamps with phrase IDs.
+The use case of reading with narration and synchronized highlight has long been a part of electronic publishing, and is already supported by existing standards ([DAISY](https://daisy.org/activities/standards/daisy/), [EPUB Media Overlays](https://www.w3.org/TR/epub/#sec-media-overlays)). Under the hood, these standards use [SMIL](https://www.w3.org/TR/SMIL3/) to synchronize an audio file with an [HTML](https://html.spec.whatwg.org/multipage/) file, by pairing timestamps with phrase IDs.
 
 ## Issues 
 

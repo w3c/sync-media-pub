@@ -3,7 +3,9 @@
 <link rel="stylesheet" href="css/page.css"/>
 {%- endblock -%}
 {%- block body -%}
+<main>
 <h1>{{title}}</h1>
 <p>Last updated {{ page.date.toDateString() }}</p>
 {{ content | safe }}
+</main>
 {%- endblock -%}
