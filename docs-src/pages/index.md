@@ -28,7 +28,7 @@ This is an overview of work being done by the [Synchronized Media for Publicatio
   <!-- * [The World's Best Audiobook](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
   _Enhanced W3C Audiobooks demo. This is more of a traditional "player" where the book documents are loaded into an `iframe`. The books are W3C Audiobooks with SyncMediaLite incorporated._
   -->
-* [See if a Media Overlays file can be converted losslessly to SyncMediaLite](convert-smil)
+* Try this experimental tool to [convert Media Overlays to SyncMediaLite](convert-smil)
 
 See [other work](https://github.com/w3c/sync-media-pub/tree/main/other-work) for more ideas this group has had over the years, including experiments with SMIL, and a syntactically-light JSON format. 
 
