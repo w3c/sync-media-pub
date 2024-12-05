@@ -6,7 +6,6 @@ import { default as markdown } from './markdown.js';
 function init(eleventyConfig) {
     eleventyConfig.setLibrary("md", markdown());
     eleventyConfig.addPassthroughCopy({"css": "css"});
-    eleventyConfig.addPassthroughCopy({"demos/raven": "demos/raven"});
     eleventyConfig.addPassthroughCopy({"convert-smil": "convert-smil"});
 
     eleventyConfig.addFilter('dump', obj => {

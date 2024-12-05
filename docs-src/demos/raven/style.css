@@ -70,17 +70,22 @@ summary h2 {
     accent-color: var(--checkbox-color);
 }
 
-::highlight(Stanzas) {
+::highlight(stanzas) {
     background-color: var(--highlight-stanza);
 }
 
-::highlight(Lines) {
+::highlight(lines) {
     text-decoration: none;
     background-color: var(--highlight-line);
 }
-::highlight(Words) {
+::highlight(words) {
     text-decoration: underline;
     text-decoration-style:dotted;
     text-decoration-thickness: 2px;
     background-color: inherit;
+}
+@supports(-moz-appearance:none) {
+    ::highlight(words) {
+        color: darkgreen;
+    }
 }
