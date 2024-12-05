@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Convert Media Overlays to SyncMediaLite</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta charset="utf-8">
+        <style>
+            
+            body {
+                width: 90vw;
+                font-family: 'Courier New', Courier, monospace;
+                font-size: larger;
+            }
+            textarea {
+                height: 80vh;
+                width: 40vw;
+            }
+            
+            label {
+                display: block;
+            }
+            div:has(.control) {
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            div.control {
+                display: flex;
+                flex-direction: column;
+            }
+        button {
+            background-color: lightgreen;
+            border-radius: 10px;
+            border: 3px darkgreen solid;
+            font-size: larger;
+        }
+        span {
+            text-decoration: underline;
+            text-decoration-color: orange;
+            text-decoration-thickness: 3px;
+            font-style: italic;
+        }
+        label, input {
+            display: inline;
+        }
+        </style>
+    </head>
+    <body>
+        <h1>Convert Media Overlays to SyncMediaLite</h1>
+        
+        <p><span>Paste SMIL below</span> and press <button id="convert">Convert</button></p>
+
+        <label for="time-tolerance">Time tolerance (ms)</label>
+        <input type="number" min="0" max="999" id="time-tolerance" value="50">
+
+        <div>
+            <div class="control">
+                <label for="input">Input</label>
+                <textarea id="input"></textarea>
+            </div>
+            
+            <div class="control">
+                <label for="output">Output</label>
+                <textarea id="output"></textarea>
+            </div>
+        </div>
+
+        <script type="module">
+            import { parseSmil, convertToTextTrackCues, secondsToHMSMS } from './parse-smil.js';
+
+            document.querySelector('#convert').onclick = e => {
+                try {
+                    clearOutput();
+                    let canConvert = true;
+                    let pars = parseSmil(document.querySelector('#input').value);
+                    // get a list of text srcs
+                    let textRefs = pars.map(par => 
+                        par.media.find(media => media.type == 'text')?.src ?? null
+                    ).filter(item => item != null);
+                    // get a list of audio srcs
+                    let audios = pars.map(par => 
+                        par.media.find(media => media.type == 'audio') ?? null
+                    ).filter(item => item != null);
+                    
+                    if (countUniqueFiles(textRefs) > 1) {
+                        addOutput('Error: Refers to multiple text files.\n');
+                        canConvert = false;
+                    }
+
+                    if (countUniqueFiles(audios.map(audio => audio.src)) > 1) {
+                        addOutput('Error: Refers to multiple audio files.\n');
+                        canConvert = false;
+                    }
+                    let analysis = analyzeAudioClips(audios, document.querySelector("#time-tolerance").value);
+                    if (analysis.filter(clip => !clip.contiguous).length > 0) {
+                        analysis.filter(clip => !clip.contiguous)
+                            .map(clip => addOutput(`Error: gap between this clip and the previous one is greater than the allowed tolerance \n${clip.data.xmlString}\n`));
+                        canConvert = false;
+                    }
+                    if (canConvert) {
+                        addOutput("WEBVTT\n")
+                        let converted = convertToTextTrackCues(pars);
+                        
+                        converted.map((cue, idx) => {
+                            let startms = secondsToHMSMS(cue.startTime);
+                            let endms = secondsToHMSMS(cue.endTime);
+                            addOutput(`${idx+1}\n${startms} --> ${endms}\n${cue.text}\n`);
+                        });
+                    }
+                    
+                    
+                }
+                catch (err) {
+                    addOutput(`Error: ${err.message}`);
+                }
+
+            }
+
+            function countUniqueFiles(arr) {
+                // remove the fragment from the filepath
+                let arr_ = arr.map(s => s.split('#')[0]);
+                // count the unique strings in the array
+                return new Set(arr_).size;
+            }
+            // is each clipEnd very close to the next clipBegin?
+            // tolerance is ms, default is a tenth of a second
+            function analyzeAudioClips(clips, tolerance=100) {
+                if (clips.length < 2) {
+                    return true;
+                }
+                
+                let lastClipEnd = clips[0].clipEnd;
+                let analysis = clips.slice(1).map(clip => {
+                    let isClose = clip.clipBegin >= lastClipEnd && 
+                        clip.clipBegin <= lastClipEnd + (tolerance/1000);
+                    lastClipEnd = clip.clipEnd;
+                    return {contiguous: isClose, data: clip};
+                });
+                return analysis;
+            }
+            function clearOutput() {
+                document.querySelector('#output').value = '';
+            }
+            function addOutput(str) {
+                let currentOutput = document.querySelector('#output').value;
+                document.querySelector('#output').value = `${currentOutput}${currentOutput ? '\n' : ''}${str}`;                    
+            }
+            
+        </script>
+    </body>
+</html>

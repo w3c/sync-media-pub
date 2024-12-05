@@ -132,8 +132,8 @@
                     <code>WEBVTT</code> declaration at the top.
                 </p>
                 <p>
-                    Each cue has an identifier (a number, in the example) and
-                    contains
+                    Each cue has an optional identifier (a number, in the
+                    example) and contains
                     <a href="https://www.w3.org/TR/webvtt1/#webvtt-cue-timings"
                         >timing information</a
                     >
@@ -164,12 +164,6 @@
                                 corresponds with this cue.
                             </td>
                         </tr>
-                        <tr>
-                            <td><code id="group">group</code></td>
-                            <td>Optional</td>
-                            <td>String or array of strings</td>
-                            <td>Name(s) of the group(s) the cue belongs to.</td>
-                        </tr>
                     </tbody>
                 </table>
                 <pre class="example" title="A WebVTT file">
@@ -177,15 +171,15 @@ WEBVTT
 
 1
 00:00:00.000 --&gt; 00:00:03.187
-{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;dtb1&quot;},&quot;group&quot;:&quot;phrase&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;sentence1&quot;}}
 
 2
 00:00:03.187 --&gt; 00:00:07.184
-{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;dtb2&quot;},&quot;group&quot;:&quot;phrase&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;sentence2&quot;}}
 
 3
 00:00:07.184 --&gt; 00:00:10.945
-{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;dtb3&quot;},&quot;group&quot;:&quot;phrase&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;FragmentSelector&quot;,&quot;value&quot;:&quot;sentence3&quot;}}
 
 </pre
                 >
@@ -211,6 +205,12 @@ WEBVTT
                         for notes on referencing sub-element ranges.
                     </p>
                 </div>
+                <pre class="example" title="The corresponding HTML markup">
+&lt;span id=&quot;sentence1&quot;&gt;&quot;Lorem ipsum!&quot; she yelled.&lt;/span&gt; 
+&lt;span id=&quot;sentence2&quot;&gt;&quot;Dolor sit amet,&quot; her friend replied, laughing.&lt;/span&gt;
+&lt;span id=&quot;sentence3&quot;&gt;She shook her head, &quot;Qui sit voluptate.&quot;&lt;/span&gt;
+</pre
+                >
             </section>
             <section
                 id="associating-the-webvtt-file-with-the-htmlmediaelement"
@@ -230,7 +230,7 @@ WEBVTT
                 </p>
                 <pre class="example" title="Audio element with metadata track">
 &lt;audio controls autoplay src=&quot;chapter.mp3&quot;&gt;
- &lt;track default src=&quot;highlight.vtt&quot; kind=&quot;metadata&quot;&gt;
+ &lt;track default src=&quot;highlight.vtt&quot; kind=&quot;metadata&quot; id=&quot;highlights&quot;&gt;
 &lt;/audio&gt;
 </pre
                 >
@@ -298,13 +298,13 @@ WEBVTT
                     class="example"
                     title="Handling cue 'enter' events on an audio element"
                 >
-let track = Array.from(document.querySelector(&apos;audio&apos;).textTracks)[0];
-Array.from(track.cues).map(cue =&gt; {
+let track = audio.textTracks[0];
+for (let cue of track.cues) {
     cue.onenter = e =&gt; {
         let cuePayload = JSON.parse(cue.text);
         doHighlighting(cuePayload.selector);
     };
-});
+}
 </pre
                 >
             </section>
@@ -369,95 +369,99 @@ function doHighlighting(selector) {
 }
 </pre
                 >
-                <p>
-                    Style the highlight using the
-                    <a
-                        href="https://www.w3.org/TR/css-pseudo-4/#highlight-pseudo-element"
-                        ><code>::highlight</code> pseudo-element</a
-                    >.
-                </p>
-                <pre class="example" title="Author-defined highlight CSS">
-::highlight(sync) {
-    background-color: yellow;
-}
-</pre
-                >
                 <section id="layering-highlights" tabindex="-1">
                     <h4 tabindex="-1">Layering highlights</h4>
                     <p>
                         Multiple simultaneous highlights are possible when cues
-                        overlap. Here is an example with cues for a nested
-                        document structure of stanzas, lines, and words.
+                        overlap. Here is an example using mulitple WebVTT files
+                        to provide highlight layers for words, lines, and
+                        stanzas of a poem. The track order gives the highlight
+                        priority order. In this example, stanzas are
+                        highlighted, followed by lines appearing on top of that,
+                        followed by words.
                     </p>
-                    <div class="note">
-                        <p>
-                            Cues with overlapping timing work best when they
-                            belong to different groups.
-                        </p>
-                    </div>
-                    <pre class="example" title="Multi-level highlights">
+                    <pre
+                        class="example"
+                        title="Audio element with multiple metadata tracks"
+                    >
+&lt;audio controls autoplay src=&quot;chapter.mp3&quot;&gt;
+ &lt;track id=&quot;stanzas&quot; kind=&quot;metadata&quot; src=&quot;stanza.vtt&quot; label=&quot;Stanzas&quot; default/&gt;
+ &lt;track id=&quot;lines&quot; kind=&quot;metadata&quot; src=&quot;line.vtt&quot; label=&quot;Lines&quot; default/&gt;
+ &lt;track id=&quot;words&quot; kind=&quot;metadata&quot; src=&quot;word.vtt&quot; label=&quot;Words&quot; default/&gt;
+&lt;/audio&gt;
+</pre
+                    >
+                    <pre class="example" title="Multi-level highlights: Words">
 WEBVTT
 
-1
 00:00:07.800 --&gt; 00:00:08.200
-{&quot;group&quot;:&quot;word&quot;, &quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 0, &quot;end&quot;: 3}}}
+{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 0, &quot;end&quot;: 3}}}
 
-2
 00:00:08.200 --&gt; 00:00:08.800
-{&quot;group&quot;:&quot;word&quot;, &quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 5, &quot;end&quot;: 8}}}
+{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 5, &quot;end&quot;: 8}}}
 
-3
 00:00:08.800 --&gt; 00:00:09.200
-{&quot;group&quot;:&quot;word&quot;, &quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 10 &quot;end&quot;: ,0&quot;}}}
+{&quot;selector&quot;: {&quot;type&quot;: &quot;CssSelector&quot;, &quot;value&quot;: &quot;:nth-child(&quot;1&quot; of .stanza) &gt; :nth-child(1 of .line)&quot;, refinedBy: {&quot;type&quot;: &quot;TextPositionSelector&quot;, &quot;start&quot;: 10 &quot;end&quot;: ,0&quot;}}}
+</pre
+                    >
+                    <pre class="example" title="Multi-level highlights: Lines">
+WEBVTT
 
-4
 00:00:07.800 --&gt; 00:00:12.600
-{&quot;group&quot;:&quot;line&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(1 of .line)&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;CssSelector&quot;,&quot;value&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(1 of .line)&quot;}}
 
-5
 00:00:12.600 --&gt; 00:00:16.200
-{&quot;group&quot;:&quot;line&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(2 of .line)&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;CssSelector&quot;,&quot;value&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(2 of .line)&quot;}}
 
-6
 00:00:17.200 --&gt; 00:00:21.000
-{&quot;group&quot;:&quot;line&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(3 of .line)&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;CssSelector&quot;,&quot;value&quot;:&quot;:nth-child(1 of .stanza) &gt; :nth-child(3 of .line)&quot;}}
 
-7
+</pre
+                    >
+                    <pre
+                        class="example"
+                        title="Multi-level highlights: Stanzas"
+                    >
+WEBVTT
+
 00:00:07.800 --&gt; 00:00:31.100
-{&quot;group&quot;:&quot;stanza&quot;, &quot;selector&quot;:&quot;:nth-child(1 of .stanza)&quot;}
+{&quot;selector&quot;:{&quot;type&quot;:&quot;CssSelector&quot;,&quot;value&quot;:&quot;:nth-child(1 of .stanza)&quot;}}
+
+00:00:32.300 --&gt; 00:00:55.800
+{&quot;selector&quot;:{&quot;type&quot;:&quot;CssSelector&quot;,&quot;value&quot;:&quot;:nth-child(2 of .stanza)&quot;}}
 
 </pre
                     >
                     <p>
-                        In that example, cues #1, #4, and #7 all start at the
-                        same time. Their purpose can be distinguished by their
-                        <code>group</code> value and therefore their highlights
-                        can all be different, for example the stanza can have a
-                        light background, the line can have a stronger
-                        background, and the word can be underlined.
+                        In that example, a cue from each WebVTT file starts at
+                        the same time. Their associated highlights can all be
+                        different, for example the stanza can have a light
+                        background, the line can have a stronger background, and
+                        the word can be underlined. All the highlights can
+                        co-exist simultaneously because each one has its own key
+                        in the HighlightRegistry. The link between the
+                        highlight's key in the HighlightRegistry and the track
+                        is given by the track's ID.
                     </p>
-                    <p>
-                        A highlight is registered with the HighlightRegistry
-                        with a key. Use the <code>group</code> name for this key
-                        to style cues based on their
-                        <code>group</code> value(s).
-                    </p>
-                    <pre class="example" title="Create highlight from group">
+                    <pre
+                        class="example"
+                        title="Create highlight and use track ID to keep it on a unique layer"
+                    >
 let range = createRange(cuePayload.selector)
 let highlight = new Highlight(range);
-CSS.highlights.set(cuePayload.group, highlight); 
+CSS.highlights.set(cue.track.id, highlight); 
 </pre
                     >
                     <pre class="example" title="CSS styles for highlights">
-::highlight(stanza) {
+::highlight(stanzas) {
     background-color: lightyellow;
 }
 
-::highlight(line) {
+::highlight(lines) {
     text-decoration: none;
     background-color: yellow;
 }
-::highlight(word) {
+::highlight(words) {
     text-decoration: underline;
     text-decoration-style:dotted;
     text-decoration-thickness: 2px;
@@ -472,8 +476,7 @@ CSS.highlights.set(cuePayload.group, highlight);
                     <h4 tabindex="-1">Previous/next navigation</h4>
                     <p>
                         This user interface feature lets a user move between
-                        cues. When paired with the available
-                        <a href="#group"><code>group</code></a> values, it
+                        cues. When paired with multiple simultaneous tracks, it
                         enables variation on the previous/next navigation
                         feature, for example allowing a way to move to the next
                         word, sentence, or paragraph.
@@ -532,7 +535,7 @@ CSS.highlights.set(cuePayload.group, highlight);
             >
             <p>
                 See the
-                <a href="#example-multi-level-highlights"
+                <a href="#layering-highlights"
                     >multi-level highlights example</a
                 >
                 for a WebVTT excerpt using this type of selector.
@@ -667,49 +670,6 @@ CSS.highlights.set(cuePayload.group, highlight);
                     use both <code>alternate</code>s together rather than
                     choosing one or the other.
                 </p>
-            </section>
-        </section>
-        <section class="appendix" id="wishlist" tabindex="-1">
-            <h2 class="appendix" tabindex="-1">Wishlist</h2>
-            <section id="highlight-priority" tabindex="-1">
-                <h3 tabindex="-1">Highlight priority</h3>
-                <p>
-                    <a
-                        href="https://www.w3.org/TR/css-highlight-api-1/#priorities"
-                        >Highlight priority</a
-                    >
-                    controls the overlay order of highlights. How could a
-                    document or publication indicate its priorities? E.g. if the
-                    groups are &quot;word&quot; and &quot;paragraph&quot;, their
-                    highlights should be prioritized accordingly so that a
-                    &quot;word&quot; highlight is not hidden behind a
-                    &quot;paragraph&quot; highlight.
-                </p>
-                <p>
-                    One simple idea is to add a <code>priority</code> property
-                    to the custom cue payload. Its value would be a non-negative
-                    integer.
-                </p>
-            </section>
-            <section id="screen-reader-friendliness" tabindex="-1">
-                <h3 tabindex="-1">Screen reader friendliness</h3>
-                <p>
-                    The user pauses audio playback and wants to inspect the
-                    currently highlighted text of the document with a screen
-                    reader. How does the screen reader know where to start from?
-                    How can it be made aware of where the highlight is
-                    currently?
-                </p>
-                <div class="note">
-                    <p>
-                        This discussion about
-                        <a href="https://github.com/whatwg/html/issues/5326"
-                            >programatically setting focus navigation start
-                            point</a
-                        >
-                        is relevant.
-                    </p>
-                </div>
             </section>
         </section>
         <section class="appendix" id="acknowledgements" tabindex="-1">

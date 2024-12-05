@@ -11,8 +11,7 @@
 
 <body>
     
-    <main>
-        
+    <main>    
         <div class="poem-info">
             <h1 class="title">The Raven</h1>
             <p class="author">By Edgar Allen Poe</p>
@@ -196,7 +195,9 @@
         <h2 id="narration-title">Narration</h2>
         <div>
             <audio id="narration-audio" src="raven.mp3" controls>
-                <track id="text-sync" kind="metadata" src="raven.vtt" label="Highlighting" default/>
+                <track id="text-sync3" kind="metadata" src="stanza.vtt" label="Stanzas" default/>
+                <track id="text-sync1" kind="metadata" src="line.vtt" label="Lines" default/>
+                <track id="text-sync2" kind="metadata" src="word.vtt" label="Words" default/>
             </audio>
             <div id="narration-highlight">
                 <h3>Highlights:</h3>
@@ -205,197 +206,51 @@
         <div>
             <button id="prev">Prev</button>
             <button id="next">Next</button>
-            <select id="group-option">
-                <option value="Stanza">Stanza</option>
-                <option value="Line">Line</option>
+            <select id="track-selection">
+                <option value="stanzas">Stanza</option>
+                <option value="lines">Line</option>
             </select>
         </div>
     </aside>
 
-    <script>
+    <script type="module">
+        import * as sync from './sync.js';
         let audio = document.querySelector('#narration-audio');
-        let track = Array.from(audio.textTracks)[0];
         let didSetup = false;
-        let highlightStack = {};
-        // group names are in in highlight priority order
-        // this would be nice to indicate delclaratively
-        let groupNames = ['Stanza', 'Line', 'Word'];
-        document.querySelector("#next").onclick = e => nextCue(document.querySelector("#group-option").value);
-        document.querySelector("#prev").onclick = e => prevCue(document.querySelector("#group-option").value);
         
-        audio.onpause = e => {
-            console.log("PAUSE");
-        };
-        audio.volume = .25;
+        document.querySelector("#next").onclick = e => sync.nextCue(document.querySelector("#track-selection").value);
+        document.querySelector("#prev").onclick = e => sync.prevCue(document.querySelector("#track-selection").value);
+        
         audio.oncanplaythrough = e => {
             if (!didSetup) {
-                let cues = Array.from(track.cues);
-                cues.map(cue => {
-                    cue.onenter = e => {
-                        try {
-                            let cueMeta = JSON.parse(cue.text);
-                            let elmRange = createRange(cueMeta.selector)
-                            let newHighlight = new Highlight(elmRange);
-                            highlightStack[cueMeta.group] = newHighlight;
-                            applyHighlights();
-                            let node = elmRange.startContainer.nodeType == 1 ? elmRange.startContainer : elmRange.startContainer.parentNode;
-                            if (!isInViewport(node)) {
-                                node.scrollIntoView();
-                            }
-                        }
-                        catch(err) {
-                            console.log("ERROR ", cue.text);
-                        }
-                    };
-                });
-                let groups = Array.from(new Set(cues.map(cue => JSON.parse(cue.text)?.group ?? ""))).filter(group => group != "");
+                sync.setupTracks(audio);
+                
+                // setup the track checkboxes
                 document.querySelector('#narration-highlight').innerHTML += 
-                    groups.map(group => 
+                    Array.from(audio.textTracks).map(track => 
                     `<div>
-                        <label>${group}</label>
+                        <label>${track.label}</label>
                         <input type="checkbox" checked 
-                            id="highlight-option-${group}" />
+                            id="highlight-option-${track.id}" />
                     </div>`)
                     .join('')
 
-                
+                // control each track's highlight
                 let highlightOptions = Array.from(document.querySelectorAll('#narration-highlight input[type=checkbox]'));
                 highlightOptions.map(inputCheckbox => {
                     inputCheckbox.onchange = e => {
-                        let group = e.target.id.replace('highlight-option-', '');
-                        // turn it off if it's on
-                        if (!e.target.checked) {
-                            if (CSS.highlights.has(group)) {
-                                CSS.highlights.delete(group);
-                            }
+                        let trackId = e.target.id.replace('highlight-option-', '');
+                        if (e.target.checked) {
+                            sync.applyHighlights();
                         }
                         else {
-                            applyHighlights();
+                            sync.removeHighlight(trackId);
                         }
                     };
                 });
                 didSetup = true;
             }
         };
-        
-        function applyHighlights() {
-            // apply them in priority order
-            for(let groupName of groupNames) {
-                if (document.querySelector(`#highlight-option-${groupName}`).checked 
-                    && highlightStack.hasOwnProperty(groupName)) {
-                    CSS.highlights.set(groupName, highlightStack[groupName]);
-                }
-            }           
-        }
-        
-        function nextCue(group) {
-            if (!track.activeCues.length) {
-                console.log("No active cues");
-                return;
-            }
-            let activeCueForGroup = Array.from(track.activeCues).find(cue => JSON.parse(cue.text).group == group);
-            if (!activeCueForGroup) {
-                console.log("No active cue for group ", group);
-                return;
-            }
-            console.log("Current #", activeCueForGroup.id, `(time ${activeCueForGroup.startTime})`);
-            let sortedCues = sortCuesByTime();
-            let idx = sortedCues.findIndex(cue => cue.id == activeCueForGroup.id);
-            if (idx != -1 && idx < sortedCues.length - 1) {
-                for (let i = idx + 1; i < sortedCues.length; i++) {
-                    let payload = JSON.parse(sortedCues[i].text);
-                    if (payload.group == group) {
-                        let newTime = sortedCues[i].startTime;
-                        console.log("Skipping to ", newTime, " #", sortedCues[i].id);
-                        document.querySelector("#next").disabled = true;
-                        audio.addEventListener("timeupdate", e => {
-                            document.querySelector("#next").disabled = false;
-                            audio.play();
-                        }, { once: true });
-                        audio.currentTime = newTime;
-                        break;
-                    }
-                }
-            }
-        }
-
-        function prevCue(group) {
-            if (!track.activeCues.length) {
-                console.log("No active cues");
-                return;
-            }
-            let activeCueForGroup = Array.from(track.activeCues).find(cue => JSON.parse(cue.text).group == group);
-            if (!activeCueForGroup) {
-                console.log("No active cue for group ", group);
-                return;
-            }
-            console.log("Current #", activeCueForGroup.id, `(time ${activeCueForGroup.startTime})`);
-            let sortedCues = sortCuesByTime();
-            let idx = sortedCues.findIndex(cue => cue.id == activeCueForGroup.id);
-            if (idx != -1 && idx > 0) {
-                for (let i = idx - 1; i > -1; i--) {
-                    let payload = JSON.parse(sortedCues[i].text);
-                    if (payload.group == group) {
-                        let newTime = sortedCues[i].startTime;
-                        console.log("Skipping to ", newTime, " #", sortedCues[i].id);
-                        document.querySelector("#next").disabled = true;
-                        audio.addEventListener("timeupdate", e => {
-                            document.querySelector("#next").disabled = false;
-                            audio.play();
-                        }, { once: true });
-                        audio.currentTime = newTime;
-                        break;
-                    }
-                }
-            }
-        }
-
-        function sortCuesByTime(group) {
-            let sortedCues = Array.from(track.cues).sort((a,b) => {
-                let timeA = parseFloat(a.startTime);
-                let timeB = parseFloat(b.startTime);
-                return a.startTime < b.startTime ? -1 : a.startTime > b.startTime ? 1 : 0;
-            });
-            return sortedCues;
-        }
-        
-        function isInViewport(elm) {
-            let bounding = elm.getBoundingClientRect();
-            let doc = elm.ownerDocument;
-            return (
-                bounding.top >= 0 &&
-                bounding.left >= 0 &&
-                bounding.bottom <= (doc.defaultView.innerHeight || doc.documentElement.clientHeight) &&
-                bounding.right <= (doc.defaultView.innerWidth || doc.documentElement.clientWidth)
-            );
-        }
-        // for CssSelector optionally with TextPositionSelector as its refinedBy
-        function createRange(rangeSelector) {
-            let node = document.querySelector(rangeSelector.value);
-            let startOffset = 0;
-            let endOffset = 0;
-            if (rangeSelector.hasOwnProperty('refinedBy')) {
-                startOffset = rangeSelector.refinedBy.start;
-                endOffset = rangeSelector.refinedBy.end;
-                
-                return new StaticRange({
-                    startContainer: node.firstChild,
-                    startOffset,
-                    endContainer: node.firstChild,
-                    endOffset: endOffset + 1
-                });
-            }
-            
-            return new StaticRange({
-                startContainer: node,
-                startOffset: 0,
-                endContainer: node.nextSibling,
-                endOffset: 0 
-            });
-        }
     </script>
-
-    
 </body>
-
 </html>

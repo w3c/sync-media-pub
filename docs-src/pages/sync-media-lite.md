@@ -54,28 +54,27 @@ Identify text to be highlighted with [a selector](https://www.w3.org/TR/selector
 
 The synchronization data must follow WebVTT's [file structure](https://www.w3.org/TR/webvtt1/#file-structure), which consists of a series of cues, following the `WEBVTT` declaration at the top.  
 
-Each cue has an identifier (a number, in the example) and contains [timing information](https://www.w3.org/TR/webvtt1/#webvtt-cue-timings) for the media segment. It also includes a JSON-formatted custom cue payload with these properties:
+Each cue has an optional identifier (a number, in the example) and contains [timing information](https://www.w3.org/TR/webvtt1/#webvtt-cue-timings) for the media segment. It also includes a JSON-formatted custom cue payload with these properties:
 
 
 | Name | Required | Type | Description |
 | -----|----------|------|-------------|
 | `selector`{#selector} | Required | [Selector](https://www.w3.org/TR/selectors-states/#selectors) | Selects the text in the document that corresponds with this cue. |
-| `group`{#group} | Optional | String or array of strings | Name(s) of the group(s) the cue belongs to. |
 
 {% example "A WebVTT file" %}
 WEBVTT
 
 1
 00:00:00.000 --> 00:00:03.187
-{"selector":{"type":"FragmentSelector","value":"dtb1"},"group":"phrase"}
+{"selector":{"type":"FragmentSelector","value":"sentence1"}}
 
 2
 00:00:03.187 --> 00:00:07.184
-{"selector":{"type":"FragmentSelector","value":"dtb2"},"group":"phrase"}
+{"selector":{"type":"FragmentSelector","value":"sentence2"}}
 
 3
 00:00:07.184 --> 00:00:10.945
-{"selector":{"type":"FragmentSelector","value":"dtb3"},"group":"phrase"}
+{"selector":{"type":"FragmentSelector","value":"sentence3"}}
 
 {% endexample %}
 
@@ -86,6 +85,12 @@ Because of how WebVTT files are parsed, it is important to not have a blank line
 This example uses `FragmentSelector`s, which link to element `id`s, but the [selector](#selector) property allows other selectors too. Other examples in this document use `CssSelector`s and `TextRangeSelector`s. See [Word-level selectors](#word-level-selectors) for notes on referencing sub-element ranges.
 :::
 
+{% example "The corresponding HTML markup" %}
+<span id="sentence1">"Lorem ipsum!" she yelled.</span> 
+<span id="sentence2">"Dolor sit amet," her friend replied, laughing.</span>
+<span id="sentence3">She shook her head, "Qui sit voluptate."</span>
+{% endexample %}
+
 
 ### Associating the WebVTT file with the HTMLMediaElement
 
@@ -93,7 +98,7 @@ The synchronization data of WebVTT is associated with an [HTMLMediaElement](http
 
 {% example "Audio element with metadata track"%}
 <audio controls autoplay src="chapter.mp3">
- <track default src="highlight.vtt" kind="metadata">
+ <track default src="highlight.vtt" kind="metadata" id="highlights">
 </audio>
 {% endexample %}
 
@@ -128,13 +133,13 @@ This section covers how to link media playback with text highlighting, using bro
 As the HTMLMediaElement plays, associated TextTrackCues will trigger events when their timestamp is reached. For example, this is how to listen to the `enter` event, for when a cue starts:
 
 {%example "Handling cue 'enter' events on an audio element" %}
-let track = Array.from(document.querySelector('audio').textTracks)[0];
-Array.from(track.cues).map(cue => {
+let track = audio.textTracks[0];
+for (let cue of track.cues) {
     cue.onenter = e => {
         let cuePayload = JSON.parse(cue.text);
         doHighlighting(cuePayload.selector);
     };
-});
+}
 {% endexample %}
 
 ### Text highlights
@@ -179,76 +184,77 @@ function doHighlighting(selector) {
 }
 {% endexample %}
 
-Style the highlight using the [`::highlight` pseudo-element](https://www.w3.org/TR/css-pseudo-4/#highlight-pseudo-element).
-
-{% example "Author-defined highlight CSS" %}
-::highlight(sync) {
-    background-color: yellow;
-}
-{% endexample %}
-
 #### Layering highlights
 
-Multiple simultaneous highlights are possible when cues overlap. Here is an example with cues for a nested document structure of stanzas, lines, and words.
+Multiple simultaneous highlights are possible when cues overlap. Here is an example using mulitple WebVTT files to provide highlight layers for words, lines, and stanzas of a poem. The track order gives the highlight priority order. In this example, stanzas are highlighted, followed by lines appearing on top of that, followed by words.
 
-:::{.note}
-Cues with overlapping timing work best when they belong to different groups.
-:::
+{% example "Audio element with multiple metadata tracks"%}
+<audio controls autoplay src="chapter.mp3">
+ <track id="stanzas" kind="metadata" src="stanza.vtt" label="Stanzas" default/>
+ <track id="lines" kind="metadata" src="line.vtt" label="Lines" default/>
+ <track id="words" kind="metadata" src="word.vtt" label="Words" default/>
+</audio>
+{% endexample %}
 
-{% example "Multi-level highlights" %}
+{% example "Multi-level highlights: Words" %}
 WEBVTT
 
-1
 00:00:07.800 --> 00:00:08.200
-{"group":"word", "selector": {"type": "CssSelector", "value": ":nth-child("1" of .stanza) > :nth-child(1 of .line)", refinedBy: {"type": "TextPositionSelector", "start": 0, "end": 3}}}
+{"selector": {"type": "CssSelector", "value": ":nth-child("1" of .stanza) > :nth-child(1 of .line)", refinedBy: {"type": "TextPositionSelector", "start": 0, "end": 3}}}
 
-2
 00:00:08.200 --> 00:00:08.800
-{"group":"word", "selector": {"type": "CssSelector", "value": ":nth-child("1" of .stanza) > :nth-child(1 of .line)", refinedBy: {"type": "TextPositionSelector", "start": 5, "end": 8}}}
+{"selector": {"type": "CssSelector", "value": ":nth-child("1" of .stanza) > :nth-child(1 of .line)", refinedBy: {"type": "TextPositionSelector", "start": 5, "end": 8}}}
 
-3
 00:00:08.800 --> 00:00:09.200
-{"group":"word", "selector": {"type": "CssSelector", "value": ":nth-child("1" of .stanza) > :nth-child(1 of .line)", refinedBy: {"type": "TextPositionSelector", "start": 10 "end": ,0"}}}
+{"selector": {"type": "CssSelector", "value": ":nth-child("1" of .stanza) > :nth-child(1 of .line)", refinedBy: {"type": "TextPositionSelector", "start": 10 "end": ,0"}}}
+{% endexample %}
 
-4
+{% example "Multi-level highlights: Lines" %}
+WEBVTT
+
 00:00:07.800 --> 00:00:12.600
-{"group":"line", "selector":":nth-child(1 of .stanza) > :nth-child(1 of .line)"}
+{"selector":{"type":"CssSelector","value":":nth-child(1 of .stanza) > :nth-child(1 of .line)"}}
 
-5
 00:00:12.600 --> 00:00:16.200
-{"group":"line", "selector":":nth-child(1 of .stanza) > :nth-child(2 of .line)"}
+{"selector":{"type":"CssSelector","value":":nth-child(1 of .stanza) > :nth-child(2 of .line)"}}
 
-6
 00:00:17.200 --> 00:00:21.000
-{"group":"line", "selector":":nth-child(1 of .stanza) > :nth-child(3 of .line)"}
-
-7
-00:00:07.800 --> 00:00:31.100
-{"group":"stanza", "selector":":nth-child(1 of .stanza)"}
+{"selector":{"type":"CssSelector","value":":nth-child(1 of .stanza) > :nth-child(3 of .line)"}}
 
 {% endexample %}
 
-In that example, cues #1, #4, and #7 all start at the same time. Their purpose can be distinguished by their `group` value and therefore their highlights can all be different, for example the stanza can have a light background, the line can have a stronger background, and the word can be underlined. 
+{% example "Multi-level highlights: Stanzas" %}
+WEBVTT
 
-A highlight is registered with the HighlightRegistry with a key. Use the `group` name for this key to style cues based on their `group` value(s).
+00:00:07.800 --> 00:00:31.100
+{"selector":{"type":"CssSelector","value":":nth-child(1 of .stanza)"}}
 
-{% example "Create highlight from group" %}
+00:00:32.300 --> 00:00:55.800
+{"selector":{"type":"CssSelector","value":":nth-child(2 of .stanza)"}}
+
+{% endexample %}
+
+In that example, a cue from each WebVTT file starts at the same time. Their associated highlights can all be different, for example the stanza can have a light background, the line can have a stronger background, and the word can be underlined. All the highlights can co-exist simultaneously because each one has its own key in the HighlightRegistry. The link between the highlight's key in the HighlightRegistry and the track is given by the track's ID. 
+
+
+
+{% example "Create highlight and use track ID to keep it on a unique layer" %}
 let range = createRange(cuePayload.selector)
 let highlight = new Highlight(range);
-CSS.highlights.set(cuePayload.group, highlight); 
+CSS.highlights.set(cue.track.id, highlight); 
 {% endexample %}
 
 
 {% example "CSS styles for highlights" %}
-::highlight(stanza) {
+::highlight(stanzas) {
     background-color: lightyellow;
 }
 
-::highlight(line) {
+::highlight(lines) {
     text-decoration: none;
     background-color: yellow;
 }
-::highlight(word) {
+::highlight(words) {
     text-decoration: underline;
     text-decoration-style:dotted;
     text-decoration-thickness: 2px;
@@ -259,7 +265,7 @@ CSS.highlights.set(cuePayload.group, highlight);
 
 #### Previous/next navigation
 
-This user interface feature lets a user move between cues. When paired with the available [`group`](#group) values, it enables variation on the previous/next navigation feature, for example allowing a way to move to the next word, sentence, or paragraph.
+This user interface feature lets a user move between cues. When paired with multiple simultaneous tracks, it enables variation on the previous/next navigation feature, for example allowing a way to move to the next word, sentence, or paragraph.
 
 Cues may appear in a WebVTT file in any order, not necessarily in document flow order. They can be sorted by timestamp when it is necessary to calculate previous and next cues.
 
@@ -289,7 +295,7 @@ It is possible to use a `CssSelector` with a `TextPositionSelector` to reference
 }
 {% endexample %}
 
-See the [multi-level highlights example](#example-multi-level-highlights) for a WebVTT excerpt using this type of selector.
+See the [multi-level highlights example](#layering-highlights) for a WebVTT excerpt using this type of selector.
 ::: {.note}
 [The text of the poem](demos/raven/index.html) in the example did not need to be marked up with `id`s!
 :::
@@ -356,23 +362,6 @@ The audio file is already in the manifest; the HTML file is its `alternate`; and
 {% endexample %}
 
 This could raise the question of how the user agent presents alternate options. In this case, the desired approach is to use both `alternate`s together rather than choosing one or the other. 
-
-
-## Wishlist {.appendix}
-
-### Highlight priority
-
-[Highlight priority](https://www.w3.org/TR/css-highlight-api-1/#priorities) controls the overlay order of highlights. How could a document or publication indicate its priorities? E.g. if the groups are "word" and "paragraph", their highlights should be prioritized accordingly so that a "word" highlight is not hidden behind a "paragraph" highlight.
-
-One simple idea is to add a `priority` property to the custom cue payload. Its value would be a non-negative integer.
-
-### Screen reader friendliness
-
-The user pauses audio playback and wants to inspect the currently highlighted text of the document with a screen reader. How does the screen reader know where to start from? How can it be made aware of where the highlight is currently?
-
-:::{.note}
-This discussion about [programatically setting focus navigation start point](https://github.com/whatwg/html/issues/5326) is relevant.
-:::
 
 
 ## Acknowledgements {.appendix}

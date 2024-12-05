@@ -7,6 +7,7 @@ function init(eleventyConfig) {
     eleventyConfig.setLibrary("md", markdown());
     eleventyConfig.addPassthroughCopy({"css": "css"});
     eleventyConfig.addPassthroughCopy({"demos/raven": "demos/raven"});
+    eleventyConfig.addPassthroughCopy({"convert-smil": "convert-smil"});
 
     eleventyConfig.addFilter('dump', obj => {
         return util.inspect(obj)
