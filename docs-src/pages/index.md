@@ -22,7 +22,7 @@ This is an overview of work being done by the [Synchronized Media for Publicatio
   * [Accessible Books in Browsers](https://daisy.github.io/accessible-books-in-browsers/#demos): 
   _Self-playing text and audio books. The books here are converted automatically from DAISY 2.02/EPUB into multi-chapter sets of HTML files with built-in playback for SyncMediaLite_
   * [The Raven](https://raven-highlight-demo.netlify.app/)
-  _Poem with multi-level highlighting. This is a single-page document with built-in playback for SyncMediaLite and advanced highlighting features_
+  _Poem with multi-level highlighting. This is a single-page document with built-in playback for SyncMediaLite and advanced highlighting features_ ([see sources](https://github.com/w3c/sync-media-pub/tree/main/docs-src/demos/raven))
   * [Using TextTrackCues to play EPUB Media Overlays](https://marisademeglio.github.io/mo-player/)
   _Using the same techniques as SyncMediaLite playback, this Media Overlays `.smil` file can be played_
   <!-- * [The World's Best Audiobook](https://github.com/marisademeglio/worlds-best-audiobook/tree/webvtt-experiment)
