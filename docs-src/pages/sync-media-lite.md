@@ -297,7 +297,7 @@ It is possible to use a `CssSelector` with a `TextPositionSelector` to reference
 
 See the [multi-level highlights example](#layering-highlights) for a WebVTT excerpt using this type of selector.
 ::: {.note}
-[The text of the poem](demos/raven/index.html) in the example did not need to be marked up with `id`s!
+[The text of the poem](https://github.com/w3c/sync-media-pub/blob/main/docs-src/demos/raven/index.html) in the example did not need to be marked up with `id`s!
 :::
 
 
